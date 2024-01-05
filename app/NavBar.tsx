@@ -1,117 +1,130 @@
 "use client";
-import {
-  Button,
-  Image,
-  Input,
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-  NavbarMenu,
-  NavbarMenuItem,
-  NavbarMenuToggle,
-} from "@nextui-org/react";
+import { Flex, TextField } from "@radix-ui/themes";
+import { AnimatePresence, motion } from "framer-motion";
+import Hamburger from "hamburger-react";
 import NextImage from "next/image";
 import Link from "next/link";
-import { Fragment, useState } from "react";
-import { CiSearch } from "react-icons/ci";
+import { Dispatch, PropsWithChildren, SetStateAction, useState } from "react";
+import { FaMagnifyingGlass } from "react-icons/fa6";
+import Login, { SignUpButton } from "./Login";
 
 export default function NavBar() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const [isOpen, setOpen] = useState(false);
   return (
-    <Navbar
-      className="flex justify-center h-24 flex-wrap"
-      position="static"
-      maxWidth="2xl"
-      onMenuOpenChange={setIsMenuOpen}
+    <Flex
+      justify="between"
+      align="center"
+      className="mx-auto w-full lg:w-[92%] border p-4 relative"
     >
-      <NavbarMenuToggle
-        aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-        className="sm:hidden"
-      />
-      <NavLinks className="hidden sm:flex" />
-      <NavLogo className="flex justify-center" />
-      <NavbarContent className="flex gap-6" justify="end">
-        <Input
-          placeholder="Search..."
-          radius="full"
-          startContent={<CiSearch />}
-          className="hidden sm:block"
-        />
-        <Link href="/search" className="sm:hidden">
-          <CiSearch size={30} />
-        </Link>
-        <SignUpButton />
-      </NavbarContent>
-      <NavMenu />
-    </Navbar>
+      <NavLinks />
+      <NavLogo>
+        <NavMenu isOpen={isOpen} setOpen={setOpen} />
+        {/* Escape prop drilling using component composition */}
+      </NavLogo>
+      <NavControl />
+    </Flex>
   );
 }
 
-interface IClassName {
-  className?: string;
-}
-
-const navLinks = [
+const navigation = [
   { label: "Inspiration", href: "/popular" },
   { label: "Go Pro", href: "/subscription" },
 ];
 
-const NavLinks = ({ className }: IClassName) => {
+const NavMenu = ({
+  isOpen,
+  setOpen,
+}: {
+  isOpen: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}) => {
   return (
-    <NavbarContent className={className} justify="start">
-      {navLinks.map((navLink, index) => (
-        <NavbarItem key={index}>
-          <Link
-            href={navLink.href}
-            className="font-semibold text-lg cursor-pointer"
+    <Flex direction="column" className="lg:hidden">
+      <Hamburger
+        toggled={isOpen}
+        toggle={setOpen}
+        size={32}
+        direction="right"
+      />
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            key="nav-content"
+            className="flex flex-col absolute left-0 top-[86px] shadow-md h-auto w-full p-4 gap-3 overflow-hidden items-center bg-white"
+            initial={{ height: 0 }}
+            animate={{ height: "auto" }}
+            exit={{ height: 0, padding: 0 }}
+            transition={{ duration: 0.1 }}
           >
-            {navLink.label}
-          </Link>
-        </NavbarItem>
-      ))}
-    </NavbarContent>
+            {navigation.map((navLink) => (
+              <motion.a
+                key={navLink.href}
+                initial={{ x: -500 }}
+                animate={{ x: 0 }}
+                exit={{ x: -500 }}
+                className="overflow-hidden hover:text-gray-400"
+                transition={{ duration: 0.3 }}
+              >
+                <Link href={navLink.href}>{navLink.label}</Link>
+              </motion.a>
+            ))}
+            <SignUpButton />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </Flex>
   );
 };
 
-const NavLogo = ({ className }: IClassName) => {
+const NavLinks = () => {
   return (
-    <NavbarBrand className={className}>
-      <Link href="/">
-        <Image
-          as={NextImage}
+    <Flex gap="6" className="hidden lg:flex items-center">
+      {navigation.map((navLink, index) => (
+        <Link key={index} href={navLink.href} className="hover:text-gray-400 ">
+          {navLink.label}
+        </Link>
+      ))}
+    </Flex>
+  );
+};
+
+const NavLogo = ({ children }: PropsWithChildren) => {
+  return (
+    <Flex align="center">
+      {children}
+      <Link href="/" className="flex justify-center items-center ">
+        <NextImage
           width="150"
-          height="20"
+          height="55"
           src="/logo.svg"
           alt="Pixels"
+          className="max-w-36 w-auto h-auto"
+          priority
         />
       </Link>
-    </NavbarBrand>
+    </Flex>
   );
 };
 
-const SignUpButton = () => {
+const NavControl = () => {
   return (
-    <Fragment>
-      <Button color="primary" size="lg" className="hidden sm:block">
-        Sign up
-      </Button>
-      <Button color="primary" className="sm:hidden">
-        Sign up
-      </Button>
-    </Fragment>
-  );
-};
-
-const NavMenu = () => {
-  return (
-    <NavbarMenu className="my-5">
-      {navLinks.map((item, index) => (
-        <NavbarMenuItem key={index}>
-          <Link href={item.href}>{item.label}</Link>
-        </NavbarMenuItem>
-      ))}
-    </NavbarMenu>
+    <Flex justify="between" align="center" gap="3">
+      <TextField.Root className="hidden lg:flex p-1 shadow-none">
+        <TextField.Slot>
+          <FaMagnifyingGlass />
+        </TextField.Slot>
+        <TextField.Input
+          variant="soft"
+          size="3"
+          placeholder="Search..."
+          radius="full"
+          className="max-w-72"
+        />
+      </TextField.Root>
+      <Link className="lg:hidden" href="/search">
+        <FaMagnifyingGlass size="20" />
+      </Link>
+      <Login />
+    </Flex>
   );
 };

@@ -9,12 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@nextui-org/react": "^2.2.9",
+    "@auth0/nextjs-auth0": "^3.5.0",
+    "@radix-ui/themes": "^2.0.3",
     "framer-motion": "^10.16.16",
+    "hamburger-react": "^2.5.0",
     "next": "14.0.4",
     "react": "^18",
     "react-dom": "^18",
-    "react-icons": "^4.12.0"
+    "react-icons": "^4.12.0",
+    "react-loading-skeleton": "^3.3.1"
   },
   "devDependencies": {
     "@types/node": "^20",
