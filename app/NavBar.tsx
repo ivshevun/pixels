@@ -14,7 +14,7 @@ export default function NavBar() {
     <Flex
       justify="between"
       align="center"
-      className="mx-auto w-full lg:w-[92%] border p-4 relative"
+      className="mx-auto w-full lg:w-[92%] p-4 relative"
     >
       <NavLinks />
       <NavLogo>
