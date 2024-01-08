@@ -1,12 +1,12 @@
 "use client";
-import { UserProvider } from "@auth0/nextjs-auth0/client";
 import { Theme } from "@radix-ui/themes";
+import { SessionProvider } from "next-auth/react";
 import { PropsWithChildren } from "react";
 
 export default function Providers({ children }: PropsWithChildren) {
   return (
-    <UserProvider>
+    <SessionProvider>
       <Theme scaling="110%">{children}</Theme>
-    </UserProvider>
+    </SessionProvider>
   );
 }
