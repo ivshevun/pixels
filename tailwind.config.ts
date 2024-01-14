@@ -14,8 +14,14 @@ const config: Config = {
         },
         gray: {
           400: "#565564"
-        }
+        },
+      },
+      boxShadow: {
+        "3xl": "0 0 0 4px rgba(234,100,217,0.1)"
       }
+    },
+    fontFamily: {
+      mona: ["var(--font-mona)"]
     }
   },
 };

@@ -53,7 +53,7 @@ export default function Login() {
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
           <DropdownMenu.Label>
-            <Text>{session?.user?.email}</Text>
+            <Text>{session.user?.email}</Text>
           </DropdownMenu.Label>
           <DropdownMenu.Item onClick={() => router.push("/api/auth/signout")}>
             Log out

@@ -5,8 +5,13 @@ import NavBar from "./NavBar";
 import Providers from "./Providers";
 import "./globals.css";
 import "./theme-config.css";
+import localFont from "next/font/local";
 
 const inter = Inter({ subsets: ["latin"] });
+const monaSans = localFont({
+  src: "../public/fonts/Mona-Sans.ttf",
+  variable: "--font-mona",
+});
 
 export const metadata: Metadata = {
   title: "Pixels",
@@ -20,7 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={monaSans.className}>
         <Providers>
           <NavBar />
           {children}

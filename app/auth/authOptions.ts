@@ -1,9 +1,10 @@
 import prisma from "@/prisma/client";
+import { User } from "@prisma/client";
+import bcrypt from "bcrypt";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
-import bcrypt from "bcrypt"
 
 const authOptions: NextAuthOptions = {
   providers: [
@@ -49,9 +50,20 @@ const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) token.user = user;
+      return token;
+    },
+    async session({ session, user }) {
+      if (user) session.user = user as User;
+
+      return session;
+    },
+  },
   theme: {
-    colorScheme: "light"
-  }
+    colorScheme: "light",
+  },
 };
 
 export default authOptions;

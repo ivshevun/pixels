@@ -7,9 +7,13 @@ import Link from "next/link";
 import { Dispatch, PropsWithChildren, SetStateAction, useState } from "react";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import Login, { SignUpButton } from "./Login";
+import { usePathname } from "next/navigation";
 
 export default function NavBar() {
   const [isOpen, setOpen] = useState(false);
+  const pathname = usePathname();
+  if (pathname.includes("/auth")) return;
+
   return (
     <Flex
       justify="between"

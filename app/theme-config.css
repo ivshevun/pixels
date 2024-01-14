@@ -1,3 +1,10 @@
 .radix-themes {
   font-weight: 500;
+  --default-font-family: var(--font-mona);
+  
+  &:where([data-scaling='110%']) {
+      --scaling: 1.25;
+    }
 }
+
+
