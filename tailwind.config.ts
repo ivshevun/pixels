@@ -24,5 +24,6 @@ const config: Config = {
       mona: ["var(--font-mona)"]
     }
   },
+  darkMode: "class"
 };
 export default config;

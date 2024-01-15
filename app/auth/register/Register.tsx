@@ -19,7 +19,7 @@ export default function Register() {
         animate={{ y: 0, opacity: 1 }}
       >
         <Heading>Sign Up to Pixels</Heading>
-        <GoogleButton className="mt-5 w-full flex justify-center hover:bg-gray-400 duration-500" />
+        <GoogleButton className="mt-5 w-full flex justify-center" />
       </motion.div>
       <RegisterForm />
     </Flex>
