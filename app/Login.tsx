@@ -17,7 +17,7 @@ export const SignUpButton = ({ className }: { className?: string }) => {
         variant="solid"
         size="3"
         className={className}
-        onClick={() => router.push("/api/auth/signin")}
+        onClick={() => router.push("/auth/signin")}
       >
         Sign up
       </Button>
@@ -39,6 +39,8 @@ export default function Login() {
   if (status === "unauthenticated")
     return <SignUpButton className="hidden lg:block" />;
 
+  if (status === "authenticated") console.log(session);
+
   return (
     status === "authenticated" && (
       <DropdownMenu.Root>
@@ -53,7 +55,7 @@ export default function Login() {
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
           <DropdownMenu.Label>
-            <Text>{session.user?.email}</Text>
+            <Text>{session.user?.username || session.user.email}</Text>
           </DropdownMenu.Label>
           <DropdownMenu.Item onClick={() => router.push("/api/auth/signout")}>
             Log out

@@ -1,0 +1,106 @@
+"use client";
+import { loginSchema } from "@/app/validationSchemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Flex, Separator, Text } from "@radix-ui/themes";
+import { motion } from "framer-motion";
+import { signIn } from "next-auth/react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import AuthButton from "../components/AuthButton";
+import AuthInput from "../components/AuthInput";
+import ErrorHandling from "../components/ErrorHandling";
+
+type AuthFormData = z.infer<typeof loginSchema>;
+
+const networkErrors: { [key: string]: string } = {
+  CredentialsSignin: "Invalid email or password",
+};
+
+export default function AuthForm() {
+  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const URLError = useSearchParams().get("error");
+  const errorMessage = URLError ? networkErrors[URLError] : "";
+
+  const handleInputChange = () => {
+    if (URLError) router.push("/auth/signin");
+  };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<AuthFormData>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  const onSubmit = async (data: AuthFormData) => {
+    await signIn("credentials", {
+      email: data.email,
+      password: data.password,
+      callbackUrl: "/",
+    });
+  };
+
+  return (
+    <motion.form
+      initial={{ x: -100, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      onSubmit={handleSubmit(onSubmit)}
+      className="w-full"
+    >
+      <Separator orientation="horizontal" my="3" size="4" className="w-full" />
+
+      <ErrorHandling errors={errors} networkError={errorMessage} />
+
+      {/* Inputs */}
+      <Flex direction="column" className="gap-y-5">
+        {/* Username input */}
+        <Flex direction="column">
+          <label>Email</label>
+          <AuthInput
+            width="400px"
+            register={register("email")}
+            maxLength={255}
+            onChange={handleInputChange}
+          />
+        </Flex>
+
+        {/* Password input */}
+        <Flex direction="column">
+          <Flex justify="between" align="center">
+            <label>Password</label>
+            <Link className="text-sm underline" href="/auth/reset-password">
+              Forgot?
+            </Link>
+          </Flex>
+          <AuthInput
+            type={showPassword ? "text" : "password"}
+            register={register("password")}
+            maxLength={20}
+            onChange={handleInputChange}
+          />
+          <Text
+            onClick={() => setShowPassword((prevShow) => !prevShow)}
+            className="text-sm mt-1 cursor-pointer"
+          >
+            {showPassword ? "Hide password" : "Show password"}
+          </Text>
+        </Flex>
+        <Flex direction="column">
+          <AuthButton disabled={isSubmitting}>Sign In</AuthButton>
+          <Flex className="text-sm justify-center gap-1 text-gray-400">
+            <Text>Don`t have an account?</Text>
+            <Link className="underline" href="/auth/new-user">
+              Sign Up
+            </Link>
+          </Flex>
+        </Flex>
+      </Flex>
+    </motion.form>
+  );
+}
