@@ -11,10 +11,10 @@ const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: {
-          label: "Email",
-          type: "email",
-          placeholder: "Email",
+        login: {
+          label: "Email or Username",
+          type: "text",
+          placeholder: "Login",
         },
         password: {
           label: "Password",
@@ -23,11 +23,26 @@ const authOptions: NextAuthOptions = {
         },
       },
       async authorize(credentials, request) {
-        if (!credentials?.email || !credentials.password) return null;
+        if (!credentials?.login || !credentials.password) return null;
 
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-        });
+        // arrange global user variable to assign it in two places
+        let user;
+
+        // check if login is email and find a user by email
+        if (credentials.login.includes("@")) {
+          user = await prisma.user.findUnique({
+            where: { email: credentials.login },
+          });
+        }
+
+        // find user by username if its not an email
+        else {
+          user = await prisma.user.findUnique({
+            where: {
+              username: credentials.login,
+            },
+          });
+        }
 
         if (!user) return null;
 

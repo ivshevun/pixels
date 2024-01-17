@@ -39,8 +39,6 @@ export default function Login() {
   if (status === "unauthenticated")
     return <SignUpButton className="hidden lg:block" />;
 
-  if (status === "authenticated") console.log(session);
-
   return (
     status === "authenticated" && (
       <DropdownMenu.Root>

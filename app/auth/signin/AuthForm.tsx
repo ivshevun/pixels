@@ -16,7 +16,7 @@ import ErrorHandling from "../components/ErrorHandling";
 type AuthFormData = z.infer<typeof loginSchema>;
 
 const networkErrors: { [key: string]: string } = {
-  CredentialsSignin: "Invalid email or password",
+  CredentialsSignin: "Invalid login or password",
 };
 
 export default function AuthForm() {
@@ -36,11 +36,12 @@ export default function AuthForm() {
     formState: { errors, isSubmitting },
   } = useForm<AuthFormData>({
     resolver: zodResolver(loginSchema),
+    mode: "all",
   });
 
   const onSubmit = async (data: AuthFormData) => {
     await signIn("credentials", {
-      email: data.email,
+      login: data.login,
       password: data.password,
       callbackUrl: "/",
     });
@@ -61,10 +62,10 @@ export default function AuthForm() {
       <Flex direction="column" className="gap-y-5">
         {/* Username input */}
         <Flex direction="column">
-          <label>Email</label>
+          <label>Email or Username</label>
           <AuthInput
             width="400px"
-            register={register("email")}
+            register={register("login")}
             maxLength={255}
             onChange={handleInputChange}
           />
