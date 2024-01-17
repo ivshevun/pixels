@@ -1,7 +1,7 @@
 "use client";
 import { Avatar, Button, DropdownMenu, Flex, Text } from "@radix-ui/themes";
 import { motion } from "framer-motion";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Skeleton from "./components/Skeleton";
 
@@ -55,7 +55,7 @@ export default function Login() {
           <DropdownMenu.Label>
             <Text>{session.user?.username || session.user.email}</Text>
           </DropdownMenu.Label>
-          <DropdownMenu.Item onClick={() => router.push("/api/auth/signout")}>
+          <DropdownMenu.Item onClick={() => signOut()}>
             Log out
           </DropdownMenu.Item>
         </DropdownMenu.Content>
