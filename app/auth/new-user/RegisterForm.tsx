@@ -6,7 +6,6 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -16,12 +15,7 @@ import ErrorHandling from "../components/ErrorHandling";
 
 type RegisterFormData = z.infer<typeof userSchema>;
 
-const networkErrors: { [key: string]: string } = {
-  CredentialsSignin: "Invalid email or password",
-};
-
 export default function RegisterForm() {
-  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
@@ -37,13 +31,17 @@ export default function RegisterForm() {
     try {
       await axios.post("/api/register", data);
       await signIn("credentials", {
-        email: data.email,
+        login: data.email || data.username,
         password: data.password,
         callbackUrl: "/",
       });
+      await axios.post("/api/emails/welcome", {
+        username: data.username,
+        email: data.email,
+      });
     } catch (error: any) {
       if (axios.isAxiosError(error)) setError(error.response?.data.error);
-      console.log(error);
+      throw error;
     }
   };
 
