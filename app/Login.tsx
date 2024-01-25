@@ -19,7 +19,7 @@ export const SignUpButton = ({ className }: { className?: string }) => {
         className={className}
         onClick={() => router.push("/auth/signin")}
       >
-        Sign up
+        Sign In
       </Button>
     </motion.button>
   );

@@ -37,4 +37,4 @@ yarn-error.log*
 next-env.d.ts
 
 # emails
-.react-emails/
+.react-email/

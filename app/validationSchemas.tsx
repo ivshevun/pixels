@@ -23,3 +23,7 @@ export const loginSchema = z.object({
     .min(6, "Password is too short")
     .max(60, "Password is too long"),
 });
+
+export const emailSchema = userSchema.pick({ email: true }); // a schema that has only email
+
+export const passwordSchema = userSchema.pick({ password: true }); // only password

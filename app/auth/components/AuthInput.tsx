@@ -11,6 +11,7 @@ const AuthInput: FC<InputProps> = ({
   register,
   type = "text",
   maxLength,
+  className,
   onChange,
 }) => {
   return (
@@ -20,7 +21,7 @@ const AuthInput: FC<InputProps> = ({
       placeholder={placeholder}
       type={type}
       maxLength={maxLength}
-      className="px-2 py-6 text-md font-normal border dark:border-white hover:shadow-3xl focus:border-[#ea64d966] focus:shadow-3xl "
+      className={`px-2 py-6 text-md font-normal border dark:border-white hover:shadow-3xl focus:border-[#ea64d966] focus:shadow-3xl ${className} `}
     />
   );
 };

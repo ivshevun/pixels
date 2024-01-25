@@ -1,11 +1,12 @@
 import "@radix-ui/themes/styles.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import localFont from "next/font/local";
+import { Toaster } from "react-hot-toast";
 import NavBar from "./NavBar";
 import Providers from "./Providers";
 import "./globals.css";
 import "./theme-config.css";
-import localFont from "next/font/local";
 
 const inter = Inter({ subsets: ["latin"] });
 const monaSans = localFont({
@@ -30,6 +31,7 @@ export default function RootLayout({
           <NavBar />
           {children}
         </Providers>
+        <Toaster />
       </body>
     </html>
   );

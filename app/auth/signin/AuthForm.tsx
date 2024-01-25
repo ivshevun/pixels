@@ -75,7 +75,7 @@ export default function AuthForm() {
         <Flex direction="column">
           <Flex justify="between" align="center">
             <label>Password</label>
-            <Link className="text-sm underline" href="/auth/reset-password">
+            <Link className="text-sm underline" href="/auth/forgot-password">
               Forgot?
             </Link>
           </Flex>
