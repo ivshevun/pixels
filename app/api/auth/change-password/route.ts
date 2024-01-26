@@ -30,7 +30,10 @@ export async function POST(request: NextRequest) {
     );
 
   // hash a password
-  const hashedPassword = await bcrypt.hash(body.password, 10);
+  const hashedPassword = await bcrypt.hash(
+    body.password,
+    Number(process.env.BCRYPT_SALT_ROUNDS)!
+  );
 
   // create new user with changed password
   const updateUser = prisma.user.update({

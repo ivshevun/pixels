@@ -12,6 +12,8 @@ import { z } from "zod";
 import AuthButton from "../components/AuthButton";
 import AuthInput from "../components/AuthInput";
 import ErrorHandling from "../components/ErrorHandling";
+import SmallText from "../components/SmallText";
+import AnimatedForm from "../components/AnimatedForm";
 
 type RegisterFormData = z.infer<typeof userSchema>;
 
@@ -46,11 +48,7 @@ export default function RegisterForm() {
   };
 
   return (
-    <motion.form
-      initial={{ x: -100, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      onSubmit={handleSubmit(onSubmit)}
-    >
+    <AnimatedForm onSubmit={handleSubmit(onSubmit)}>
       <Separator orientation="horizontal" my="3" size="4" className="w-full" />
 
       {/* Render errors only if its not empty */}
@@ -82,12 +80,12 @@ export default function RegisterForm() {
             maxLength={25}
             register={register("password")}
           />
-          <Text
-            className="text-right text-sm text-gray-400 mt-2 cursor-pointer"
+          <SmallText
+            className="text-right mt-2 cursor-pointer"
             onClick={() => setShowPassword((prevShow) => !prevShow)}
           >
             {showPassword ? "Hide password" : "Show password"}
-          </Text>
+          </SmallText>
         </Flex>
       </Flex>
       {/* Button */}
@@ -99,10 +97,10 @@ export default function RegisterForm() {
         className="text-gray-400 text-sm"
       >
         <Text>Already have an account?</Text>
-        <Link href="/api/auth/signin" className="underline">
+        <Link href="/auth/sign-in" className="underline">
           Sign in
         </Link>
       </Flex>
-    </motion.form>
+    </AnimatedForm>
   );
 }

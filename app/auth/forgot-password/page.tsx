@@ -10,6 +10,9 @@ import { toast } from "react-hot-toast";
 import { z } from "zod";
 import AuthButton from "../components/AuthButton";
 import AuthInput from "../components/AuthInput";
+import { Center } from "../components/Center";
+import SmallText from "../components/SmallText";
+import AnimatedForm from "../components/AnimatedForm";
 
 type ResetFormData = z.infer<typeof emailSchema>;
 
@@ -25,7 +28,7 @@ export default function ForgotPage() {
       await axios.post("/api/auth/forgot-password", data);
 
       // navigate to login page
-      router.push("/auth/signin");
+      router.push("/auth/sign-in");
 
       // send info toast
       toast.success(
@@ -40,16 +43,8 @@ export default function ForgotPage() {
   };
 
   return (
-    <Flex
-      direction="column"
-      justify="center"
-      align="center"
-      key="form-wrapper"
-      className="mx-auto lg:mx-0 lg:mr-auto px-8"
-    >
-      <motion.form
-        initial={{ x: -100, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
+    <Center>
+      <AnimatedForm
         className="flex flex-col gap-4 mx-auto lg:mx-0"
         onSubmit={handleSubmit(onSubmit)}
       >
@@ -57,16 +52,16 @@ export default function ForgotPage() {
           Forgot password
         </Heading>
         {/* make heading smaller */}
-        <Text className="mx-auto text-center text-sm text-gray-400 w-3/4 lg:mx-0 lg:text-left ">
+        <SmallText className="mx-auto text-center w-3/4 lg:mx-0 lg:text-left ">
           Enter the email address you used when you joined and we’ll send you
           instructions to reset your password.
-        </Text>
+        </SmallText>
         <div className="w-3/4 mx-auto lg:mx-0">
           <label>Email</label>
           <AuthInput register={register("email")} />
           <AuthButton>Submit</AuthButton>
         </div>
-      </motion.form>
-    </Flex>
+      </AnimatedForm>
+    </Center>
   );
 }

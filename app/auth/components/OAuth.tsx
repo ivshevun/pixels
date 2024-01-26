@@ -1,6 +1,5 @@
-import { Heading, Separator } from "@radix-ui/themes";
+import { Heading } from "@radix-ui/themes";
 import { motion } from "framer-motion";
-import React from "react";
 import GoogleButton from "./GoogleButton";
 
 export default function OAuth({ title }: { title: string }) {

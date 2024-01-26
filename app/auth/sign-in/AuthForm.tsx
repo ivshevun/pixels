@@ -12,6 +12,7 @@ import { z } from "zod";
 import AuthButton from "../components/AuthButton";
 import AuthInput from "../components/AuthInput";
 import ErrorHandling from "../components/ErrorHandling";
+import AnimatedForm from "../components/AnimatedForm";
 
 type AuthFormData = z.infer<typeof loginSchema>;
 
@@ -48,12 +49,7 @@ export default function AuthForm() {
   };
 
   return (
-    <motion.form
-      initial={{ x: -100, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      onSubmit={handleSubmit(onSubmit)}
-      className="w-full"
-    >
+    <AnimatedForm onSubmit={handleSubmit(onSubmit)} className="w-full">
       <Separator orientation="horizontal" my="3" size="4" className="w-full" />
 
       <ErrorHandling errors={errors} networkError={errorMessage} />
@@ -102,6 +98,6 @@ export default function AuthForm() {
           </Flex>
         </Flex>
       </Flex>
-    </motion.form>
+    </AnimatedForm>
   );
 }

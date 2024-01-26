@@ -11,7 +11,10 @@ import toast from "react-hot-toast";
 import { z } from "zod";
 import AuthButton from "../../components/AuthButton";
 import AuthInput from "../../components/AuthInput";
+import { CenterResponsive } from "../../components/Center";
 import ErrorHandling from "../../components/ErrorHandling";
+import SmallText from "../../components/SmallText";
+import AnimatedForm from "../../components/AnimatedForm";
 
 type PasswordFormData = z.infer<typeof passwordSchema>;
 
@@ -39,7 +42,7 @@ export default function PasswordFormPage() {
       };
 
       await axios.post("/api/auth/change-password", extendedData);
-      router.push("/auth/signin");
+      router.push("/auth/sign-in");
 
       toast.success("Password changed!");
     } catch (error) {
@@ -48,16 +51,8 @@ export default function PasswordFormPage() {
   };
 
   return (
-    <Flex
-      direction="column"
-      justify="center"
-      align="center"
-      key="form-wrapper"
-      className="mx-auto lg:mx-0 lg:mr-auto px-8 items-start md:w-1/2 lg:w-1/3"
-    >
-      <motion.form
-        initial={{ x: -100, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
+    <CenterResponsive>
+      <AnimatedForm
         className="flex flex-col gap-y-10 w-full xl:w-3/4"
         onSubmit={handleSubmit(onSubmit)}
       >
@@ -81,12 +76,12 @@ export default function PasswordFormPage() {
             type={showPassword ? "text" : "password"}
             register={register("password")}
           />
-          <Text className="text-sm text-gray-400">Minimum 6 characters</Text>
+          <SmallText>Minimum 6 characters</SmallText>
           <AuthButton disabled={isSubmitting} className="py-3">
             Change password
           </AuthButton>
         </Flex>
-      </motion.form>
-    </Flex>
+      </AnimatedForm>
+    </CenterResponsive>
   );
 }

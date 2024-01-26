@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Skeleton from "./components/Skeleton";
 
 export const SignUpButton = ({ className }: { className?: string }) => {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const router = useRouter();
 
   if (session?.user) return;
@@ -27,7 +27,6 @@ export const SignUpButton = ({ className }: { className?: string }) => {
 
 export default function Login() {
   const { data: session, status } = useSession();
-  const router = useRouter();
 
   if (status === "loading")
     return (

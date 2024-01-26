@@ -1,3 +1,4 @@
+import SmallText from "@/app/auth/components/SmallText";
 import {
   Body,
   Button,
@@ -30,9 +31,7 @@ const ForgotPasswordTemplate = ({
               src="https://i.imgur.com/aFyMRUi.jpg"
             />
             <Heading>Hi, {username}!</Heading>
-            <Text className="text-sm text-gray-400">
-              Here are your password reset instructions.
-            </Text>
+            <SmallText>Here are your password reset instructions.</SmallText>
             <Hr />
             <Text>
               A request to reset your Pixels password has been made. If you did
@@ -45,9 +44,7 @@ const ForgotPasswordTemplate = ({
             >
               Reset password
             </Button>
-            <Section className="text-sm text-gray-400 text-left">
-              <Text>Cheers, Pixels Team</Text>
-            </Section>
+            <SmallText className="text-left">Cheers, Pixels Team</SmallText>
           </Container>
         </Body>
       </Tailwind>
