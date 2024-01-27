@@ -28,7 +28,7 @@ export default function AuthForm() {
   const errorMessage = URLError ? networkErrors[URLError] : "";
 
   const handleInputChange = () => {
-    if (URLError) router.push("/auth/signin");
+    if (URLError) router.push("/auth/sign-in");
   };
 
   const {

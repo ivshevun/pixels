@@ -1,32 +1,36 @@
 "use client";
-import { Flex, TextField } from "@radix-ui/themes";
+import { Flex, TextField, Theme } from "@radix-ui/themes";
 import { AnimatePresence, motion } from "framer-motion";
 import Hamburger from "hamburger-react";
 import NextImage from "next/image";
 import Link from "next/link";
 import { Dispatch, PropsWithChildren, SetStateAction, useState } from "react";
 import { FaMagnifyingGlass } from "react-icons/fa6";
-import Login, { SignUpButton } from "./Login";
+import Login, { Auth } from "./Login";
 import { usePathname } from "next/navigation";
 
 export default function NavBar() {
   const [isOpen, setOpen] = useState(false);
   const pathname = usePathname();
+
+  // disable navigation on /auth route
   if (pathname.includes("/auth")) return;
 
   return (
-    <Flex
-      justify="between"
-      align="center"
-      className="mx-auto w-full lg:w-[92%] p-4 relative"
-    >
-      <NavLinks />
-      <NavLogo>
-        <NavMenu isOpen={isOpen} setOpen={setOpen} />
-        {/* Escape prop drilling using component composition */}
-      </NavLogo>
-      <NavControl />
-    </Flex>
+    <Theme scaling="90%">
+      <Flex
+        justify="between"
+        align="center"
+        className="mx-auto w-full lg:w-[92%] p-4 relative"
+      >
+        <NavLinks />
+        <NavLogo>
+          <NavMenu isOpen={isOpen} setOpen={setOpen} />
+          {/* Escape prop drilling using component composition */}
+        </NavLogo>
+        <NavControl />
+      </Flex>
+    </Theme>
   );
 }
 
@@ -72,7 +76,7 @@ const NavMenu = ({
                 <Link href={navLink.href}>{navLink.label}</Link>
               </motion.a>
             ))}
-            <SignUpButton />
+            <Auth />
           </motion.div>
         )}
       </AnimatePresence>
@@ -112,13 +116,12 @@ const NavLogo = ({ children }: PropsWithChildren) => {
 
 const NavControl = () => {
   return (
-    <Flex justify="between" align="center" gap="3">
-      <TextField.Root className="hidden lg:flex p-1 shadow-none">
+    <Flex justify="between" align="center" gap="5">
+      <TextField.Root className="hidden lg:flex p-1 shadow-none focus:border-none">
         <TextField.Slot>
           <FaMagnifyingGlass />
         </TextField.Slot>
         <TextField.Input
-          variant="soft"
           size="3"
           placeholder="Search..."
           radius="full"

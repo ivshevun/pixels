@@ -6,7 +6,7 @@ import { PropsWithChildren } from "react";
 export default function Providers({ children }: PropsWithChildren) {
   return (
     <SessionProvider>
-      <Theme scaling="110%">{children}</Theme>
+      <Theme scaling="100%">{children}</Theme>
     </SessionProvider>
   );
 }

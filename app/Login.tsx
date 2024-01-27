@@ -4,24 +4,31 @@ import { motion } from "framer-motion";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Skeleton from "./components/Skeleton";
+import classNames from "classnames";
+import Link from "next/link";
 
-export const SignUpButton = ({ className }: { className?: string }) => {
+export const Auth = ({ className }: { className?: string }) => {
   const { data: session } = useSession();
   const router = useRouter();
 
   if (session?.user) return;
 
+  const styles = classNames("flex-col lg:flex-row gap-x-4 gap-y-2", className);
+
   return (
-    <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-      <Button
-        variant="solid"
-        size="3"
-        className={className}
-        onClick={() => router.push("/auth/signin")}
-      >
-        Sign In
-      </Button>
-    </motion.button>
+    <Flex align="center" justify="center" className={styles}>
+      <Link href="/auth/sign-in">Log in</Link>
+      <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+        <Button
+          variant="solid"
+          size="3"
+          className="bg-indigo-950 text-white rounded-full text-xs px-6"
+          onClick={() => router.push("/auth/new-user")}
+        >
+          Sign Up
+        </Button>
+      </motion.button>
+    </Flex>
   );
 };
 
@@ -35,8 +42,7 @@ export default function Login() {
       </Flex>
     );
 
-  if (status === "unauthenticated")
-    return <SignUpButton className="hidden lg:block" />;
+  if (status === "unauthenticated") return <Auth className="hidden lg:flex" />;
 
   return (
     status === "authenticated" && (

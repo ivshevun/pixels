@@ -81,7 +81,7 @@ const authOptions: NextAuthOptions = {
     colorScheme: "light",
   },
   pages: {
-    signIn: "/auth/signin",
+    signIn: "/auth/sign-in",
   },
 };
 
