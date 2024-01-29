@@ -18,7 +18,7 @@ export const Auth = ({ className }: { className?: string }) => {
   return (
     <Flex align="center" justify="center" className={styles}>
       <Link href="/auth/sign-in">Log in</Link>
-      <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+      <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
         <Button
           variant="solid"
           size="4"
@@ -27,7 +27,7 @@ export const Auth = ({ className }: { className?: string }) => {
         >
           Sign Up
         </Button>
-      </motion.button>
+      </motion.div>
     </Flex>
   );
 };

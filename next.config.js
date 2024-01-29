@@ -8,7 +8,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "cdn.dribble.com",
+        hostname: "cdn.dribbble.com",
       },
     ],
   },
