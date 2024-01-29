@@ -21,8 +21,8 @@ export const Auth = ({ className }: { className?: string }) => {
       <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
         <Button
           variant="solid"
-          size="3"
-          className="bg-indigo-950 text-white rounded-full text-xs px-6"
+          size="4"
+          className="bg-indigo-950 text-white rounded-full text-base py-6"
           onClick={() => router.push("/auth/new-user")}
         >
           Sign Up
