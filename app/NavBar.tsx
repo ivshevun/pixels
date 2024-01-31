@@ -1,18 +1,20 @@
 "use client";
+import { toggleNavMenu } from "@/lib/redux/features/disclosure/disclosureSlice";
+import { useDisclosure } from "@/lib/redux/features/disclosure/hooks";
+import { useAppDispatch } from "@/lib/redux/hooks";
 import { Flex, TextField } from "@radix-ui/themes";
 import { motion } from "framer-motion";
 import Hamburger from "hamburger-react";
 import NextImage from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Dispatch, PropsWithChildren, SetStateAction, useState } from "react";
+import { PropsWithChildren } from "react";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import Login, { Auth } from "./Login";
 import AnimatedMenu from "./components/AnimatedMenu";
 import Overlay from "./components/Overlay";
 
 export default function NavBar() {
-  const [isOpen, setOpen] = useState(false);
   const pathname = usePathname();
 
   // disable navigation on /auth route
@@ -24,10 +26,9 @@ export default function NavBar() {
       align="center"
       className="mx-auto w-full lg:w-[92%] p-4 relative"
     >
-      <Overlay isOverlayed={isOpen} setOverlayed={setOpen} />
       <NavLinks />
       <NavLogo>
-        <NavMenu isOpen={isOpen} setOpen={setOpen} />
+        <NavMenu />
         {/* Escape prop drilling using component composition */}
       </NavLogo>
       <NavControl />
@@ -45,43 +46,44 @@ const linkVariants = {
   hidden: { x: -500 },
 };
 
-const NavMenu = ({
-  isOpen,
-  setOpen,
-}: {
-  isOpen: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-}) => {
+const NavMenu = () => {
+  const { isNavMenuOpen: isOpen } = useDisclosure();
+  const dispatch = useAppDispatch();
+
+  const handleMenuToggle = () => {
+    dispatch(toggleNavMenu());
+  };
+
   return (
     <Flex direction="column" className="lg:hidden">
       <Hamburger
         toggled={isOpen}
-        toggle={setOpen}
+        toggle={handleMenuToggle}
         size={32}
         direction="right"
       />
-      {isOpen && (
-        <AnimatedMenu
-          isOpen={isOpen}
-          className="items-center"
-          transition={{ duration: 0 }}
-        >
-          {navigation.map((navLink) => (
-            <motion.p
-              key={navLink.href}
-              variants={linkVariants}
-              initial="hidden"
-              animate="visible"
-              exit="visible"
-              className="overflow-hidden hover:text-gray-400"
-              transition={{ duration: 0.3 }}
-            >
-              <Link href={navLink.href}>{navLink.label}</Link>
-            </motion.p>
-          ))}
-          <Auth />
-        </AnimatedMenu>
-      )}
+      <Overlay isOverlayed={isOpen} setOverlayed={handleMenuToggle} />
+
+      <AnimatedMenu
+        isOpen={isOpen}
+        className="items-center"
+        transition={{ duration: 0 }}
+      >
+        {navigation.map((navLink) => (
+          <motion.p
+            key={navLink.href}
+            variants={linkVariants}
+            initial="hidden"
+            animate="visible"
+            exit="visible"
+            className="overflow-hidden hover:text-gray-400"
+            transition={{ duration: 0.3 }}
+          >
+            <Link href={navLink.href}>{navLink.label}</Link>
+          </motion.p>
+        ))}
+        <Auth />
+      </AnimatedMenu>
     </Flex>
   );
 };

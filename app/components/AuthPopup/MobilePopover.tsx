@@ -1,6 +1,9 @@
+import { toggleUserMenu } from "@/lib/redux/features/disclosure/disclosureSlice";
+import { useDisclosure } from "@/lib/redux/features/disclosure/hooks";
+import { useAppDispatch } from "@/lib/redux/hooks";
 import { Flex, Separator, Text } from "@radix-ui/themes";
 import { signOut } from "next-auth/react";
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useRef } from "react";
 import AnimatedMenu from "../AnimatedMenu";
 import Overlay from "../Overlay";
 import { ILink, IUser, PopupLink, UserInfo, UserTrigger } from "./AuthPopover";
@@ -12,13 +15,23 @@ export default function MobilePopover({
   user: IUser;
   links: ILink[];
 }) {
-  const [isOpen, setOpen] = useState(false);
+  const { isUserMenuOpen: isOpen } = useDisclosure();
+  const dispatch = useAppDispatch();
+
   const avatarRef = useRef(null);
+
+  const handleToggleMenu = () => {
+    dispatch(toggleUserMenu());
+  };
 
   return (
     <Flex direction="column" className="lg:hidden">
-      <UserTrigger setOpen={setOpen} user={user} innerRef={avatarRef} />
-      <Overlay isOverlayed={isOpen} setOverlayed={setOpen} />
+      <UserTrigger
+        setOpen={handleToggleMenu}
+        user={user}
+        innerRef={avatarRef}
+      />
+      <Overlay isOverlayed={isOpen} setOverlayed={handleToggleMenu} />
       <AnimatedMenu isOpen={isOpen}>
         <UserInfo user={user} />
         <Flex direction="column" gap="2" className="pl-8">
