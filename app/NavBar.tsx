@@ -1,13 +1,15 @@
 "use client";
-import { Flex, TextField, Theme } from "@radix-ui/themes";
-import { AnimatePresence, motion } from "framer-motion";
+import { Flex, TextField } from "@radix-ui/themes";
+import { motion } from "framer-motion";
 import Hamburger from "hamburger-react";
 import NextImage from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Dispatch, PropsWithChildren, SetStateAction, useState } from "react";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import Login, { Auth } from "./Login";
-import { usePathname } from "next/navigation";
+import AnimatedMenu from "./components/AnimatedMenu";
+import Overlay from "./components/Overlay";
 
 export default function NavBar() {
   const [isOpen, setOpen] = useState(false);
@@ -17,20 +19,19 @@ export default function NavBar() {
   if (pathname.includes("/auth")) return;
 
   return (
-    <Theme scaling="90%">
-      <Flex
-        justify="between"
-        align="center"
-        className="mx-auto w-full lg:w-[92%] p-4 relative"
-      >
-        <NavLinks />
-        <NavLogo>
-          <NavMenu isOpen={isOpen} setOpen={setOpen} />
-          {/* Escape prop drilling using component composition */}
-        </NavLogo>
-        <NavControl />
-      </Flex>
-    </Theme>
+    <Flex
+      justify="between"
+      align="center"
+      className="mx-auto w-full lg:w-[92%] p-4 relative"
+    >
+      <Overlay isOverlayed={isOpen} setOverlayed={setOpen} />
+      <NavLinks />
+      <NavLogo>
+        <NavMenu isOpen={isOpen} setOpen={setOpen} />
+        {/* Escape prop drilling using component composition */}
+      </NavLogo>
+      <NavControl />
+    </Flex>
   );
 }
 
@@ -38,6 +39,11 @@ const navigation = [
   { label: "Inspiration", href: "/popular" },
   { label: "Go Pro", href: "/subscription" },
 ];
+
+const linkVariants = {
+  visible: { x: 0 },
+  hidden: { x: -500 },
+};
 
 const NavMenu = ({
   isOpen,
@@ -54,32 +60,28 @@ const NavMenu = ({
         size={32}
         direction="right"
       />
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            key="nav-content"
-            className="flex flex-col absolute left-0 top-[86px] shadow-md h-auto w-full p-4 gap-3 overflow-hidden items-center bg-white"
-            initial={{ height: 0 }}
-            animate={{ height: "auto" }}
-            exit={{ height: 0, padding: 0 }}
-            transition={{ duration: 0.1 }}
-          >
-            {navigation.map((navLink) => (
-              <motion.a
-                key={navLink.href}
-                initial={{ x: -500 }}
-                animate={{ x: 0 }}
-                exit={{ x: -500 }}
-                className="overflow-hidden hover:text-gray-400"
-                transition={{ duration: 0.3 }}
-              >
-                <Link href={navLink.href}>{navLink.label}</Link>
-              </motion.a>
-            ))}
-            <Auth />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {isOpen && (
+        <AnimatedMenu
+          isOpen={isOpen}
+          className="items-center"
+          transition={{ duration: 0 }}
+        >
+          {navigation.map((navLink) => (
+            <motion.p
+              key={navLink.href}
+              variants={linkVariants}
+              initial="hidden"
+              animate="visible"
+              exit="visible"
+              className="overflow-hidden hover:text-gray-400"
+              transition={{ duration: 0.3 }}
+            >
+              <Link href={navLink.href}>{navLink.label}</Link>
+            </motion.p>
+          ))}
+          <Auth />
+        </AnimatedMenu>
+      )}
     </Flex>
   );
 };

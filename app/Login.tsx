@@ -1,11 +1,12 @@
 "use client";
-import { Avatar, Button, DropdownMenu, Flex, Text } from "@radix-ui/themes";
-import { motion } from "framer-motion";
-import { signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import Skeleton from "./components/Skeleton";
+import { Button, Flex } from "@radix-ui/themes";
 import classNames from "classnames";
+import { motion } from "framer-motion";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import AuthPopover from "./components/AuthPopup/AuthPopover";
+import Skeleton from "./components/Skeleton";
 
 export const Auth = ({ className }: { className?: string }) => {
   const { data: session } = useSession();
@@ -44,27 +45,5 @@ export default function Login() {
 
   if (status === "unauthenticated") return <Auth className="hidden lg:flex" />;
 
-  return (
-    status === "authenticated" && (
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger>
-          <Avatar
-            src={session?.user?.image!}
-            fallback="?"
-            radius="full"
-            className="cursor-pointer"
-            referrerPolicy="no-referrer"
-          />
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Content>
-          <DropdownMenu.Label>
-            <Text>{session.user?.username || session.user.email}</Text>
-          </DropdownMenu.Label>
-          <DropdownMenu.Item onClick={() => signOut()}>
-            Log out
-          </DropdownMenu.Item>
-        </DropdownMenu.Content>
-      </DropdownMenu.Root>
-    )
-  );
+  return status === "authenticated" && <AuthPopover user={session.user} />;
 }
