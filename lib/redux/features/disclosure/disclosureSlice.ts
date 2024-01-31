@@ -15,7 +15,6 @@ export const disclosureSlice = createSlice({
   initialState,
   reducers: {
     toggleNavMenu: (state) => {
-      
       if (state.isUserMenuOpen) state.isUserMenuOpen = false;
     
       state.isNavMenuOpen = !state.isNavMenuOpen;
