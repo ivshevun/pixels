@@ -123,13 +123,14 @@ const NavControl = () => {
     <Flex justify="between" align="center" gap="5">
       <TextField.Root className="hidden lg:flex p-1 shadow-none focus:border-none">
         <TextField.Slot>
-          <FaMagnifyingGlass />
+          <FaMagnifyingGlass size="16" />
         </TextField.Slot>
         <TextField.Input
           size="3"
           placeholder="Search..."
           radius="full"
-          className="max-w-72"
+          variant="soft"
+          className="max-w-72 placeholder:text-gray-600 placeholder:text-base"
         />
       </TextField.Root>
       <Link className="lg:hidden" href="/search">

@@ -81,7 +81,7 @@ export const UserInfo = ({ user }: { user: IUser }) => {
         gap="3"
       >
         <Avatar size="6" radius="full" src={user.image!} fallback="?" />
-        <Text>{user.username || user.email}</Text>
+        <Text>{user.username || user.name || user.email}</Text>
       </Flex>
     </Link>
   );

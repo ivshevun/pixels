@@ -2,6 +2,7 @@ import prisma from "@/prisma/client";
 import { User } from "@prisma/client";
 import { Avatar, Flex, Heading } from "@radix-ui/themes";
 import SmallText from "../auth/components/SmallText";
+import UserTabs from "./UserTabs";
 import TransparentButton from "./components/TransparentButton";
 
 interface Params {
@@ -13,31 +14,43 @@ export default async function Dashboard({ params }: Params) {
     where: { username: params.username },
   });
 
-  if (!user) return; // todo: change this logic
+  // TODO: make it return 404 page
+  if (!user) return;
 
   return (
     <Flex
       direction="column"
       width="100%"
-      pt="7"
-      className="h-screen"
-      align="center"
+      py="7"
+      className="h-100% py-16 md:px-8 xl:px-20"
+      gap="7"
     >
       <UserInfo user={user} />
+      <UserTabs user={user} />
     </Flex>
   );
 }
 
 const UserInfo = ({ user }: { user: User }) => {
   return (
-    <Flex gap="5" align="center" direction={{ initial: "column", sm: "row" }}>
-      <Avatar size="7" radius="full" src={user.image!} fallback="?" />
+    <Flex
+      gap="6"
+      align="center"
+      justify="center"
+      direction={{ initial: "column", sm: "row" }}
+    >
+      <Avatar
+        size={{ initial: "7", md: "8" }}
+        radius="full"
+        src={user.image!}
+        fallback="?"
+      />
       <Flex
         direction="column"
         gap="1"
         align={{ initial: "center", sm: "start" }}
       >
-        <Heading className="font-semibold">
+        <Heading className="font-semibold text-2xl md:text-4xl">
           {user.username || user.name}
         </Heading>
         <SmallText className="text-sm text-gray-400">{user.email}</SmallText>
