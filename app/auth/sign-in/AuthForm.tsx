@@ -9,7 +9,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import AuthButton from "../components/AuthButton";
+import DarkButton from "../../components/DarkButton";
 import AuthInput from "../components/AuthInput";
 import ErrorHandling from "../components/ErrorHandling";
 import AnimatedForm from "../components/AnimatedForm";
@@ -89,7 +89,7 @@ export default function AuthForm() {
           </Text>
         </Flex>
         <Flex direction="column">
-          <AuthButton disabled={isSubmitting}>Sign In</AuthButton>
+          <DarkButton disabled={isSubmitting}>Sign In</DarkButton>
           <Flex className="text-sm justify-center gap-1 text-gray-400">
             <Text>Don`t have an account?</Text>
             <Link className="underline" href="/auth/new-user">

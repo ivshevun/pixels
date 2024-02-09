@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
-import AuthButton from "../../components/AuthButton";
+import DarkButton from "../../../components/DarkButton";
 import AuthInput from "../../components/AuthInput";
 import { CenterResponsive } from "../../components/Center";
 import ErrorHandling from "../../components/ErrorHandling";
@@ -77,9 +77,9 @@ export default function PasswordFormPage() {
             register={register("password")}
           />
           <SmallText>Minimum 6 characters</SmallText>
-          <AuthButton disabled={isSubmitting} className="py-3">
+          <DarkButton disabled={isSubmitting} className="py-3">
             Change password
-          </AuthButton>
+          </DarkButton>
         </Flex>
       </AnimatedForm>
     </CenterResponsive>

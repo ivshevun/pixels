@@ -9,7 +9,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import AuthButton from "../components/AuthButton";
+import DarkButton from "../../components/DarkButton";
 import AuthInput from "../components/AuthInput";
 import ErrorHandling from "../components/ErrorHandling";
 import SmallText from "../components/SmallText";
@@ -89,7 +89,7 @@ export default function RegisterForm() {
         </Flex>
       </Flex>
       {/* Button */}
-      <AuthButton disabled={isSubmitting}>Create Account</AuthButton>
+      <DarkButton disabled={isSubmitting}>Create Account</DarkButton>
       <Flex
         justify="center"
         align="center"

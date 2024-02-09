@@ -1,19 +1,17 @@
-"use client";
 import { ButtonProps } from "@/app/interfaces/ButtonProps";
 import classNames from "classnames";
 
-export default function TransparentButton({
+export default function BeigeButton({
   children,
   className,
-  ...rest
+  ...props
 }: ButtonProps) {
   const styles = classNames(
-    "border rounded-full text-sm hover:border-gray-300 transition-colors font-semibold",
+    "bg-yellow-100 hover:bg-yellow-200 rounded-full  px-4 text-sm font-semibold py-2",
     className
   );
-
   return (
-    <button className={styles} {...rest}>
+    <button className={styles} {...props}>
       {children}
     </button>
   );

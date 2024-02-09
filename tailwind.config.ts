@@ -15,6 +15,13 @@ const config: Config = {
         gray: {
           400: "#565564"
         },
+        yellow: {
+          100: "#f8f7f4",
+          200: "#f5f3f0"
+        }
+      },
+      screens: {
+        "xs": "360px"
       },
       boxShadow: {
         "3xl": "0 0 0 4px rgba(234,100,217,0.1)"

@@ -17,8 +17,11 @@ import Overlay from "./components/Overlay";
 export default function NavBar() {
   const pathname = usePathname();
 
-  // disable navigation on /auth route
-  if (pathname.includes("/auth")) return;
+  const restrictedPaths = ["auth", "uploads"];
+
+  // check if path is restricted
+  if (pathname.split("/").some((path) => restrictedPaths.includes(path)))
+    return;
 
   return (
     <Flex

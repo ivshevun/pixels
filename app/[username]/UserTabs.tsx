@@ -26,7 +26,7 @@ export default function UserTabs({ user }: { user: User }) {
   ];
   const currentTab = usePathname();
 
-  const activeStyles = "bg-[#f8f7f4] rounded-full hover:bg-[#f5f3f0]";
+  const activeStyles = "bg-yellow-100 rounded-full hover:bg-yellow-200";
   const nonActiveStyles = "hover:text-gray-400";
 
   return (
@@ -41,7 +41,7 @@ export default function UserTabs({ user }: { user: User }) {
           <Link
             key={tab.href}
             className={classNames(
-              "capitalize text-sm px-4 py-2 cursor-pointer transition-colors",
+              "capitalize text-sm font-semibold px-4 py-2 cursor-pointer transition-colors",
               currentTab === tab.href ? activeStyles : nonActiveStyles
             )}
             href={tab.href}

@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgres"
   url      = env("DATABASE_URL")
 }
 
@@ -46,10 +46,11 @@ model User {
   image          String?
   hashedPassword String?
 
-  accounts Account[]
-  sessions Session[]
-
+  accounts           Account[]
+  sessions           Session[]
   passwordResetToken passwordResetToken[]
+
+  Shots Shot[]
 }
 
 model passwordResetToken {
@@ -60,4 +61,134 @@ model passwordResetToken {
 
   user   User   @relation(fields: [userId], references: [id])
   userId String
+}
+
+model Shot {
+  id           String @id @default(cuid())
+  imageUrl     String @db.VarChar(255)
+  thumbnailUrl String @db.VarChar(255)
+
+  title       String
+  description String @db.VarChar(255)
+
+  // create a one-to-one relationship with user
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  views    Int
+  saves    Int
+  likes    Int
+  comments Int
+
+  tags Tag[]
+}
+
+enum Tag {
+  Mobile
+  Typography
+  WebDesign
+  Animations
+  Illustrations
+  ThreeD
+  ProductDesign
+  UIUX
+  Photography
+  Minimalism
+  FlatDesign
+  Responsive
+  Branding
+  Ecommerce
+  LandingPage
+  Portfolio
+  DarkMode
+  LightMode
+  Sketch
+  Figma
+  AdobeXD
+  Photoshop
+  Illustrator
+  Sketching
+  Wireframing
+  Prototyping
+  MotionGraphics
+  MaterialDesign
+  Colorful
+  Monochrome
+  Retro
+  Vintage
+  HandLettering
+  Calligraphy
+  Graffiti
+  VectorArt
+  PixelArt
+  Abstract
+  Surreal
+  Conceptual
+  Infographics
+  Charts
+  Graphs
+  Maps
+  Icons
+  Logos
+  Badges
+  Stickers
+  Emojis
+  SocialMedia
+  Marketing
+  Podcast
+  Music
+  Video
+  VR
+  AR
+  Wearables
+  IoT
+  GameDesign
+  VRGames
+  ARGames
+  AugmentedReality
+  VirtualReality
+  Coding
+  Programming
+  Development
+  CodeSnippets
+  Algorithms
+  DataStructures
+  AI
+  MachineLearning
+  Blockchain
+  Cryptocurrency
+  Bitcoin
+  Ethereum
+  SmartContracts
+  NFT
+  CyberSecurity
+  Privacy
+  Accessibility
+  InclusiveDesign
+  Sustainability
+  Environment
+  Health
+  Fitness
+  Cooking
+  Travel
+  Nature
+  Space
+  Astronomy
+  Science
+  History
+  Literature
+  Movies
+  TVShows
+  Anime
+  Gaming
+  Comics
+  Fantasy
+  SciFi
+  Horror
+  Web
+  Design
+  Ux
+  Ui
+  Startup
+  Service
 }

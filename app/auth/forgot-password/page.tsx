@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { z } from "zod";
-import AuthButton from "../components/AuthButton";
+import DarkButton from "../../components/DarkButton";
 import AuthInput from "../components/AuthInput";
 import { Center } from "../components/Center";
 import SmallText from "../components/SmallText";
@@ -59,7 +59,7 @@ export default function ForgotPage() {
         <div className="w-3/4 mx-auto lg:mx-0">
           <label>Email</label>
           <AuthInput register={register("email")} />
-          <AuthButton>Submit</AuthButton>
+          <DarkButton>Submit</DarkButton>
         </div>
       </AnimatedForm>
     </Center>
