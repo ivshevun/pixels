@@ -89,7 +89,9 @@ export default function RegisterForm() {
         </Flex>
       </Flex>
       {/* Button */}
-      <DarkButton disabled={isSubmitting}>Create Account</DarkButton>
+      <DarkButton disabled={isSubmitting} className="py-4 my-2">
+        Create Account
+      </DarkButton>
       <Flex
         justify="center"
         align="center"

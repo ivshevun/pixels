@@ -89,7 +89,9 @@ export default function AuthForm() {
           </Text>
         </Flex>
         <Flex direction="column">
-          <DarkButton disabled={isSubmitting}>Sign In</DarkButton>
+          <DarkButton disabled={isSubmitting} className="py-4 my-4">
+            Sign In
+          </DarkButton>
           <Flex className="text-sm justify-center gap-1 text-gray-400">
             <Text>Don`t have an account?</Text>
             <Link className="underline" href="/auth/new-user">
