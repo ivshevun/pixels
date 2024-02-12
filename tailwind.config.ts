@@ -18,6 +18,9 @@ const config: Config = {
         yellow: {
           100: "#f8f7f4",
           200: "#f5f3f0"
+        },
+        purple: {
+          950: '#ea64d966'
         }
       },
       screens: {

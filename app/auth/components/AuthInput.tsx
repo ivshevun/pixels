@@ -16,7 +16,7 @@ const AuthInput = ({
   onChange,
 }: InputProps) => {
   const styles = classNames(
-    "px-2 py-6 text-md font-normal border dark:border-white hover:shadow-3xl focus:border-[#ea64d966] focus:shadow-3xl",
+    "px-2 py-6 text-md font-normal border dark:border-white hover:shadow-3xl focus:border-purple-950 focus:shadow-3xl",
     className
   );
 

@@ -10,6 +10,7 @@
     "preview-email": "email dev -p 3030"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.511.0",
     "@editorjs/editorjs": "^2.29.0",
     "@hookform/resolvers": "^3.3.4",
     "@next-auth/prisma-adapter": "^1.0.7",
