@@ -2,7 +2,8 @@
 import TransparentButton from "@/app/[username]/components/TransparentButton";
 import SmallText from "@/app/auth/components/SmallText";
 import DarkButton from "@/app/components/DarkButton";
-import { Box, Flex, Heading, Text } from "@radix-ui/themes";
+import log from "@/lib/log";
+import { Flex, Heading, Text } from "@radix-ui/themes";
 import axios from "axios";
 import classNames from "classnames";
 import { useSession } from "next-auth/react";
@@ -11,10 +12,24 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, Fragment, KeyboardEvent, useState } from "react";
 import BeigeButton from "./components/BeigeButton";
 import MediaFeatures from "./components/MediaFeatures";
-import log from "@/lib/log";
+import { AnimatePresence, motion } from "framer-motion";
+import { opacityVariants } from "@/lib/animationVariants";
 
 export default function UploadPage() {
   const [file, setFile] = useState<File | null>(null);
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    const isEnterKey = event.key === "Enter";
+    const isEscapeKey = event.key === "Escape";
+
+    if (isEnterKey && file) {
+      uploadImage();
+    }
+
+    if (isEscapeKey && file) {
+      setFile(null);
+    }
+  };
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
@@ -48,7 +63,12 @@ export default function UploadPage() {
   };
 
   return (
-    <Flex direction="column" className="overflow-hidden max-h-screen">
+    <Flex
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+      direction="column"
+      className="overflow-hidden h-screen"
+    >
       <ControlButtons file={file} onSubmit={uploadImage} />
       <Flex
         direction="column"
@@ -132,19 +152,34 @@ const ImagePlaceholder = ({ file }: { file: File | null }) => {
     <label
       htmlFor="file"
       className={classNames(
-        "flex flex-col justify-center items-center rounded-xl py-12 md:py-0 lg:py-0 w-full lg:w-3/4 xl:w-3/5 md:h-[700px] gap-12 cursor-pointer relative",
+        "flex flex-col justify-center items-center rounded-xl py-64 md:py-0 lg:py-0 w-full lg:w-3/4 xl:w-3/5 h-full md:h-[700px] gap-12 cursor-pointer relative overflow-hidden",
         !file && "border-2 border-dashed"
       )}
     >
       {/* Show image or imagePlaceholder */}
-      {file ? (
-        <Image
-          className="w-full h-full object-cover rounded-lg border-2 border-transparent hover:border-2 hover:border-gray-200 transition-all duration-200 p-4 relative"
-          src={URL.createObjectURL(file)}
-          alt="Shot Image"
-          fill
-        />
-      ) : (
+
+      {/* Here i am using conditional rendering (&&) and not ternary operators (? :) because of the way AnimatePresence works */}
+      <AnimatePresence initial={false}>
+        {file && (
+          <motion.div
+            key={file.name}
+            variants={opacityVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+          >
+            <Image
+              className="w-full h-full object-cover rounded-lg border-2 border-transparent hover:border-2 hover:border-gray-200 transition-all duration-200 p-4 relative"
+              src={URL.createObjectURL(file)}
+              alt="Shot Image"
+              fill
+              autoFocus
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {!file && (
         <Fragment>
           <Flex direction="column" gap="2" align="center" className="mt-2">
             <Image

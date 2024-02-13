@@ -1,11 +1,7 @@
+import { opacityVariants } from "@/lib/animationVariants";
 import classNames from "classnames";
-import { AnimatePresence, Variants, motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Dispatch, SetStateAction } from "react";
-
-const variants: Variants = {
-  visible: { opacity: 1 },
-  hidden: { opacity: 0 },
-};
 
 export default function Overlay({
   isOverlayed,
@@ -24,7 +20,7 @@ export default function Overlay({
           initial="hidden"
           animate="visible"
           exit="hidden"
-          variants={variants}
+          variants={opacityVariants}
           onClick={() => setOverlayed((prevOverlayed) => !prevOverlayed)}
         />
       )}
