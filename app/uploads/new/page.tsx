@@ -2,21 +2,23 @@
 import TransparentButton from "@/app/[username]/components/TransparentButton";
 import SmallText from "@/app/auth/components/SmallText";
 import DarkButton from "@/app/components/DarkButton";
+import { opacityVariants } from "@/lib/animationVariants";
 import log from "@/lib/log";
 import { Flex, Heading, Text } from "@radix-ui/themes";
 import axios from "axios";
 import classNames from "classnames";
+import { AnimatePresence, motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, Fragment, KeyboardEvent, useState } from "react";
 import BeigeButton from "./components/BeigeButton";
 import MediaFeatures from "./components/MediaFeatures";
-import { AnimatePresence, motion } from "framer-motion";
-import { opacityVariants } from "@/lib/animationVariants";
 
 export default function UploadPage() {
   const [file, setFile] = useState<File | null>(null);
+  const { data: session } = useSession();
+  const router = useRouter();
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     const isEnterKey = event.key === "Enter";
@@ -26,8 +28,10 @@ export default function UploadPage() {
       uploadImage();
     }
 
-    if (isEscapeKey && file) {
-      setFile(null);
+    if (isEscapeKey) {
+      if (file) setFile(null);
+      // if no file is uploaded, go back
+      else router.push("/" + session?.user.username);
     }
   };
 
@@ -106,7 +110,7 @@ const ControlButtons = ({
   file: File | null;
 }) => {
   const router = useRouter();
-  const { data } = useSession();
+  const { data: session } = useSession();
 
   return (
     <Flex
@@ -115,7 +119,7 @@ const ControlButtons = ({
       className="p-6 gap-4 xs:gap-24 sm:gap-4"
     >
       <TransparentButton
-        onClick={() => router.push(`/${data?.user?.username}`)}
+        onClick={() => router.push(`/${session?.user?.username}`)}
         className="px-4"
       >
         Cancel
