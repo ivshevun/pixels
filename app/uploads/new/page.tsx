@@ -11,8 +11,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, KeyboardEvent, useState } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  KeyboardEvent,
+  SetStateAction,
+  useState,
+} from "react";
 import BeigeButton from "./components/BeigeButton";
+import ImageControls from "./components/ImageControls";
 import MediaFeatures from "./components/MediaFeatures";
 
 export default function UploadPage() {
@@ -86,7 +93,9 @@ export default function UploadPage() {
 
         {/* Conditional rendering because of how AnimatePresence works */}
 
-        <AnimatePresence>{file && <ShotMedia file={file} />}</AnimatePresence>
+        <AnimatePresence>
+          {file && <ShotMedia setFile={setFile} file={file} />}
+        </AnimatePresence>
 
         {!file && <ImagePlaceholder file={file} />}
 
@@ -180,7 +189,13 @@ const ImagePlaceholder = ({ file }: { file: File | null }) => {
   );
 };
 
-const ShotMedia = ({ file }: { file: File | null }) => {
+const ShotMedia = ({
+  file,
+  setFile,
+}: {
+  file: File | null;
+  setFile: Dispatch<SetStateAction<File | null>>;
+}) => {
   return (
     file && (
       <motion.div
@@ -199,6 +214,7 @@ const ShotMedia = ({ file }: { file: File | null }) => {
           height="1600"
           autoFocus
         />
+        <ImageControls handleDelete={() => setFile(null)} />
       </motion.div>
     )
   );
