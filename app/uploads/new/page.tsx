@@ -4,7 +4,7 @@ import SmallText from "@/app/auth/components/SmallText";
 import DarkButton from "@/app/components/DarkButton";
 import { opacityVariants } from "@/lib/animationVariants";
 import log from "@/lib/log";
-import { Flex, Heading, Text } from "@radix-ui/themes";
+import { Flex, Heading, Separator, Text } from "@radix-ui/themes";
 import axios from "axios";
 import classNames from "classnames";
 import { AnimatePresence, motion } from "framer-motion";
@@ -18,12 +18,15 @@ import {
   SetStateAction,
   useState,
 } from "react";
+import { FaPlus } from "react-icons/fa6";
+import Aside from "./components/Aside";
 import BeigeButton from "./components/BeigeButton";
 import ImageControls from "./components/ImageControls";
 import MediaFeatures from "./components/MediaFeatures";
 
 export default function UploadPage() {
   const [file, setFile] = useState<File | null>(null);
+  const [isAsideOpen, setAsideOpen] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -35,10 +38,14 @@ export default function UploadPage() {
       uploadImage();
     }
 
-    if (isEscapeKey) {
+    if (isEscapeKey && !isAsideOpen) {
       if (file) setFile(null);
       // if no file is uploaded, go back
       else router.push("/" + session?.user.username);
+    }
+
+    if (isEscapeKey && isAsideOpen) {
+      setAsideOpen(false);
     }
   };
 
@@ -78,38 +85,41 @@ export default function UploadPage() {
       onKeyDown={handleKeyDown}
       tabIndex={0}
       direction="column"
-      className={classNames("h-screen", !file && "overflow-hidden")}
+      className={classNames(
+        "h-screen overflow-x-hidden",
+        !file && "overflow-y-hidden"
+      )}
     >
-      <ControlButtons file={file} onSubmit={uploadImage} />
-      <Flex
-        direction="column"
-        justify="center"
-        align="center"
-        className="text-center py-8 px-4 gap-16"
-      >
-        <Heading className="text-3xl md:text-4xl">
-          What have you been working on?
-        </Heading>
-
-        {/* Conditional rendering because of how AnimatePresence works */}
-
-        <AnimatePresence>
-          {file && <ShotMedia setFile={setFile} file={file} />}
-        </AnimatePresence>
-
-        {!file && <ImagePlaceholder file={file} />}
-
-        {!file && (
-          <input
-            accept="image/*, video/*"
-            className="hidden"
-            name="file"
-            type="file"
-            id="file"
-            onChange={handleFileChange}
-          />
-        )}
-        {/* Editor */}
+      <Flex className="relative w-full">
+        <motion.div
+          className="flex flex-col justify-center items-center text-center px-4 gap-16"
+          initial={{ width: isAsideOpen ? "80%" : "100%" }}
+          animate={{ width: isAsideOpen ? "80%" : "100%" }}
+          transition={{ duration: 0.3 }}
+        >
+          <ControlButtons file={file} onSubmit={uploadImage} />
+          <Heading className="text-3xl md:text-4xl ">
+            What have you been working on?
+          </Heading>
+          {/* Conditional rendering because of how AnimatePresence works */}
+          <AnimatePresence>
+            {file && <ShotMedia setFile={setFile} file={file} />}
+          </AnimatePresence>
+          {!file && <ImagePlaceholder file={file} />}
+          {!file && (
+            <input
+              accept="image/*, video/*"
+              className="hidden"
+              name="file"
+              type="file"
+              id="file"
+              onChange={handleFileChange}
+            />
+          )}
+          <BlockInserter setOpen={setAsideOpen} file={file} />
+          {/* Editor */}
+        </motion.div>
+        <Aside isOpen={isAsideOpen} setOpen={setAsideOpen} />
       </Flex>
     </Flex>
   );
@@ -207,7 +217,7 @@ const ShotMedia = ({
         className="relative w-full lg:w-3/4 p-4 border-2 border-transparent hover:border-2 hover:border-gray-200 rounded-lg transition-all duration-200 "
       >
         <Image
-          className="w-full h-full object-cover rounded-lg  "
+          className="w-full h-full object-cover rounded-lg "
           src={URL.createObjectURL(file)}
           alt="Shot Image"
           width="1280"
@@ -216,6 +226,35 @@ const ShotMedia = ({
         />
         <ImageControls handleDelete={() => setFile(null)} />
       </motion.div>
+    )
+  );
+};
+
+const BlockInserter = ({
+  setOpen,
+  file,
+}: {
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  file: File | null;
+}) => {
+  return (
+    file && (
+      <Flex
+        width="100%"
+        justify="between"
+        className="w-screen overflow-hidden"
+        align="center"
+      >
+        <Separator className="flex-1" />
+        <TransparentButton
+          className="px-24 py-4 flex items-center gap-2 font-normal"
+          onClick={() => setOpen((prevOpen) => !prevOpen)}
+        >
+          <FaPlus />
+          <Text>Insert Block</Text>
+        </TransparentButton>
+        <Separator className="flex-1" />
+      </Flex>
     )
   );
 };
