@@ -30,6 +30,9 @@ export default function UploadPage() {
   const { data: session } = useSession();
   const router = useRouter();
 
+  const isMobile = isAsideOpen && window.innerWidth < 1024;
+  const isAside = isAsideOpen && window.innerWidth > 1024;
+
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     const isEnterKey = event.key === "Enter";
     const isEscapeKey = event.key === "Escape";
@@ -47,6 +50,10 @@ export default function UploadPage() {
     if (isEscapeKey && isAsideOpen) {
       setAsideOpen(false);
     }
+  };
+
+  const handleClick = () => {
+    if (isAsideOpen) setAsideOpen(false);
   };
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -81,20 +88,24 @@ export default function UploadPage() {
   };
 
   return (
-    <Flex
+    <motion.div
+      onClick={handleClick}
       onKeyDown={handleKeyDown}
       tabIndex={0}
-      direction="column"
       className={classNames(
-        "h-screen overflow-x-hidden",
+        "flex flex-col h-screen overflow-x-hidden",
         !file && "overflow-y-hidden"
       )}
     >
       <Flex className="relative w-full">
         <motion.div
           className="flex flex-col justify-center items-center text-center px-4 gap-16"
-          initial={{ width: isAsideOpen ? "80%" : "100%" }}
-          animate={{ width: isAsideOpen ? "80%" : "100%" }}
+          initial={{
+            width: isAside ? "80%" : "100%",
+          }}
+          animate={{
+            width: isAside ? "80%" : "100%",
+          }}
           transition={{ duration: 0.3 }}
         >
           <ControlButtons file={file} onSubmit={uploadImage} />
@@ -116,12 +127,16 @@ export default function UploadPage() {
               onChange={handleFileChange}
             />
           )}
-          <BlockInserter setOpen={setAsideOpen} file={file} />
+          <BlockInserter
+            isMobile={isMobile}
+            setOpen={setAsideOpen}
+            file={file}
+          />
           {/* Editor */}
         </motion.div>
         <Aside isOpen={isAsideOpen} setOpen={setAsideOpen} />
       </Flex>
-    </Flex>
+    </motion.div>
   );
 }
 
@@ -178,7 +193,7 @@ const ImagePlaceholder = ({ file }: { file: File | null }) => {
   return (
     <label
       htmlFor="file"
-      className="flex flex-col justify-center items-center rounded-xl w-full lg:w-3/4 xl:w-3/5 h-full md:h-[700px] gap-12 cursor-pointer relative overflow-hidden border-2 border-dashed"
+      className="flex flex-col justify-center items-center rounded-xl w-full lg:w-3/4 xl:w-3/5 h-full md:h-[700px] gap-12 cursor-pointer relative overflow-hidden border-2 border-dashed py-4"
     >
       <Flex direction="column" gap="2" align="center" className="mt-2">
         <Image
@@ -231,19 +246,21 @@ const ShotMedia = ({
 };
 
 const BlockInserter = ({
+  isMobile,
   setOpen,
   file,
 }: {
+  isMobile: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   file: File | null;
 }) => {
   return (
     file && (
-      <Flex
-        width="100%"
-        justify="between"
-        className="w-screen overflow-hidden"
-        align="center"
+      <motion.div
+        className="flex items-center justify-between w-screen overflow-hidden"
+        initial={{ paddingBottom: isMobile ? "384px" : "0" }}
+        animate={{ paddingBottom: isMobile ? "384px" : "0" }}
+        transition={{ duration: 0.3 }}
       >
         <Separator className="flex-1" />
         <TransparentButton
@@ -254,7 +271,7 @@ const BlockInserter = ({
           <Text>Insert Block</Text>
         </TransparentButton>
         <Separator className="flex-1" />
-      </Flex>
+      </motion.div>
     )
   );
 };

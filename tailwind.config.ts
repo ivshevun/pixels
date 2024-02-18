@@ -13,6 +13,7 @@ const config: Config = {
           950: "#0D0C22"
         },
         gray: {
+          200: '#e7e7e9',
           400: "#565564"
         },
         yellow: {
