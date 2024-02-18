@@ -42,7 +42,7 @@ export default function Aside({ isOpen, setOpen }: DisclosureProps) {
               Close
             </Text>
 
-            <Heading className="font-normal">Insert block</Heading>
+            <Heading className="font-normal text-2xl">Insert block</Heading>
             <Separator className="w-full" />
 
             <Box>
