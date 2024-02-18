@@ -44,19 +44,9 @@ export default function Aside({ isOpen, setOpen }: DisclosureProps) {
 
             <Heading className="font-normal text-2xl">Insert block</Heading>
             <Separator className="w-full" />
-
-            <Box>
-              <Flex direction="column" gap="1">
-                <Heading size="4" className={asideOption}>
-                  Heading
-                </Heading>
-                <Box className={asideOption}>
-                  <Heading size="4">Heading</Heading>
-                  <Text>with text</Text>
-                </Box>
-                <Text className={asideOption}>Text</Text>
-              </Flex>
-            </Box>
+            <Flex direction="column" gap="1">
+              <TextOptions optionStyles={asideOption} />
+            </Flex>
           </motion.div>
         )}
       </AnimatePresence>
@@ -80,18 +70,24 @@ const MobileControls = ({ isOpen, setOpen }: DisclosureProps) => {
           transition={{ duration: 0.3 }}
           className="flex flex-col lg:hidden w-full fixed bottom-0 bg-white z-10 overflow-hidden shadow-2xl border rounded-t-3xl overflow-y-scroll gap-1"
         >
-          <Heading size="4" className={mobileOption}>
-            Heading
-          </Heading>
-          <Box className={mobileOption}>
-            <Heading size="4">Heading</Heading>
-            <Text>with text</Text>
-          </Box>
-          <Heading className={classNames(mobileOption, "font-normal")}>
-            Text
-          </Heading>
+          <TextOptions optionStyles={mobileOption} />
         </motion.div>
       )}
     </AnimatePresence>
+  );
+};
+
+const TextOptions = ({ optionStyles }: { optionStyles: string }) => {
+  return (
+    <Fragment>
+      <Heading size="4" className={optionStyles}>
+        Heading
+      </Heading>
+      <Box className={optionStyles}>
+        <Heading size="4">Heading</Heading>
+        <Text>with text</Text>
+      </Box>
+      <Text className={optionStyles}>Text</Text>
+    </Fragment>
   );
 };
