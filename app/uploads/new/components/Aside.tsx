@@ -18,6 +18,7 @@ export interface DisclosureProps {
   setOpen: Dispatch<SetStateAction<boolean>>;
   children?: React.ReactNode;
   title?: string;
+  isSmall?: boolean;
 }
 
 export function Aside({ isOpen, setOpen, children, title }: DisclosureProps) {

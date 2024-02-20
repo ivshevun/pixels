@@ -8,6 +8,7 @@ export default function Controller({
   setOpen,
   title,
   children,
+  isSmall,
 }: DisclosureProps) {
   const asideChildren = React.Children.toArray(children)[0];
   const mobileChildren = React.Children.toArray(children)[1];
@@ -21,7 +22,7 @@ export default function Controller({
       </Aside>
 
       {/* Editor controller for mobile */}
-      <MobileController isOpen={isOpen} setOpen={setOpen}>
+      <MobileController isSmall={isSmall} isOpen={isOpen} setOpen={setOpen}>
         {mobileChildren}
       </MobileController>
     </Fragment>
