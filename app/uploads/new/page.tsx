@@ -19,19 +19,25 @@ import {
   useState,
 } from "react";
 import { FaPlus } from "react-icons/fa6";
-import Aside from "./components/Aside";
+import EditorController from "./components/EditorController";
 import BeigeButton from "./components/BeigeButton";
 import ImageControls from "./components/ImageControls";
 import MediaFeatures from "./components/MediaFeatures";
+import MediaController from "./components/MediaController";
 
 export default function UploadPage() {
   const [file, setFile] = useState<File | null>(null);
-  const [isAsideOpen, setAsideOpen] = useState(false);
+  const [isEditorOpen, setEditorOpen] = useState(false);
+  const [isMediaOpen, setMediaOpen] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
 
-  const isMobile = isAsideOpen && window.innerWidth < 1024;
-  const isAside = isAsideOpen && window.innerWidth > 1024;
+  const isMobile =
+    (isEditorOpen && window.innerWidth < 1024) ||
+    (isMediaOpen && window.innerWidth < 1024);
+  const isAside =
+    (isEditorOpen && window.innerWidth > 1024) ||
+    (isMediaOpen && window.innerWidth > 1024);
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     const isEnterKey = event.key === "Enter";
@@ -41,19 +47,24 @@ export default function UploadPage() {
       uploadImage();
     }
 
-    if (isEscapeKey && !isAsideOpen) {
+    if (isEscapeKey && !isEditorOpen && !isMediaOpen) {
       if (file) setFile(null);
       // if no file is uploaded, go back
       else router.push("/" + session?.user.username);
     }
 
-    if (isEscapeKey && isAsideOpen) {
-      setAsideOpen(false);
+    if (isEscapeKey && isEditorOpen) {
+      setEditorOpen(false);
+    }
+
+    if (isEscapeKey && isMediaOpen) {
+      setMediaOpen(false);
     }
   };
 
   const handleClick = () => {
-    if (isAsideOpen) setAsideOpen(false);
+    if (isEditorOpen) setEditorOpen(false);
+    if (isMediaOpen) setMediaOpen(false);
   };
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +100,6 @@ export default function UploadPage() {
 
   return (
     <motion.div
-      onClick={handleClick}
       onKeyDown={handleKeyDown}
       tabIndex={0}
       className={classNames(
@@ -100,6 +110,7 @@ export default function UploadPage() {
       <Flex className="relative w-full">
         <motion.div
           className="flex flex-col justify-center items-center text-center px-4 gap-16"
+          onClick={handleClick}
           initial={{
             width: isAside ? "80%" : "100%",
           }}
@@ -114,7 +125,14 @@ export default function UploadPage() {
           </Heading>
           {/* Conditional rendering because of how AnimatePresence works */}
           <AnimatePresence>
-            {file && <ShotMedia setFile={setFile} file={file} />}
+            {file && (
+              <ShotMedia
+                isMediaOpen={isMediaOpen}
+                setMediaOpen={setMediaOpen}
+                setFile={setFile}
+                file={file}
+              />
+            )}
           </AnimatePresence>
           {!file && <ImagePlaceholder file={file} />}
           {!file && (
@@ -129,12 +147,18 @@ export default function UploadPage() {
           )}
           <BlockInserter
             isMobile={isMobile}
-            setOpen={setAsideOpen}
+            setOpen={setEditorOpen}
             file={file}
           />
           {/* Editor */}
         </motion.div>
-        <Aside isOpen={isAsideOpen} setOpen={setAsideOpen} />
+        <EditorController isOpen={isEditorOpen} setOpen={setEditorOpen} />
+        <MediaController
+          file={file}
+          setFile={setFile}
+          isOpen={isMediaOpen}
+          setOpen={setMediaOpen}
+        />
       </Flex>
     </motion.div>
   );
@@ -216,9 +240,13 @@ const ImagePlaceholder = ({ file }: { file: File | null }) => {
 
 const ShotMedia = ({
   file,
+  isMediaOpen,
+  setMediaOpen,
   setFile,
 }: {
   file: File | null;
+  isMediaOpen: boolean;
+  setMediaOpen: Dispatch<SetStateAction<boolean>>;
   setFile: Dispatch<SetStateAction<File | null>>;
 }) => {
   return (
@@ -229,7 +257,10 @@ const ShotMedia = ({
         initial="hidden"
         animate="visible"
         exit="hidden"
-        className="relative w-full lg:w-3/4 p-4 border-2 border-transparent hover:border-2 hover:border-gray-200 rounded-lg transition-all duration-200 "
+        className={classNames(
+          "relative w-full lg:w-3/4 p-4 border-2 hover:border-2 hover:border-gray-200 rounded-lg transition-all duration-200",
+          isMediaOpen && "border-purple-500 hover:border-purple-500"
+        )}
       >
         <Image
           className="w-full h-full object-cover rounded-lg "
@@ -237,6 +268,10 @@ const ShotMedia = ({
           alt="Shot Image"
           width="1280"
           height="1600"
+          onClick={() => {
+            // open only on mobile
+            if (window.innerWidth < 1024) setMediaOpen((prevOpen) => !prevOpen);
+          }}
           autoFocus
         />
         <ImageControls handleDelete={() => setFile(null)} />

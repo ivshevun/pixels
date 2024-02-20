@@ -1,7 +1,6 @@
-import { Box, Flex, Heading, Separator, Text } from "@radix-ui/themes";
-import classNames from "classnames";
+import { Heading, Separator, Text } from "@radix-ui/themes";
 import { AnimatePresence, motion } from "framer-motion";
-import { Dispatch, Fragment, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 const variants = {
   hidden: {
@@ -14,80 +13,40 @@ const variants = {
   },
 };
 
-const asideOption =
-  "w-full p-2 hover:bg-gray-100 transition-colors cursor-pointer";
-
-interface DisclosureProps {
+export interface DisclosureProps {
   isOpen: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  children?: React.ReactNode;
+  title?: string;
 }
 
-export default function Aside({ isOpen, setOpen }: DisclosureProps) {
-  return (
-    <Fragment>
-      <AnimatePresence>
-        {isOpen && window.innerWidth > 1024 && (
-          <motion.div
-            variants={variants}
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
-            transition={{ duration: 0.3 }}
-            className="hidden lg:flex flex-col gap-4 w-1/5 bg-white shadow-xl p-8 fixed right-0 h-full overflow-y-auto "
-          >
-            <Text
-              onClick={() => setOpen(false)}
-              className="text-left font-light text-base cursor-pointer"
-            >
-              Close
-            </Text>
-
-            <Heading className="font-normal text-2xl">Insert block</Heading>
-            <Separator className="w-full" />
-            <Flex direction="column" gap="1">
-              <TextOptions optionStyles={asideOption} />
-            </Flex>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Editor controller for mobile */}
-      <MobileControls isOpen={isOpen} setOpen={setOpen} />
-    </Fragment>
-  );
-}
-
-const mobileOption = "w-full cursor-pointer hover:bg-gray-200 text-center p-16";
-
-const MobileControls = ({ isOpen, setOpen }: DisclosureProps) => {
+export function Aside({ isOpen, setOpen, children, title }: DisclosureProps) {
   return (
     <AnimatePresence>
-      {isOpen && (
+      {isOpen && window.innerWidth > 1024 && (
         <motion.div
-          initial={{ opacity: 0, height: "0" }}
-          animate={{ opacity: 1, height: "30%" }}
-          exit={{ opacity: 0, height: "0" }}
+          variants={variants}
+          initial="hidden"
+          animate="visible"
+          exit="hidden"
           transition={{ duration: 0.3 }}
-          className="flex flex-col lg:hidden w-full fixed bottom-0 bg-white z-10 overflow-hidden shadow-2xl border rounded-t-3xl overflow-y-scroll gap-1"
+          className="hidden lg:flex flex-col gap-4 w-1/5 bg-white shadow-xl p-8 fixed right-0 h-full overflow-y-auto z-10 "
         >
-          <TextOptions optionStyles={mobileOption} />
+          <Text
+            onClick={() => setOpen(false)}
+            className="text-left font-light text-base cursor-pointer"
+          >
+            Close
+          </Text>
+
+          {/* Heading */}
+          <Heading className="font-normal text-2xl">{title}</Heading>
+          <Separator className="w-full" />
+
+          {/* Content */}
+          {children}
         </motion.div>
       )}
     </AnimatePresence>
   );
-};
-
-const TextOptions = ({ optionStyles }: { optionStyles: string }) => {
-  return (
-    <Fragment>
-      <Heading size="4" className={optionStyles}>
-        Heading
-      </Heading>
-      <Box className={optionStyles}>
-        <Heading size="4">Heading</Heading>
-        <Text>with text</Text>
-      </Box>
-      <Text className={optionStyles}>Text</Text>
-    </Fragment>
-  );
-};
+}
