@@ -1,29 +1,18 @@
 "use client";
-import TransparentButton from "@/app/[username]/components/TransparentButton";
-import SmallText from "@/app/auth/components/SmallText";
-import DarkButton from "@/app/components/DarkButton";
-import { opacityVariants } from "@/lib/animationVariants";
 import log from "@/lib/log";
-import { Flex, Heading, Separator, Text } from "@radix-ui/themes";
+import { Flex, Heading } from "@radix-ui/themes";
 import axios from "axios";
 import classNames from "classnames";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
-import {
-  ChangeEvent,
-  Dispatch,
-  KeyboardEvent,
-  SetStateAction,
-  useState,
-} from "react";
-import { FaPlus } from "react-icons/fa6";
+import { ChangeEvent, KeyboardEvent, useState } from "react";
+import BlockInserter from "./components/BlockInserter";
+import ControlButtons from "./components/ControlButtons";
 import EditorController from "./components/EditorController";
-import BeigeButton from "./components/BeigeButton";
-import ImageControls from "./components/ImageControls";
-import MediaFeatures from "./components/MediaFeatures";
+import ImagePlaceholder from "./components/ImagePlaceholder";
 import MediaController from "./components/MediaController";
+import ShotMedia from "./components/ShotMedia";
 
 export default function UploadPage() {
   const [file, setFile] = useState<File | null>(null);
@@ -134,7 +123,7 @@ export default function UploadPage() {
               />
             )}
           </AnimatePresence>
-          {!file && <ImagePlaceholder file={file} />}
+          {!file && <ImagePlaceholder />}
           {!file && (
             <input
               accept="image/*, video/*"
@@ -163,150 +152,3 @@ export default function UploadPage() {
     </motion.div>
   );
 }
-
-const ControlButtons = ({
-  onSubmit,
-  file,
-}: {
-  onSubmit: () => void;
-  file: File | null;
-}) => {
-  const router = useRouter();
-  const { data: session } = useSession();
-
-  return (
-    <Flex
-      width="100%"
-      justify="between"
-      className="p-6 gap-4 xs:gap-24 sm:gap-4"
-    >
-      <TransparentButton
-        onClick={() => router.push(`/${session?.user?.username}`)}
-        className="px-4"
-      >
-        Cancel
-      </TransparentButton>
-
-      <Flex
-        gap="4"
-        align="center"
-        justify="end"
-        className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/5 2xl:w-1/6"
-      >
-        {/* Make it disabled if no image is provided */}
-        <BeigeButton className="w-full" disabled={!file}>
-          {/* Mobile text */}
-          <Text className="sm:hidden">Save</Text>
-
-          {/* Desktop text */}
-          <Text className="hidden sm:block">Save as draft</Text>
-        </BeigeButton>
-        <DarkButton
-          onClick={() => onSubmit()}
-          className="text-sm font-semibold py-2"
-          disabled={!file}
-        >
-          Continue
-        </DarkButton>
-      </Flex>
-    </Flex>
-  );
-};
-
-const ImagePlaceholder = ({ file }: { file: File | null }) => {
-  return (
-    <label
-      htmlFor="file"
-      className="flex flex-col justify-center items-center rounded-xl w-full lg:w-3/4 xl:w-3/5 h-full md:h-[700px] gap-12 cursor-pointer relative overflow-hidden border-2 border-dashed py-4"
-    >
-      <Flex direction="column" gap="2" align="center" className="mt-2">
-        <Image
-          src="/assets/image-placeholder.png"
-          alt=""
-          width="85"
-          height="92"
-          className="hidden sm:block"
-        />
-        <Text>
-          Drag and drop an image, or{" "}
-          <span className="pb-1 border-b-2 border-purple-500">Browse</span>
-        </Text>
-        <SmallText>Minimum 1600px width recommended.</SmallText>
-      </Flex>
-      <MediaFeatures />
-    </label>
-  );
-};
-
-const ShotMedia = ({
-  file,
-  isMediaOpen,
-  setMediaOpen,
-  setFile,
-}: {
-  file: File | null;
-  isMediaOpen: boolean;
-  setMediaOpen: Dispatch<SetStateAction<boolean>>;
-  setFile: Dispatch<SetStateAction<File | null>>;
-}) => {
-  return (
-    file && (
-      <motion.div
-        key={file.name}
-        variants={opacityVariants}
-        initial="hidden"
-        animate="visible"
-        exit="hidden"
-        className={classNames(
-          "relative w-full lg:w-3/4 p-4 border-2 hover:border-2 hover:border-gray-200 rounded-lg transition-all duration-200",
-          isMediaOpen && "border-purple-500 hover:border-purple-500"
-        )}
-      >
-        <Image
-          className="w-full h-full object-cover rounded-lg "
-          src={URL.createObjectURL(file)}
-          alt="Shot Image"
-          width="1280"
-          height="1600"
-          onClick={() => {
-            // open only on mobile
-            if (window.innerWidth < 1024) setMediaOpen((prevOpen) => !prevOpen);
-          }}
-          autoFocus
-        />
-        <ImageControls handleDelete={() => setFile(null)} />
-      </motion.div>
-    )
-  );
-};
-
-const BlockInserter = ({
-  isMobile,
-  setOpen,
-  file,
-}: {
-  isMobile: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  file: File | null;
-}) => {
-  return (
-    file && (
-      <motion.div
-        className="flex items-center justify-between w-screen overflow-hidden"
-        initial={{ paddingBottom: isMobile ? "384px" : "0" }}
-        animate={{ paddingBottom: isMobile ? "384px" : "0" }}
-        transition={{ duration: 0.3 }}
-      >
-        <Separator className="flex-1" />
-        <TransparentButton
-          className="px-24 py-4 flex items-center gap-2 font-normal"
-          onClick={() => setOpen((prevOpen) => !prevOpen)}
-        >
-          <FaPlus />
-          <Text>Insert Block</Text>
-        </TransparentButton>
-        <Separator className="flex-1" />
-      </motion.div>
-    )
-  );
-};

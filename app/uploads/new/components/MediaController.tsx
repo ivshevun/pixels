@@ -71,7 +71,7 @@ const MediaContent = ({
             className
           )}
         >
-          <Text className="px-6 py-2 border text-center text-sm rounded-full cursor-pointer">
+          <Text className="px-12 py-2 border text-center text-sm rounded-full cursor-pointer">
             Select Media
           </Text>
           <Text className="text-xs text-center text-gray-400">
