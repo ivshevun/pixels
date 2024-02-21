@@ -8,7 +8,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { VscBold } from "react-icons/vsc";
 import { DisclosureProps } from "./Aside";
 import Controller from "./Controller";
-import { AsideContent } from "./ControllerOptions";
+import Dropdown from "./Dropdown";
 
 export default function EditorController({ isOpen, setOpen }: DisclosureProps) {
   // Does not work for now
@@ -33,8 +33,20 @@ type Components = {
   [key: string]: JSX.Element;
 };
 
+const textOptions = ["heading 1", "heading 2", "text"];
+export const AsideContent = () => {
+  const [currentFont, setCurrentFont] = useState(textOptions[2]);
+
+  return (
+    <Dropdown
+      options={textOptions}
+      currentItem={currentFont}
+      setCurrentItem={setCurrentFont}
+    />
+  );
+};
+
 const MobileContent = () => {
-  const textOptions = ["Heading 1", "Heading 2", "Text"];
   const aligns = ["left", "right", "center"];
   const alignComponents: Components = {
     left: <FaAlignLeft />,
@@ -91,7 +103,9 @@ const MobileContent = () => {
         onClick={handleTextChange}
         className="cursor-pointer w-1/3"
       >
-        <Text className="text-sm sm:text-base">{textOptions[textIndex]}</Text>
+        <Text className="text-sm sm:text-base capitalize">
+          {textOptions[textIndex]}
+        </Text>
         <IoIosArrowDown size="14" />
       </Flex>
       <Flex justify="center" align="center" gap="1" className="w-1/3">
@@ -102,8 +116,11 @@ const MobileContent = () => {
             className={classNames(
               "cursor-pointer p-1 border-2",
               currentModifiers.includes(modifier.key!)
-                ? "border-purple-900 rounded-lg bg-[rgba(79,60,201,.1)] transition-colors duration-500"
+                ? "rounded-lg bg-[rgba(79,60,201,.1)] transition-colors duration-500"
                 : "border-transparent",
+              currentModifiers.includes(modifier.key!) &&
+                textIndex > 1 &&
+                "border-purple-900",
               textIndex < 2 &&
                 modifier.key === "bold" &&
                 "border-[#9e9ea7] bg-gray-200 rounded-lg"

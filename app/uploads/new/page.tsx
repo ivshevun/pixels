@@ -64,9 +64,9 @@ export default function UploadPage() {
   };
 
   const handleClick = () => {
-    if (isEditorOpen) setEditorOpen(false);
+    // if (isEditorOpen) setEditorOpen(false);
     if (isMediaOpen) setMediaOpen(false);
-    if (isBlockOpen) setBlockOpen(false);
+    // if (isBlockOpen) setBlockOpen(false);
   };
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {

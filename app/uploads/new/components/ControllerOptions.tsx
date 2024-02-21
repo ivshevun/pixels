@@ -1,5 +1,6 @@
-import { Box, Flex, Heading, Select, Text } from "@radix-ui/themes";
-import { Fragment } from "react";
+import { Box, Heading, Text } from "@radix-ui/themes";
+import { Fragment, useState } from "react";
+import Dropdown from "./Dropdown";
 
 export const BlockOptions = ({ optionStyles }: { optionStyles: string }) => {
   return (
@@ -16,22 +17,16 @@ export const BlockOptions = ({ optionStyles }: { optionStyles: string }) => {
   );
 };
 
-export const AsideContent = ({}) => {
+const selectItems = ["heading 1", "heading 2", "text"];
+
+export const AsideContent = () => {
+  const [currentFont, setCurrentFont] = useState("");
+
   return (
-    <Flex direction="column">
-      <Flex>
-        <label>Select</label>
-        <Select.Root>
-          <Select.Trigger />
-          <Select.Content>
-            <Select.Group>
-              <Select.Item value="heading-1">Heading 1</Select.Item>
-              <Select.Item value="heading-2">Heading 2</Select.Item>
-              <Select.Item value="heading-3">Text</Select.Item>
-            </Select.Group>
-          </Select.Content>
-        </Select.Root>
-      </Flex>
-    </Flex>
+    <Dropdown
+      options={selectItems}
+      currentItem={currentFont}
+      setCurrentItem={setCurrentFont}
+    />
   );
 };
