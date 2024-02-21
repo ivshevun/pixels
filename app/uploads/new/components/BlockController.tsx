@@ -1,6 +1,6 @@
 import { DisclosureProps } from "./Aside";
 import Controller from "./Controller";
-import { TextOptions } from "./ControllerOptions";
+import { BlockOptions } from "./ControllerOptions";
 
 const asideStyles =
   "w-full p-2 hover:bg-gray-100 transition-colors cursor-pointer";
@@ -10,10 +10,10 @@ export default function BlockController({ isOpen, setOpen }: DisclosureProps) {
   return (
     <Controller isOpen={isOpen} setOpen={setOpen}>
       {/* Aside options */}
-      <TextOptions optionStyles={asideStyles} />
+      <BlockOptions optionStyles={asideStyles} />
 
       {/* Mobile options */}
-      <TextOptions optionStyles={mobileStyles} />
+      <BlockOptions optionStyles={mobileStyles} />
     </Controller>
   );
 }

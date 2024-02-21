@@ -1,7 +1,7 @@
-import { Box, Heading, Text } from "@radix-ui/themes";
+import { Box, Flex, Heading, Select, Text } from "@radix-ui/themes";
 import { Fragment } from "react";
 
-export const TextOptions = ({ optionStyles }: { optionStyles: string }) => {
+export const BlockOptions = ({ optionStyles }: { optionStyles: string }) => {
   return (
     <Fragment>
       <Heading size="4" className={optionStyles}>
@@ -16,6 +16,22 @@ export const TextOptions = ({ optionStyles }: { optionStyles: string }) => {
   );
 };
 
-export const VideoOptions = ({ optionStyles }: { optionStyles: string }) => {
-  return <Box>Video options</Box>;
+export const AsideContent = ({}) => {
+  return (
+    <Flex direction="column">
+      <Flex>
+        <label>Select</label>
+        <Select.Root>
+          <Select.Trigger />
+          <Select.Content>
+            <Select.Group>
+              <Select.Item value="heading-1">Heading 1</Select.Item>
+              <Select.Item value="heading-2">Heading 2</Select.Item>
+              <Select.Item value="heading-3">Text</Select.Item>
+            </Select.Group>
+          </Select.Content>
+        </Select.Root>
+      </Flex>
+    </Flex>
+  );
 };

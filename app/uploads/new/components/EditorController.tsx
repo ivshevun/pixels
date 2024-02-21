@@ -8,22 +8,19 @@ import { IoIosArrowDown } from "react-icons/io";
 import { VscBold } from "react-icons/vsc";
 import { DisclosureProps } from "./Aside";
 import Controller from "./Controller";
-import { TextOptions } from "./ControllerOptions";
-
-const asideStyles =
-  "w-full p-2 hover:bg-gray-100 transition-colors cursor-pointer";
+import { AsideContent } from "./ControllerOptions";
 
 export default function EditorController({ isOpen, setOpen }: DisclosureProps) {
+  // Does not work for now
   return (
     <Controller
       isOpen={isOpen}
       setOpen={setOpen}
-      title="Insert block"
+      title="Text Block"
       isSmall={true}
     >
       <Fragment>
-        {/* TextOptions is not the element, that I need. I will build it next. Now its just a temporary plug */}
-        <TextOptions optionStyles={asideStyles} />
+        <AsideContent />
       </Fragment>
       <Fragment>
         <MobileContent />

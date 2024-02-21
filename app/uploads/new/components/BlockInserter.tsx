@@ -17,8 +17,8 @@ export default function BlockInserter({
     file && (
       <motion.div
         className="flex items-center justify-between w-screen overflow-hidden"
-        initial={{ paddingBottom: isMobile ? "384px" : "0" }}
-        animate={{ paddingBottom: isMobile ? "384px" : "0" }}
+        initial={{ paddingTop: isMobile ? "250px" : "0" }}
+        animate={{ paddingTop: isMobile ? "250px" : "0" }}
         transition={{ duration: 0.3 }}
       >
         <Separator className="flex-1" />

@@ -6,37 +6,43 @@ import classNames from "classnames";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, KeyboardEvent, useState } from "react";
+import React, { ChangeEvent, KeyboardEvent, useState } from "react";
+import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
+import sanitizeHtml from "sanitize-html";
+import BlockController from "./components/BlockController";
 import BlockInserter from "./components/BlockInserter";
 import ControlButtons from "./components/ControlButtons";
 import EditorController from "./components/EditorController";
 import ImagePlaceholder from "./components/ImagePlaceholder";
 import MediaController from "./components/MediaController";
 import ShotMedia from "./components/ShotMedia";
-import BlockController from "./components/BlockController";
+import TextEditor from "./components/TextEditor";
 
 export default function UploadPage() {
   const [file, setFile] = useState<File | null>(null);
   const [isEditorOpen, setEditorOpen] = useState(false);
   const [isMediaOpen, setMediaOpen] = useState(false);
   const [isBlockOpen, setBlockOpen] = useState(false);
+  const [description, setDescription] = useState("");
   const { data: session } = useSession();
   const router = useRouter();
 
   const isMobile =
     (isEditorOpen && window.innerWidth < 1024) ||
-    (isMediaOpen && window.innerWidth < 1024);
+    (isMediaOpen && window.innerWidth < 1024) ||
+    (isBlockOpen && window.innerWidth < 1024);
   const isAside =
     (isEditorOpen && window.innerWidth > 1024) ||
-    (isMediaOpen && window.innerWidth > 1024);
+    (isMediaOpen && window.innerWidth > 1024) ||
+    (isBlockOpen && window.innerWidth > 1024);
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     const isEnterKey = event.key === "Enter";
     const isEscapeKey = event.key === "Escape";
 
-    if (isEnterKey && file) {
-      uploadImage();
-    }
+    // if (isEnterKey && file) {
+    //   uploadImage();
+    // }
 
     if (isEscapeKey && !isEditorOpen && !isMediaOpen && !isBlockOpen) {
       if (file) setFile(null);
@@ -141,12 +147,20 @@ export default function UploadPage() {
               onChange={handleFileChange}
             />
           )}
+          {/* Editor */}
+          {file && (
+            <TextEditor
+              content={description}
+              setContent={setDescription}
+              isEditorOpen={isEditorOpen}
+              setEditorOpen={setEditorOpen}
+            />
+          )}
           <BlockInserter
             isMobile={isMobile}
             setOpen={setBlockOpen}
             file={file}
           />
-          {/* Editor */}
         </motion.div>
         <EditorController isOpen={isEditorOpen} setOpen={setEditorOpen} />
         <MediaController
