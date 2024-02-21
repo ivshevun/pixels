@@ -12,7 +12,6 @@ import { TextOptions } from "./ControllerOptions";
 
 const asideStyles =
   "w-full p-2 hover:bg-gray-100 transition-colors cursor-pointer";
-const mobileStyles = "w-full cursor-pointer hover:bg-gray-200 text-center p-16";
 
 export default function EditorController({ isOpen, setOpen }: DisclosureProps) {
   return (
@@ -23,6 +22,7 @@ export default function EditorController({ isOpen, setOpen }: DisclosureProps) {
       isSmall={true}
     >
       <Fragment>
+        {/* TextOptions is not the element, that I need. I will build it next. Now its just a temporary plug */}
         <TextOptions optionStyles={asideStyles} />
       </Fragment>
       <Fragment>
@@ -109,7 +109,7 @@ const MobileContent = () => {
                 : "border-transparent",
               textIndex < 2 &&
                 modifier.key === "bold" &&
-                "border-gray-400 bg-gray-200 rounded-lg"
+                "border-[#9e9ea7] bg-gray-200 rounded-lg"
             )}
             key={modifier.key}
           >

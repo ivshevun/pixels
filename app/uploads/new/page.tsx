@@ -13,11 +13,13 @@ import EditorController from "./components/EditorController";
 import ImagePlaceholder from "./components/ImagePlaceholder";
 import MediaController from "./components/MediaController";
 import ShotMedia from "./components/ShotMedia";
+import BlockController from "./components/BlockController";
 
 export default function UploadPage() {
   const [file, setFile] = useState<File | null>(null);
   const [isEditorOpen, setEditorOpen] = useState(false);
   const [isMediaOpen, setMediaOpen] = useState(false);
+  const [isBlockOpen, setBlockOpen] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -36,7 +38,7 @@ export default function UploadPage() {
       uploadImage();
     }
 
-    if (isEscapeKey && !isEditorOpen && !isMediaOpen) {
+    if (isEscapeKey && !isEditorOpen && !isMediaOpen && !isBlockOpen) {
       if (file) setFile(null);
       // if no file is uploaded, go back
       else router.push("/" + session?.user.username);
@@ -49,11 +51,16 @@ export default function UploadPage() {
     if (isEscapeKey && isMediaOpen) {
       setMediaOpen(false);
     }
+
+    if (isEscapeKey && isBlockOpen) {
+      setBlockOpen(false);
+    }
   };
 
   const handleClick = () => {
     if (isEditorOpen) setEditorOpen(false);
     if (isMediaOpen) setMediaOpen(false);
+    if (isBlockOpen) setBlockOpen(false);
   };
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -136,7 +143,7 @@ export default function UploadPage() {
           )}
           <BlockInserter
             isMobile={isMobile}
-            setOpen={setEditorOpen}
+            setOpen={setBlockOpen}
             file={file}
           />
           {/* Editor */}
@@ -148,6 +155,7 @@ export default function UploadPage() {
           isOpen={isMediaOpen}
           setOpen={setMediaOpen}
         />
+        <BlockController isOpen={isBlockOpen} setOpen={setBlockOpen} />
       </Flex>
     </motion.div>
   );
