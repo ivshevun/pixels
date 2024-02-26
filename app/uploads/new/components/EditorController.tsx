@@ -1,3 +1,10 @@
+import { useTextSettings } from "@/lib/redux/features/textSettings/hooks";
+import {
+  changeAlign,
+  changeFont,
+  changeModifiers,
+} from "@/lib/redux/features/textSettings/textSlice";
+import { useAppDispatch } from "@/lib/redux/hooks";
 import { Flex, Text } from "@radix-ui/themes";
 import classNames from "classnames";
 import { Fragment, useState } from "react";
@@ -59,35 +66,57 @@ const MobileContent = () => {
     <BiUnderline key="underline" />,
   ];
 
+  const { currentModifiers } = useTextSettings();
+  const dispatch = useAppDispatch();
+
+  const handleChangeFont = (font: string) => {
+    dispatch(changeFont(font));
+  };
+
+  const handleChangeModifiers = (modifiers: string[]) => {
+    dispatch(changeModifiers(modifiers));
+  };
+
+  const handleChangeAlign = (align: string) => {
+    dispatch(changeAlign(align));
+  };
+
   const [textIndex, setTextIndex] = useState(0);
-  const [currentModifiers, setCurrentModifiers] = useState<string[]>([]);
   const [alignIndex, setAlignIndex] = useState(0);
 
   const handleTextChange = () => {
+    // change text index
     setTextIndex((prevIndex) => (prevIndex + 1) % textOptions.length);
 
+    handleChangeFont(textOptions[(textIndex + 1) % textOptions.length]);
+
     // reset current modifiers by default
-    setCurrentModifiers([]);
+    handleChangeModifiers([]);
 
     // Add bold modifier by default to the heading 1 and heading 2
-    if (textIndex === 0 || textIndex === 2) setCurrentModifiers(["bold"]);
+    if (textIndex === 0 || textIndex === 2) handleChangeModifiers(["bold"]);
   };
 
   const handleModifierClick = (modifierKey: string) => {
     if (!currentModifiers.includes(modifierKey))
-      return setCurrentModifiers([...currentModifiers, modifierKey]);
+      return handleChangeModifiers([...currentModifiers, modifierKey]);
 
     // does not allow to remove bold modifier from the heading 1 and heading 2
     if (textIndex < 2 && modifierKey === "bold") return;
 
     // remove modifier if its allowed
-    setCurrentModifiers((prevModifiers) =>
-      prevModifiers.filter((modifier) => modifier !== modifierKey)
+
+    const filteredModifiers = currentModifiers.filter(
+      (modifier) => modifier !== modifierKey
     );
+
+    handleChangeModifiers(filteredModifiers);
   };
 
-  const handleAlignChange = () =>
+  const handleAlignChange = () => {
     setAlignIndex((prevIndex) => (prevIndex + 1) % aligns.length);
+    handleChangeAlign(aligns[(alignIndex + 1) % aligns.length]);
+  };
 
   return (
     <Flex
@@ -118,9 +147,7 @@ const MobileContent = () => {
               currentModifiers.includes(modifier.key!)
                 ? "rounded-lg bg-[rgba(79,60,201,.1)] transition-colors duration-500"
                 : "border-transparent",
-              currentModifiers.includes(modifier.key!) &&
-                textIndex > 1 &&
-                "border-purple-900",
+              currentModifiers.includes(modifier.key!) && "border-purple-900",
               textIndex < 2 &&
                 modifier.key === "bold" &&
                 "border-[#9e9ea7] bg-gray-200 rounded-lg"

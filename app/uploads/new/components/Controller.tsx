@@ -1,7 +1,7 @@
 import { Flex } from "@radix-ui/themes";
 import React, { Fragment } from "react";
 import { Aside, DisclosureProps } from "./Aside";
-import MobileController from "./MobileController";
+import MobileDrawer from "./MobileDrawer";
 
 export default function Controller({
   isOpen,
@@ -22,9 +22,9 @@ export default function Controller({
       </Aside>
 
       {/* Editor controller for mobile */}
-      <MobileController isSmall={isSmall} isOpen={isOpen} setOpen={setOpen}>
+      <MobileDrawer isSmall={isSmall} isOpen={isOpen} setOpen={setOpen}>
         {mobileChildren}
-      </MobileController>
+      </MobileDrawer>
     </Fragment>
   );
 }

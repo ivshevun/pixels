@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { DisclosureProps } from "./Aside";
 import classNames from "classnames";
 
-export default function MobileController({
+export default function MobileDrawer({
   isOpen,
   children,
   isSmall,
