@@ -1,10 +1,10 @@
 import { useTextSettings } from "@/lib/redux/features/textSettings/hooks";
-import {
-  changeAlign,
-  changeFont,
-  changeModifiers,
-} from "@/lib/redux/features/textSettings/textSlice";
 import { useAppDispatch } from "@/lib/redux/hooks";
+import {
+  handleChangeAlign,
+  handleChangeFont,
+  handleChangeModifiers,
+} from "@/lib/redux/utils/textHandlers";
 import { Flex, Text } from "@radix-ui/themes";
 import classNames from "classnames";
 import { Fragment, useState } from "react";
@@ -15,10 +15,9 @@ import { IoIosArrowDown } from "react-icons/io";
 import { VscBold } from "react-icons/vsc";
 import { DisclosureProps } from "./Aside";
 import Controller from "./Controller";
-import Dropdown from "./Dropdown";
+import FontDropdown from "./FontDropdown";
 
 export default function EditorController({ isOpen, setOpen }: DisclosureProps) {
-  // Does not work for now
   return (
     <Controller
       isOpen={isOpen}
@@ -40,19 +39,11 @@ type Components = {
   [key: string]: JSX.Element;
 };
 
-const textOptions = ["heading 1", "heading 2", "text"];
 export const AsideContent = () => {
-  const [currentFont, setCurrentFont] = useState(textOptions[2]);
-
-  return (
-    <Dropdown
-      options={textOptions}
-      currentItem={currentFont}
-      setCurrentItem={setCurrentFont}
-    />
-  );
+  return <FontDropdown />;
 };
 
+const textOptions = ["heading 1", "heading 2", "text"];
 const MobileContent = () => {
   const aligns = ["left", "right", "center"];
   const alignComponents: Components = {
@@ -69,18 +60,6 @@ const MobileContent = () => {
   const { currentModifiers } = useTextSettings();
   const dispatch = useAppDispatch();
 
-  const handleChangeFont = (font: string) => {
-    dispatch(changeFont(font));
-  };
-
-  const handleChangeModifiers = (modifiers: string[]) => {
-    dispatch(changeModifiers(modifiers));
-  };
-
-  const handleChangeAlign = (align: string) => {
-    dispatch(changeAlign(align));
-  };
-
   const [textIndex, setTextIndex] = useState(0);
   const [alignIndex, setAlignIndex] = useState(0);
 
@@ -88,18 +67,25 @@ const MobileContent = () => {
     // change text index
     setTextIndex((prevIndex) => (prevIndex + 1) % textOptions.length);
 
-    handleChangeFont(textOptions[(textIndex + 1) % textOptions.length]);
+    handleChangeFont(
+      textOptions[(textIndex + 1) % textOptions.length],
+      dispatch
+    );
 
     // reset current modifiers by default
-    handleChangeModifiers([]);
+    handleChangeModifiers([], dispatch);
 
     // Add bold modifier by default to the heading 1 and heading 2
-    if (textIndex === 0 || textIndex === 2) handleChangeModifiers(["bold"]);
+    if (textIndex === 0 || textIndex === 2)
+      handleChangeModifiers(["bold"], dispatch);
   };
 
   const handleModifierClick = (modifierKey: string) => {
     if (!currentModifiers.includes(modifierKey))
-      return handleChangeModifiers([...currentModifiers, modifierKey]);
+      return handleChangeModifiers(
+        [...currentModifiers, modifierKey],
+        dispatch
+      );
 
     // does not allow to remove bold modifier from the heading 1 and heading 2
     if (textIndex < 2 && modifierKey === "bold") return;
@@ -110,12 +96,12 @@ const MobileContent = () => {
       (modifier) => modifier !== modifierKey
     );
 
-    handleChangeModifiers(filteredModifiers);
+    handleChangeModifiers(filteredModifiers, dispatch);
   };
 
   const handleAlignChange = () => {
     setAlignIndex((prevIndex) => (prevIndex + 1) % aligns.length);
-    handleChangeAlign(aligns[(alignIndex + 1) % aligns.length]);
+    handleChangeAlign(aligns[(alignIndex + 1) % aligns.length], dispatch);
   };
 
   return (

@@ -1,7 +1,10 @@
+import { changeModifiers } from "@/lib/redux/features/textSettings/textSlice";
+import { useAppDispatch } from "@/lib/redux/hooks";
+import { AppDispatch } from "@/lib/redux/store";
 import { Flex, Text } from "@radix-ui/themes";
 import classNames from "classnames";
 import { AnimatePresence, Variants, motion } from "framer-motion";
-import { Dispatch, ReactNode, SetStateAction, useState } from "react";
+import { ReactNode, useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import { TiTick } from "react-icons/ti";
 
@@ -24,9 +27,11 @@ export default function Dropdown({
   currentItem,
   setCurrentItem,
   options,
+  changeModifiers,
 }: {
   currentItem: string;
-  setCurrentItem: Dispatch<SetStateAction<string>>;
+  setCurrentItem: (font: string, dispatch: AppDispatch) => void;
+  changeModifiers: (modifiers: string[], dispatch: AppDispatch) => void;
   options: string[];
 }) {
   const [isOpen, setOpen] = useState(false);
@@ -54,6 +59,7 @@ export default function Dropdown({
               <DropDownItem
                 currentItem={currentItem}
                 setCurrentItem={setCurrentItem}
+                changeModifiers={changeModifiers}
                 key={option}
               >
                 {option}
@@ -70,12 +76,27 @@ const DropDownItem = ({
   currentItem,
   setCurrentItem,
   children,
+  changeModifiers,
 }: {
   currentItem: string;
-  setCurrentItem: Dispatch<SetStateAction<string>>;
+  setCurrentItem: (font: string, dispatch: AppDispatch) => void;
+  changeModifiers: (modifiers: string[], dispatch: AppDispatch) => void;
   children: ReactNode;
 }) => {
   const isCurrent = currentItem === children;
+  const dispatch = useAppDispatch();
+
+  const handleChangeFont = () => {
+    setCurrentItem(children?.toString() || "", dispatch);
+
+    // Add bold to the headings
+    if (
+      children?.toString() === "heading 1" ||
+      children?.toString() === "heading 2"
+    ) {
+      changeModifiers(["bold"], dispatch);
+    } else changeModifiers([], dispatch);
+  };
 
   return (
     <Flex
@@ -84,7 +105,7 @@ const DropDownItem = ({
         "text-xs font-medium p-2 items-center capitalize cursor-pointer transition-colors duration-200",
         isCurrent && "bg-[#f3f3f4] rounded-md"
       )}
-      onClick={() => setCurrentItem(children?.toString() || "")}
+      onClick={handleChangeFont}
     >
       <Text>{children}</Text>
       {isCurrent && <TiTick />}

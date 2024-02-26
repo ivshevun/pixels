@@ -1,13 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface TextState {
-  text: string;
+  currentFont: string;
   currentModifiers: string[];
   align: string;
 }
 
 const initialState: TextState = {
-  text: "heading 1",
+  currentFont: "heading 1",
   currentModifiers: ["bold"],
   align: "left",
 }
@@ -17,7 +17,7 @@ export const textSlice = createSlice({
   initialState,
   reducers: {
     changeFont(state, action) {
-      state.text = action.payload
+      state.currentFont = action.payload
     },
     changeModifiers(state, action) {
       state.currentModifiers = action.payload
