@@ -16,6 +16,7 @@ import { VscBold } from "react-icons/vsc";
 import { DisclosureProps } from "./Aside";
 import Controller from "./Controller";
 import FontDropdown from "./FontDropdown";
+import ButtonGroup from "./ButtonGroup";
 
 export default function EditorController({ isOpen, setOpen }: DisclosureProps) {
   return (
@@ -39,23 +40,41 @@ type Components = {
   [key: string]: JSX.Element;
 };
 
+const fontModifiers = [
+  <VscBold key="bold" size="20" />,
+  <GoItalic key="italic" size="20" />,
+  <BiUnderline key="underline" size="20" />,
+];
+
+const alignComponents: Components = {
+  left: <FaAlignLeft key="left" />,
+  center: <FaAlignCenter key="center" />,
+  right: <FaAlignRight key="right" />,
+};
+
 export const AsideContent = () => {
-  return <FontDropdown />;
+  const { currentModifiers, align, currentFont } = useTextSettings();
+  return (
+    <Flex direction="column" gap="6">
+      <FontDropdown />
+      <ButtonGroup
+        icons={fontModifiers}
+        activeElements={currentModifiers}
+        setActiveElements={handleChangeModifiers}
+        currentFont={currentFont}
+      />
+      <ButtonGroup
+        icons={Object.values(alignComponents)}
+        activeElement={align}
+        setActiveElement={handleChangeAlign}
+      />
+    </Flex>
+  );
 };
 
 const textOptions = ["heading 1", "heading 2", "text"];
 const MobileContent = () => {
   const aligns = ["left", "right", "center"];
-  const alignComponents: Components = {
-    left: <FaAlignLeft />,
-    right: <FaAlignRight />,
-    center: <FaAlignCenter />,
-  };
-  const fontModifiers = [
-    <VscBold key="bold" />,
-    <GoItalic key="italic" />,
-    <BiUnderline key="underline" />,
-  ];
 
   const { currentModifiers } = useTextSettings();
   const dispatch = useAppDispatch();
@@ -131,12 +150,11 @@ const MobileContent = () => {
             className={classNames(
               "cursor-pointer p-1 border-2",
               currentModifiers.includes(modifier.key!)
-                ? "rounded-lg bg-[rgba(79,60,201,.1)] transition-colors duration-500"
+                ? "rounded-lg bg-[rgba(79,60,201,.1)] transition-colors duration-500 border-purple-900 "
                 : "border-transparent",
-              currentModifiers.includes(modifier.key!) && "border-purple-900",
               textIndex < 2 &&
                 modifier.key === "bold" &&
-                "border-[#9e9ea7] bg-gray-200 rounded-lg"
+                "border-zinc-400 bg-gray-200 rounded-lg cursor-default"
             )}
             key={modifier.key}
           >
