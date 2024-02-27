@@ -1,8 +1,9 @@
 import { setBlockInserterOpen as setBlockOpen } from "@/lib/redux/features/disclosure/disclosureSlice";
 import { useDisclosure } from "@/lib/redux/features/disclosure/hooks";
 import { useAppDispatch } from "@/lib/redux/hooks";
+import { Box, Heading, Text } from "@radix-ui/themes";
+import { Fragment } from "react";
 import Controller from "./Controller";
-import { BlockOptions } from "./ControllerOptions";
 
 const asideStyles =
   "w-full p-2 hover:bg-gray-100 transition-colors cursor-pointer";
@@ -26,3 +27,18 @@ export default function BlockController() {
     </Controller>
   );
 }
+
+const BlockOptions = ({ optionStyles }: { optionStyles: string }) => {
+  return (
+    <Fragment>
+      <Heading size="4" className={optionStyles}>
+        Heading
+      </Heading>
+      <Box className={optionStyles}>
+        <Heading size="4">Heading</Heading>
+        <Text>with text</Text>
+      </Box>
+      <Text className={optionStyles}>Text</Text>
+    </Fragment>
+  );
+};
