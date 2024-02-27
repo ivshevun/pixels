@@ -1,14 +1,15 @@
 "use client";
 import log from "@/lib/log";
+import { useTextSettings } from "@/lib/redux/features/textSettings/hooks";
+import { changeShotDescription } from "@/lib/redux/features/textSettings/textSlice";
+import { useAppDispatch } from "@/lib/redux/hooks";
 import { Flex, Heading } from "@radix-ui/themes";
 import axios from "axios";
 import classNames from "classnames";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import React, { ChangeEvent, KeyboardEvent, useState } from "react";
-import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
-import sanitizeHtml from "sanitize-html";
+import { ChangeEvent, KeyboardEvent, useState } from "react";
 import BlockController from "./components/BlockController";
 import BlockInserter from "./components/BlockInserter";
 import ControlButtons from "./components/ControlButtons";
@@ -19,11 +20,13 @@ import ShotMedia from "./components/ShotMedia";
 import TextEditor from "./components/TextEditor";
 
 export default function UploadPage() {
+  const dispatch = useAppDispatch();
+  const { shotDescription } = useTextSettings();
+
   const [file, setFile] = useState<File | null>(null);
   const [isEditorOpen, setEditorOpen] = useState(false);
   const [isMediaOpen, setMediaOpen] = useState(false);
   const [isBlockOpen, setBlockOpen] = useState(false);
-  const [description, setDescription] = useState("");
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -150,9 +153,8 @@ export default function UploadPage() {
           {/* Editor */}
           {file && (
             <TextEditor
-              content={description}
-              setContent={setDescription}
-              isEditorOpen={isEditorOpen}
+              content={shotDescription}
+              setContent={(content) => dispatch(changeShotDescription(content))}
               setEditorOpen={setEditorOpen}
             />
           )}

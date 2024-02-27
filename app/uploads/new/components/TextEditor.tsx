@@ -6,12 +6,10 @@ import sanitizeHtml from "sanitize-html";
 export default function TextEditor({
   content,
   setContent,
-  isEditorOpen,
   setEditorOpen,
 }: {
   content: string;
-  setContent: React.Dispatch<React.SetStateAction<string>>;
-  isEditorOpen: boolean;
+  setContent: (content: string) => void;
   setEditorOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const onContentChange = React.useCallback(

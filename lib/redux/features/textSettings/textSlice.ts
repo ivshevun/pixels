@@ -4,12 +4,14 @@ export interface TextState {
   currentFont: string;
   currentModifiers: string[];
   align: string;
+  shotDescription: string
 }
 
 const initialState: TextState = {
   currentFont: "heading 1",
   currentModifiers: ["bold"],
   align: "left",
+  shotDescription: "",
 }
 
 export const textSlice = createSlice({
@@ -24,6 +26,9 @@ export const textSlice = createSlice({
     },
     changeAlign(state, action) {
       state.align = action.payload
+    },
+    changeShotDescription(state, action) {
+      state.shotDescription = action.payload
     }
   }
 })
@@ -31,7 +36,8 @@ export const textSlice = createSlice({
 export const {
   changeFont,
   changeModifiers,
-  changeAlign
+  changeAlign,
+  changeShotDescription
 } = textSlice.actions
 
 export default textSlice.reducer
