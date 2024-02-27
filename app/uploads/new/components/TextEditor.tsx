@@ -10,7 +10,7 @@ export default function TextEditor({
 }: {
   content: string;
   setContent: (content: string) => void;
-  setEditorOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setEditorOpen: (isOpen: boolean) => void;
 }) {
   const onContentChange = React.useCallback(
     (event: ContentEditableEvent) => {

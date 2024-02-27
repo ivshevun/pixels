@@ -1,21 +1,23 @@
 import { opacityVariants } from "@/lib/animationVariants";
+import { setMediaControllerOpen as setMediaOpen } from "@/lib/redux/features/disclosure/disclosureSlice";
+import { useDisclosure } from "@/lib/redux/features/disclosure/hooks";
+import { useAppDispatch } from "@/lib/redux/hooks";
 import classNames from "classnames";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { Dispatch, SetStateAction } from "react";
 import ImageControls from "./ImageControls";
-import Image from "next/image";
 
 export default function ShotMedia({
   file,
-  isMediaOpen,
-  setMediaOpen,
   setFile,
 }: {
   file: File | null;
-  isMediaOpen: boolean;
-  setMediaOpen: Dispatch<SetStateAction<boolean>>;
   setFile: Dispatch<SetStateAction<File | null>>;
 }) {
+  const dispatch = useAppDispatch();
+  const { isMediaControllerOpen: isMediaOpen } = useDisclosure();
+
   return (
     file && (
       <motion.div
@@ -37,7 +39,7 @@ export default function ShotMedia({
           height="1600"
           onClick={() => {
             // open only on mobile
-            if (window.innerWidth < 1024) setMediaOpen((prevOpen) => !prevOpen);
+            if (window.innerWidth < 1024) dispatch(setMediaOpen(!isMediaOpen));
           }}
           autoFocus
         />

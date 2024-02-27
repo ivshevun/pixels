@@ -13,16 +13,21 @@ import { FaAlignCenter, FaAlignLeft, FaAlignRight } from "react-icons/fa";
 import { GoItalic } from "react-icons/go";
 import { IoIosArrowDown } from "react-icons/io";
 import { VscBold } from "react-icons/vsc";
-import { DisclosureProps } from "./Aside";
 import Controller from "./Controller";
 import FontDropdown from "./FontDropdown";
 import ButtonGroup from "./ButtonGroup";
+import { useDispatch } from "react-redux";
+import { useDisclosure } from "@/lib/redux/features/disclosure/hooks";
+import { setEditorOpen } from "@/lib/redux/features/disclosure/disclosureSlice";
 
-export default function EditorController({ isOpen, setOpen }: DisclosureProps) {
+export default function EditorController() {
+  const dispatch = useDispatch();
+  const { isEditorOpen } = useDisclosure();
+
   return (
     <Controller
-      isOpen={isOpen}
-      setOpen={setOpen}
+      isOpen={isEditorOpen}
+      setOpen={(isOpen) => dispatch(setEditorOpen(isOpen))}
       title="Text Block"
       isSmall={true}
     >

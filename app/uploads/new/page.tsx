@@ -18,34 +18,39 @@ import ImagePlaceholder from "./components/ImagePlaceholder";
 import MediaController from "./components/MediaController";
 import ShotMedia from "./components/ShotMedia";
 import TextEditor from "./components/TextEditor";
+import { useDisclosure } from "@/lib/redux/features/disclosure/hooks";
+import {
+  setEditorOpen,
+  setMediaControllerOpen as setMediaOpen,
+  setBlockInserterOpen as setBlockOpen,
+} from "@/lib/redux/features/disclosure/disclosureSlice";
 
 export default function UploadPage() {
   const dispatch = useAppDispatch();
   const { shotDescription } = useTextSettings();
+  const {
+    isEditorOpen,
+    isMediaControllerOpen: isMediaOpen,
+    isBlockInserterOpen: isBlockOpen,
+  } = useDisclosure();
 
   const [file, setFile] = useState<File | null>(null);
-  const [isEditorOpen, setEditorOpen] = useState(false);
-  const [isMediaOpen, setMediaOpen] = useState(false);
-  const [isBlockOpen, setBlockOpen] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
 
-  const isMobile =
-    (isEditorOpen && window.innerWidth < 1024) ||
-    (isMediaOpen && window.innerWidth < 1024) ||
-    (isBlockOpen && window.innerWidth < 1024);
-  const isAside =
-    (isEditorOpen && window.innerWidth > 1024) ||
-    (isMediaOpen && window.innerWidth > 1024) ||
-    (isBlockOpen && window.innerWidth > 1024);
+  const disclosures = [isEditorOpen, isMediaOpen, isBlockOpen];
+  const areDisclosuresOpen = disclosures.some((disclosure) => disclosure);
+
+  const isMobile = areDisclosuresOpen && window.innerWidth < 1024;
+  const isAside = areDisclosuresOpen && window.innerWidth > 1024;
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     const isEnterKey = event.key === "Enter";
     const isEscapeKey = event.key === "Escape";
 
-    // if (isEnterKey && file) {
-    //   uploadImage();
-    // }
+    if (isEnterKey && file && !isEditorOpen) {
+      uploadImage();
+    }
 
     if (isEscapeKey && !isEditorOpen && !isMediaOpen && !isBlockOpen) {
       if (file) setFile(null);
@@ -54,22 +59,21 @@ export default function UploadPage() {
     }
 
     if (isEscapeKey && isEditorOpen) {
-      setEditorOpen(false);
+      dispatch(setEditorOpen(false));
     }
 
     if (isEscapeKey && isMediaOpen) {
-      setMediaOpen(false);
+      dispatch(dispatch(setMediaOpen(false)));
     }
 
     if (isEscapeKey && isBlockOpen) {
-      setBlockOpen(false);
+      dispatch(setBlockOpen(false));
     }
   };
 
   const handleClick = () => {
-    // if (isEditorOpen) setEditorOpen(false);
-    if (isMediaOpen) setMediaOpen(false);
-    // if (isBlockOpen) setBlockOpen(false);
+    if (isMediaOpen) dispatch(setMediaOpen(false));
+    if (isBlockOpen) dispatch(setBlockOpen(false));
   };
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -130,19 +134,12 @@ export default function UploadPage() {
           </Heading>
           {/* Conditional rendering because of how AnimatePresence works */}
           <AnimatePresence>
-            {file && (
-              <ShotMedia
-                isMediaOpen={isMediaOpen}
-                setMediaOpen={setMediaOpen}
-                setFile={setFile}
-                file={file}
-              />
-            )}
+            {file && <ShotMedia setFile={setFile} file={file} />}
           </AnimatePresence>
           {!file && <ImagePlaceholder />}
           {!file && (
             <input
-              accept="image/*, video/*"
+              accept="image/*"
               className="hidden"
               name="file"
               type="file"
@@ -155,23 +152,14 @@ export default function UploadPage() {
             <TextEditor
               content={shotDescription}
               setContent={(content) => dispatch(changeShotDescription(content))}
-              setEditorOpen={setEditorOpen}
+              setEditorOpen={(isOpen) => dispatch(setEditorOpen(isOpen))}
             />
           )}
-          <BlockInserter
-            isMobile={isMobile}
-            setOpen={setBlockOpen}
-            file={file}
-          />
+          <BlockInserter isMobile={isMobile} file={file} />
         </motion.div>
-        <EditorController isOpen={isEditorOpen} setOpen={setEditorOpen} />
-        <MediaController
-          file={file}
-          setFile={setFile}
-          isOpen={isMediaOpen}
-          setOpen={setMediaOpen}
-        />
-        <BlockController isOpen={isBlockOpen} setOpen={setBlockOpen} />
+        <EditorController />
+        <MediaController file={file} setFile={setFile} />
+        <BlockController />
       </Flex>
     </motion.div>
   );

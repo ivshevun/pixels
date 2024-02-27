@@ -1,3 +1,11 @@
+import TransparentButton from "@/app/[username]/components/TransparentButton";
+import log from "@/lib/log";
+import { setMediaControllerOpen } from "@/lib/redux/features/disclosure/disclosureSlice";
+import { useDisclosure } from "@/lib/redux/features/disclosure/hooks";
+import { useAppDispatch } from "@/lib/redux/hooks";
+import { Box, Flex, Text } from "@radix-ui/themes";
+import classNames from "classnames";
+import Image from "next/image";
 import React, {
   ChangeEvent,
   Dispatch,
@@ -6,15 +14,8 @@ import React, {
   SetStateAction,
 } from "react";
 import Controller from "./Controller";
-import { DisclosureProps } from "./Aside";
-import { Box, Flex, Text } from "@radix-ui/themes";
-import SmallText from "@/app/auth/components/SmallText";
-import classNames from "classnames";
-import Image from "next/image";
-import TransparentButton from "@/app/[username]/components/TransparentButton";
-import log from "@/lib/log";
 
-interface VideoControllerProps extends DisclosureProps {
+interface VideoControllerProps {
   file: File | null;
   setFile: Dispatch<SetStateAction<File | null>>;
 }
@@ -29,11 +30,16 @@ interface FileInputProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
 export default function MediaController({
   file,
   setFile,
-  isOpen,
-  setOpen,
 }: VideoControllerProps) {
+  const dispatch = useAppDispatch();
+  const { isMediaControllerOpen: isMediaOpen } = useDisclosure();
+
   return (
-    <Controller isOpen={isOpen} setOpen={setOpen} title="Media">
+    <Controller
+      isOpen={isMediaOpen}
+      setOpen={(isOpen: boolean) => dispatch(setMediaControllerOpen(isOpen))}
+      title="Media"
+    >
       {/* Aside content */}
       <MediaContent file={file} setFile={setFile} className="p-4" />
 

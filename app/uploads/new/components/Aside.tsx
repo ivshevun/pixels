@@ -1,6 +1,5 @@
 import { Heading, Separator, Text } from "@radix-ui/themes";
 import { AnimatePresence, motion } from "framer-motion";
-import { Dispatch, SetStateAction } from "react";
 
 const variants = {
   hidden: {
@@ -15,7 +14,7 @@ const variants = {
 
 export interface DisclosureProps {
   isOpen: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
+  setOpen: (isOpen: boolean) => void;
   children?: React.ReactNode;
   title?: string;
   isSmall?: boolean;
