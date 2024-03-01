@@ -3,7 +3,7 @@ import { useShotInfo } from "@/lib/redux/features/shotInfo/hooks";
 import { changeTitle } from "@/lib/redux/features/shotInfo/shotSlice";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { Heading } from "@radix-ui/themes";
-import Editable from "./Editable";
+import Editable from "./Editable/Editable";
 
 export default function ShotName({ file }: { file: File | null }) {
   const dispatch = useAppDispatch();
@@ -18,7 +18,7 @@ export default function ShotName({ file }: { file: File | null }) {
 
   return (
     <Editable
-      html={content}
+      content={content}
       setContent={(content: string) => dispatch(changeTitle(content))}
       placeholder="Give me a name"
       className="w-1/2 text-center items-center text-2xl md:text-3xl outline-none"
