@@ -1,4 +1,4 @@
-import { useTextSettings } from "@/lib/redux/features/textSettings/hooks";
+import { useShotInfo } from "@/lib/redux/features/shotInfo/hooks";
 import {
   handleChangeFont,
   handleChangeModifiers,
@@ -7,7 +7,7 @@ import Dropdown from "./Dropdown";
 
 const textOptions = ["heading 1", "heading 2", "text"];
 export default function FontDropdown() {
-  const { currentFont } = useTextSettings();
+  const { currentFont } = useShotInfo();
 
   return (
     <Dropdown

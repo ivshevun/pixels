@@ -1,4 +1,6 @@
-import { useTextSettings } from "@/lib/redux/features/textSettings/hooks";
+import { setEditorOpen } from "@/lib/redux/features/disclosure/disclosureSlice";
+import { useDisclosure } from "@/lib/redux/features/disclosure/hooks";
+import { useShotInfo } from "@/lib/redux/features/shotInfo/hooks";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import {
   handleChangeAlign,
@@ -13,12 +15,10 @@ import { FaAlignCenter, FaAlignLeft, FaAlignRight } from "react-icons/fa";
 import { GoItalic } from "react-icons/go";
 import { IoIosArrowDown } from "react-icons/io";
 import { VscBold } from "react-icons/vsc";
+import { useDispatch } from "react-redux";
+import ButtonGroup from "./ButtonGroup";
 import Controller from "./Controller";
 import FontDropdown from "./FontDropdown";
-import ButtonGroup from "./ButtonGroup";
-import { useDispatch } from "react-redux";
-import { useDisclosure } from "@/lib/redux/features/disclosure/hooks";
-import { setEditorOpen } from "@/lib/redux/features/disclosure/disclosureSlice";
 
 export default function EditorController() {
   const dispatch = useDispatch();
@@ -58,7 +58,7 @@ const alignComponents: Components = {
 };
 
 export const AsideContent = () => {
-  const { currentModifiers, align, currentFont } = useTextSettings();
+  const { currentModifiers, align, currentFont } = useShotInfo();
   return (
     <Flex direction="column" gap="6">
       <FontDropdown />
@@ -81,7 +81,7 @@ const textOptions = ["heading 1", "heading 2", "text"];
 const MobileContent = () => {
   const aligns = ["left", "right", "center"];
 
-  const { currentModifiers } = useTextSettings();
+  const { currentModifiers } = useShotInfo();
   const dispatch = useAppDispatch();
 
   const [textIndex, setTextIndex] = useState(0);

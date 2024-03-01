@@ -1,6 +1,6 @@
-import { useAppSelector } from "../../hooks"
+import { useAppSelector } from "../../hooks";
 
-export const useTextSettings = () => {
+export const useShotInfo = () => {
   const useSelector = useAppSelector();
 
   return useSelector((state) => state.text);

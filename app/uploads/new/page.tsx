@@ -1,33 +1,31 @@
 "use client";
 import log from "@/lib/log";
-import { useTextSettings } from "@/lib/redux/features/textSettings/hooks";
-import { changeShotDescription } from "@/lib/redux/features/textSettings/textSlice";
+import {
+  setBlockInserterOpen as setBlockOpen,
+  setEditorOpen,
+  setMediaControllerOpen as setMediaOpen,
+} from "@/lib/redux/features/disclosure/disclosureSlice";
+import { useDisclosure } from "@/lib/redux/features/disclosure/hooks";
 import { useAppDispatch } from "@/lib/redux/hooks";
-import { Flex, Heading } from "@radix-ui/themes";
+import { Flex } from "@radix-ui/themes";
 import axios from "axios";
 import classNames from "classnames";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, KeyboardEvent, useState } from "react";
-import BlockController from "./components/controllers/BlockController";
 import BlockInserter from "./components/BlockInserter";
 import ControlButtons from "./components/ControlButtons";
-import EditorController from "./components/controllers/EditorController";
 import ImagePlaceholder from "./components/ImagePlaceholder";
-import MediaController from "./components/controllers/MediaController";
 import ShotMedia from "./components/ShotMedia";
+import ShotName from "./components/ShotName";
 import TextEditor from "./components/TextEditor";
-import { useDisclosure } from "@/lib/redux/features/disclosure/hooks";
-import {
-  setEditorOpen,
-  setMediaControllerOpen as setMediaOpen,
-  setBlockInserterOpen as setBlockOpen,
-} from "@/lib/redux/features/disclosure/disclosureSlice";
+import BlockController from "./components/controllers/BlockController";
+import EditorController from "./components/controllers/EditorController";
+import MediaController from "./components/controllers/MediaController";
 
 export default function UploadPage() {
   const dispatch = useAppDispatch();
-  const { shotDescription } = useTextSettings();
   const {
     isEditorOpen,
     isMediaControllerOpen: isMediaOpen,
@@ -35,6 +33,7 @@ export default function UploadPage() {
   } = useDisclosure();
 
   const [file, setFile] = useState<File | null>(null);
+
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -48,11 +47,11 @@ export default function UploadPage() {
     const isEnterKey = event.key === "Enter";
     const isEscapeKey = event.key === "Escape";
 
-    if (isEnterKey && file && !isEditorOpen) {
-      uploadImage();
-    }
+    // if (isEnterKey && file && !isEditorOpen) {
+    //   uploadImage();
+    // }
 
-    if (isEscapeKey && !isEditorOpen && !isMediaOpen && !isBlockOpen) {
+    if (isEscapeKey && !areDisclosuresOpen) {
       if (file) setFile(null);
       // if no file is uploaded, go back
       else router.push("/" + session?.user.username);
@@ -63,7 +62,7 @@ export default function UploadPage() {
     }
 
     if (isEscapeKey && isMediaOpen) {
-      dispatch(dispatch(setMediaOpen(false)));
+      dispatch(setMediaOpen(false));
     }
 
     if (isEscapeKey && isBlockOpen) {
@@ -129,9 +128,7 @@ export default function UploadPage() {
           transition={{ duration: 0.3 }}
         >
           <ControlButtons file={file} onSubmit={uploadImage} />
-          <Heading className="text-3xl md:text-4xl ">
-            What have you been working on?
-          </Heading>
+          <ShotName file={file} />
           {/* Conditional rendering because of how AnimatePresence works */}
           <AnimatePresence>
             {file && <ShotMedia setFile={setFile} file={file} />}
@@ -148,13 +145,7 @@ export default function UploadPage() {
             />
           )}
           {/* Editor */}
-          {file && (
-            <TextEditor
-              content={shotDescription}
-              setContent={(content) => dispatch(changeShotDescription(content))}
-              setEditorOpen={(isOpen) => dispatch(setEditorOpen(isOpen))}
-            />
-          )}
+          {file && <TextEditor />}
           <BlockInserter isMobile={isMobile} file={file} />
         </motion.div>
         <EditorController />

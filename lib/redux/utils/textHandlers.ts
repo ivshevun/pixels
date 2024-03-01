@@ -3,8 +3,7 @@ import {
   changeAlign,
   changeFont,
   changeModifiers,
-} from "../features/textSettings/textSlice";
-import { useAppDispatch } from "../hooks";
+} from "../features/shotInfo/shotSlice";
 import { AppDispatch } from "../store";
 
 
