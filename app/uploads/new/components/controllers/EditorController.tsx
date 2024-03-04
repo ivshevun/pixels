@@ -8,6 +8,7 @@ import {
   handleChangeModifiers,
 } from "@/lib/redux/utils/textHandlers";
 import { Flex, Text } from "@radix-ui/themes";
+import { Editor } from "@tiptap/react";
 import classNames from "classnames";
 import { Fragment, useState } from "react";
 import { BiUnderline } from "react-icons/bi";
@@ -20,7 +21,11 @@ import ButtonGroup from "./ButtonGroup";
 import Controller from "./Controller";
 import FontDropdown from "./FontDropdown";
 
-export default function EditorController() {
+interface EditorProps {
+  editor: Editor | null;
+}
+
+export default function EditorController({ editor }: EditorProps) {
   const dispatch = useDispatch();
   const { isEditorOpen } = useDisclosure();
 
@@ -32,10 +37,10 @@ export default function EditorController() {
       isSmall={true}
     >
       <Fragment>
-        <AsideContent />
+        <AsideContent editor={editor} />
       </Fragment>
       <Fragment>
-        <MobileContent />
+        <MobileContent editor={editor} />
       </Fragment>
     </Controller>
   );
@@ -57,7 +62,7 @@ const alignComponents: Components = {
   right: <FaAlignRight key="right" />,
 };
 
-export const AsideContent = () => {
+export const AsideContent = ({ editor }: EditorProps) => {
   const { currentModifiers, align, currentFont } = useShotInfo();
   return (
     <Flex direction="column" gap="6">
@@ -78,7 +83,7 @@ export const AsideContent = () => {
 };
 
 const textOptions = ["heading 1", "heading 2", "text"];
-const MobileContent = () => {
+const MobileContent = ({ editor }: EditorProps) => {
   const aligns = ["left", "right", "center"];
 
   const { currentModifiers } = useShotInfo();

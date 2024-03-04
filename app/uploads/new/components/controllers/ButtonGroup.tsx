@@ -42,6 +42,7 @@ export default function ButtonGroup({
           activeElements.filter((element) => element !== iconKey),
           dispatch
         );
+
       setActiveElements([...activeElements!, iconKey], dispatch);
     }
 
