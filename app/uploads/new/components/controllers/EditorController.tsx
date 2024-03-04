@@ -21,7 +21,7 @@ import ButtonGroup from "./ButtonGroup";
 import Controller from "./Controller";
 import FontDropdown from "./FontDropdown";
 
-interface EditorProps {
+export interface EditorProps {
   editor: Editor | null;
 }
 
@@ -66,17 +66,19 @@ export const AsideContent = ({ editor }: EditorProps) => {
   const { currentModifiers, align, currentFont } = useShotInfo();
   return (
     <Flex direction="column" gap="6">
-      <FontDropdown />
+      <FontDropdown editor={editor} />
       <ButtonGroup
         icons={fontModifiers}
         activeElements={currentModifiers}
         setActiveElements={handleChangeModifiers}
         currentFont={currentFont}
+        editor={editor}
       />
       <ButtonGroup
         icons={Object.values(alignComponents)}
         activeElement={align}
         setActiveElement={handleChangeAlign}
+        editor={editor}
       />
     </Flex>
   );
@@ -98,22 +100,24 @@ const MobileContent = ({ editor }: EditorProps) => {
 
     handleChangeFont(
       textOptions[(textIndex + 1) % textOptions.length],
-      dispatch
+      dispatch,
+      editor
     );
 
     // reset current modifiers by default
-    handleChangeModifiers([], dispatch);
+    handleChangeModifiers([], dispatch, editor);
 
     // Add bold modifier by default to the heading 1 and heading 2
     if (textIndex === 0 || textIndex === 2)
-      handleChangeModifiers(["bold"], dispatch);
+      handleChangeModifiers(["bold"], dispatch, editor);
   };
 
   const handleModifierClick = (modifierKey: string) => {
     if (!currentModifiers.includes(modifierKey))
       return handleChangeModifiers(
         [...currentModifiers, modifierKey],
-        dispatch
+        dispatch,
+        editor
       );
 
     // does not allow to remove bold modifier from the heading 1 and heading 2
@@ -125,12 +129,16 @@ const MobileContent = ({ editor }: EditorProps) => {
       (modifier) => modifier !== modifierKey
     );
 
-    handleChangeModifiers(filteredModifiers, dispatch);
+    handleChangeModifiers(filteredModifiers, dispatch, editor);
   };
 
   const handleAlignChange = () => {
     setAlignIndex((prevIndex) => (prevIndex + 1) % aligns.length);
-    handleChangeAlign(aligns[(alignIndex + 1) % aligns.length], dispatch);
+    handleChangeAlign(
+      aligns[(alignIndex + 1) % aligns.length],
+      dispatch,
+      editor
+    );
   };
 
   return (

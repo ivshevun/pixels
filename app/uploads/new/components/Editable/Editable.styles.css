@@ -9,5 +9,16 @@
   @media screen and (min-width: 375px) {
     font-size: 20px;
   }
-    
+}
+
+.tiptap h1 {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 38px;
+}
+
+.tiptap h2 {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 29px;
 }

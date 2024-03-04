@@ -1,6 +1,7 @@
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { AppDispatch } from "@/lib/redux/store";
 import { Flex } from "@radix-ui/themes";
+import { Editor } from "@tiptap/react";
 import classNames from "classnames";
 import { ButtonHTMLAttributes } from "react";
 
@@ -10,10 +11,19 @@ interface ButtonGroupProps {
   activeElements?: string[];
   activeElement?: string;
 
-  setActiveElements?: (elements: string[], dispatch: AppDispatch) => void;
-  setActiveElement?: (element: string, dispatch: AppDispatch) => void;
+  setActiveElements?: (
+    elements: string[],
+    dispatch: AppDispatch,
+    editor: Editor | null
+  ) => void;
+  setActiveElement?: (
+    element: string,
+    dispatch: AppDispatch,
+    editor: Editor | null
+  ) => void;
 
   currentFont?: string;
+  editor: Editor | null;
 }
 
 export default function ButtonGroup({
@@ -26,6 +36,8 @@ export default function ButtonGroup({
   setActiveElement,
 
   currentFont,
+
+  editor,
 }: ButtonGroupProps) {
   const dispatch = useAppDispatch();
 
@@ -40,14 +52,15 @@ export default function ButtonGroup({
       if (activeElements?.includes(iconKey))
         return setActiveElements(
           activeElements.filter((element) => element !== iconKey),
-          dispatch
+          dispatch,
+          editor
         );
 
-      setActiveElements([...activeElements!, iconKey], dispatch);
+      setActiveElements([...activeElements!, iconKey], dispatch, editor);
     }
 
     if (setActiveElement) {
-      setActiveElement(iconKey, dispatch);
+      setActiveElement(iconKey, dispatch, editor);
     }
   };
 

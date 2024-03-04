@@ -21,7 +21,6 @@ import ShotMedia from "./components/ShotMedia";
 import ShotName from "./components/ShotName";
 import TextEditor from "./components/TextEditor";
 import BlockController from "./components/controllers/BlockController";
-import EditorController from "./components/controllers/EditorController";
 import MediaController from "./components/controllers/MediaController";
 
 export default function UploadPage() {
@@ -148,7 +147,6 @@ export default function UploadPage() {
           {file && <TextEditor />}
           <BlockInserter isMobile={isMobile} file={file} />
         </motion.div>
-        <EditorController />
         <MediaController file={file} setFile={setFile} />
         <BlockController />
       </Flex>

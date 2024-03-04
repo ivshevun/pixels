@@ -1,11 +1,27 @@
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { AppDispatch } from "@/lib/redux/store";
 import { Flex, Text } from "@radix-ui/themes";
+import { Editor } from "@tiptap/react";
 import classNames from "classnames";
 import { AnimatePresence, Variants, motion } from "framer-motion";
 import { ReactNode, useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import { TiTick } from "react-icons/ti";
+
+type Props = {
+  currentItem: string;
+  setCurrentItem: (
+    font: string,
+    dispatch: AppDispatch,
+    editor: Editor | null
+  ) => void;
+  changeModifiers: (
+    modifiers: string[],
+    dispatch: AppDispatch,
+    editor: Editor | null
+  ) => void;
+  editor: Editor | null;
+};
 
 const variants: Variants = {
   hidden: {
@@ -27,12 +43,8 @@ export default function Dropdown({
   setCurrentItem,
   options,
   changeModifiers,
-}: {
-  currentItem: string;
-  setCurrentItem: (font: string, dispatch: AppDispatch) => void;
-  changeModifiers: (modifiers: string[], dispatch: AppDispatch) => void;
-  options: string[];
-}) {
+  editor,
+}: Props & { options: string[] }) {
   const [isOpen, setOpen] = useState(false);
 
   return (
@@ -60,6 +72,7 @@ export default function Dropdown({
                 setCurrentItem={setCurrentItem}
                 changeModifiers={changeModifiers}
                 key={option}
+                editor={editor}
               >
                 {option}
               </DropDownItem>
@@ -70,31 +83,26 @@ export default function Dropdown({
     </Flex>
   );
 }
-
 const DropDownItem = ({
   currentItem,
   setCurrentItem,
   children,
   changeModifiers,
-}: {
-  currentItem: string;
-  setCurrentItem: (font: string, dispatch: AppDispatch) => void;
-  changeModifiers: (modifiers: string[], dispatch: AppDispatch) => void;
-  children: ReactNode;
-}) => {
+  editor,
+}: Props & { children: ReactNode }) => {
   const isCurrent = currentItem === children;
   const dispatch = useAppDispatch();
 
   const handleChangeFont = () => {
-    setCurrentItem(children?.toString() || "", dispatch);
+    setCurrentItem(children?.toString() || "", dispatch, editor);
 
     // Add bold to the headings
     if (
       children?.toString() === "heading 1" ||
       children?.toString() === "heading 2"
     ) {
-      changeModifiers(["bold"], dispatch);
-    } else changeModifiers([], dispatch);
+      changeModifiers(["bold"], dispatch, editor);
+    } else changeModifiers([], dispatch, editor);
   };
 
   return (
