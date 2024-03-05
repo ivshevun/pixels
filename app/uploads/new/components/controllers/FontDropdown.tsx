@@ -4,7 +4,7 @@ import {
   handleChangeModifiers,
 } from "@/lib/redux/utils/textHandlers";
 import Dropdown from "./Dropdown";
-import { EditorProps } from "./EditorController";
+import { EditorProps } from "./Editor/EditorController";
 
 const textOptions = ["heading 1", "heading 2", "text"];
 export default function FontDropdown({ editor }: EditorProps) {

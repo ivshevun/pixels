@@ -9,8 +9,8 @@ export interface ShotState {
 }
 
 const initialState: ShotState = {
-  currentFont: "heading 1",
-  currentModifiers: ["bold"],
+  currentFont: "text",
+  currentModifiers: [],
   align: "left",
   shotDescription: "",
   shotTitle: "",

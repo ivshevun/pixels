@@ -7,7 +7,7 @@ import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Fragment } from "react";
 import Editable from "./Editable/Editable";
-import EditorController from "./controllers/EditorController";
+import EditorController from "./controllers/Editor/EditorController";
 
 export default function TextEditor() {
   const dispatch = useAppDispatch();

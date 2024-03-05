@@ -34,6 +34,17 @@ export const handleChangeModifiers = (
   editor: Editor | null
 ) => {
   dispatch(changeModifiers(modifiers));
+  
+  const focusedEditor = editor?.chain().focus();
+
+  const commands: Record<string, () => void> = {
+    "bold": () => focusedEditor?.setBold().run(),
+    "italic": () => focusedEditor?.setItalic().run(),
+    'underline': () => focusedEditor?.setStrike().run(),
+  };
+
+  modifiers.forEach(modifier => commands[modifier]());
+
 };
 
 export const handleChangeAlign = (
