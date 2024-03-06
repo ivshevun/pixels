@@ -1,3 +1,4 @@
+import log from "@/lib/log";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { AppDispatch } from "@/lib/redux/store";
 import { Flex } from "@radix-ui/themes";
@@ -40,6 +41,7 @@ export default function ButtonGroup({
   editor,
 }: ButtonGroupProps) {
   const dispatch = useAppDispatch();
+  const focusedEditor = editor?.chain().focus();
 
   const handleClick = (iconKey: string) => {
     if (setActiveElements) {
@@ -49,14 +51,23 @@ export default function ButtonGroup({
       )
         return;
 
-      if (activeElements?.includes(iconKey))
+      if (activeElements?.includes(iconKey)) {
+        const deleteCommands: Record<string, () => void> = {
+          bold: () => focusedEditor?.unsetBold().run(),
+          italic: () => focusedEditor?.unsetItalic().run(),
+          underline: () => focusedEditor?.unsetUnderline().run(),
+        };
+        activeElements.forEach((element) => deleteCommands[element]());
+
+        log("activeElements", activeElements);
         return setActiveElements(
           activeElements.filter((element) => element !== iconKey),
           dispatch,
           editor
         );
+      }
 
-      setActiveElements([...activeElements!, iconKey], dispatch, editor);
+      return setActiveElements([...activeElements!, iconKey], dispatch, editor);
     }
 
     if (setActiveElement) {
@@ -75,7 +86,7 @@ export default function ButtonGroup({
           <IconButton
             className={classNames(
               "transition-colors border border-gray-200",
-              activeElements?.includes(icon.key!) && activeStyles,
+              editor?.isActive(icon.key!) && activeStyles,
               activeElement === icon.key && activeStyles,
               index === 0 && "rounded-l-lg",
               index === icons.length - 1 && "rounded-r-lg",

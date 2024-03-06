@@ -3,6 +3,7 @@ import { useShotInfo } from "@/lib/redux/features/shotInfo/hooks";
 import { changeDescription } from "@/lib/redux/features/shotInfo/shotSlice";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import Placeholder from "@tiptap/extension-placeholder";
+import Underline from "@tiptap/extension-underline";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Fragment } from "react";
@@ -20,6 +21,7 @@ export default function TextEditor() {
         placeholder:
           "Write what went into this design or add any details you’d like to mention",
       }),
+      Underline,
     ],
     content,
     editorProps: {
@@ -30,7 +32,6 @@ export default function TextEditor() {
     onUpdate: ({ editor }) => {
       dispatch(changeDescription(editor.getHTML()));
     },
-    injectCSS: false,
     editable: true,
   });
 

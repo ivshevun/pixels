@@ -65,8 +65,8 @@ export const AsideContent = ({ editor }: EditorProps) => {
     useShotInfo();
 
   useEffect(
-    () => synchronizeEditor(editor, currentModifiers, currentFont),
-    [currentModifiers, shotDescription, currentFont, editor]
+    () => synchronizeEditor(editor, currentFont),
+    [shotDescription, currentFont, editor]
   );
 
   return (

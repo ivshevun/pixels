@@ -42,8 +42,8 @@ export default function MobileContent({ editor }: EditorProps) {
   };
 
   useEffect(
-    () => synchronizeEditor(editor, currentModifiers, currentFont),
-    [currentModifiers, shotDescription, currentFont, editor]
+    () => synchronizeEditor(editor, currentFont),
+    [shotDescription, currentFont, editor]
   );
 
   const handleModifierClick = (modifierKey: string) => {
@@ -58,6 +58,13 @@ export default function MobileContent({ editor }: EditorProps) {
     if (isHeading && modifierKey === "bold") return;
 
     // remove modifier if its allowed
+    const focusedEditor = editor?.chain().focus();
+    const deleteCommands: Record<string, () => void> = {
+      bold: () => focusedEditor?.unsetBold().run(),
+      italic: () => focusedEditor?.unsetItalic().run(),
+      underline: () => focusedEditor?.unsetUnderline().run(),
+    };
+    currentModifiers.forEach((modifier) => deleteCommands[modifier]());
 
     const filteredModifiers = currentModifiers.filter(
       (modifier) => modifier !== modifierKey
@@ -99,7 +106,7 @@ export default function MobileContent({ editor }: EditorProps) {
             align="center"
             className={classNames(
               "cursor-pointer p-1 border-2",
-              currentModifiers.includes(modifier.key!)
+              editor?.isActive(modifier.key!)
                 ? "rounded-lg bg-[rgba(79,60,201,.1)] transition-colors duration-500 border-purple-900 "
                 : "border-transparent",
               isHeading &&

@@ -28,7 +28,6 @@ export default function ShotName({ file }: { file: File | null }) {
     onUpdate: ({ editor }) => {
       dispatch(changeTitle(editor.getHTML()));
     },
-
     injectCSS: false,
     editable: true,
   });
