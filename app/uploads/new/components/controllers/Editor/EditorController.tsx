@@ -7,7 +7,7 @@ import {
 } from "@/lib/redux/utils/textHandlers";
 import { Flex } from "@radix-ui/themes";
 import { Editor } from "@tiptap/react";
-import { Fragment, useEffect } from "react";
+import { Fragment } from "react";
 import { BiUnderline } from "react-icons/bi";
 import { FaAlignCenter, FaAlignLeft, FaAlignRight } from "react-icons/fa";
 import { GoItalic } from "react-icons/go";
@@ -17,7 +17,6 @@ import ButtonGroup from "../ButtonGroup";
 import Controller from "../Controller";
 import FontDropdown from "../FontDropdown";
 import MobileContent from "./MobileContent";
-import { synchronizeEditor } from "./utils";
 
 export interface EditorProps {
   editor: Editor | null;
@@ -61,13 +60,7 @@ export const alignComponents: Components = {
 };
 
 export const AsideContent = ({ editor }: EditorProps) => {
-  const { currentModifiers, align, currentFont, shotDescription } =
-    useShotInfo();
-
-  useEffect(
-    () => synchronizeEditor(editor, currentFont),
-    [shotDescription, currentFont, editor]
-  );
+  const { currentModifiers, align, currentFont } = useShotInfo();
 
   return (
     <Flex direction="column" gap="6">

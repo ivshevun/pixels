@@ -19,6 +19,7 @@
     "@react-email/components": "^0.0.13",
     "@reduxjs/toolkit": "^2.1.0",
     "@tiptap/extension-placeholder": "^2.2.4",
+    "@tiptap/extension-text-align": "^2.2.4",
     "@tiptap/extension-underline": "^2.2.4",
     "@tiptap/pm": "^2.2.4",
     "@tiptap/react": "^2.2.4",

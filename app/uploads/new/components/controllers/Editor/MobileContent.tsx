@@ -7,14 +7,13 @@ import {
 } from "@/lib/redux/utils/textHandlers";
 import { Flex, Text } from "@radix-ui/themes";
 import classNames from "classnames";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import {
   EditorProps,
   alignComponents,
   fontModifiers,
 } from "./EditorController";
-import { synchronizeEditor } from "./utils";
 
 const textOptions = ["text", "heading 1", "heading 2"];
 export default function MobileContent({ editor }: EditorProps) {
@@ -36,15 +35,7 @@ export default function MobileContent({ editor }: EditorProps) {
 
     // reset current modifiers by default
     handleChangeModifiers([], dispatch, editor);
-
-    // Add bold modifier by default to the heading 1 and heading 2
-    if (currentTextIndex) handleChangeModifiers(["bold"], dispatch, editor);
   };
-
-  useEffect(
-    () => synchronizeEditor(editor, currentFont),
-    [shotDescription, currentFont, editor]
-  );
 
   const handleModifierClick = (modifierKey: string) => {
     if (!currentModifiers.includes(modifierKey))

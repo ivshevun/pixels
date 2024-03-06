@@ -1,4 +1,3 @@
-import log from "@/lib/log";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { AppDispatch } from "@/lib/redux/store";
 import { Flex } from "@radix-ui/themes";
@@ -59,15 +58,12 @@ export default function ButtonGroup({
         };
         activeElements.forEach((element) => deleteCommands[element]());
 
-        log("activeElements", activeElements);
         return setActiveElements(
           activeElements.filter((element) => element !== iconKey),
           dispatch,
           editor
         );
-      }
-
-      return setActiveElements([...activeElements!, iconKey], dispatch, editor);
+      } else setActiveElements([...activeElements!, iconKey], dispatch, editor);
     }
 
     if (setActiveElement) {
@@ -87,7 +83,7 @@ export default function ButtonGroup({
             className={classNames(
               "transition-colors border border-gray-200",
               editor?.isActive(icon.key!) && activeStyles,
-              activeElement === icon.key && activeStyles,
+              editor?.isActive({ textAlign: icon.key }) && activeStyles,
               index === 0 && "rounded-l-lg",
               index === icons.length - 1 && "rounded-r-lg",
               icon.key === "bold" &&

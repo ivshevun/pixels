@@ -4,7 +4,7 @@ import { Flex, Text } from "@radix-ui/themes";
 import { Editor } from "@tiptap/react";
 import classNames from "classnames";
 import { AnimatePresence, Variants, motion } from "framer-motion";
-import { ReactNode, useState } from "react";
+import { Dispatch, ReactNode, SetStateAction, useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import { TiTick } from "react-icons/ti";
 
@@ -73,6 +73,7 @@ export default function Dropdown({
                 changeModifiers={changeModifiers}
                 key={option}
                 editor={editor}
+                setOpen={setOpen}
               >
                 {option}
               </DropDownItem>
@@ -89,20 +90,20 @@ const DropDownItem = ({
   children,
   changeModifiers,
   editor,
-}: Props & { children: ReactNode }) => {
+  setOpen,
+}: Props & {
+  children: ReactNode;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}) => {
   const isCurrent = currentItem === children;
   const dispatch = useAppDispatch();
 
   const handleChangeFont = () => {
     setCurrentItem(children?.toString() || "", dispatch, editor);
 
-    // Add bold to the headings
-    if (
-      children?.toString() === "heading 1" ||
-      children?.toString() === "heading 2"
-    ) {
-      changeModifiers(["bold"], dispatch, editor);
-    } else changeModifiers([], dispatch, editor);
+    changeModifiers([], dispatch, editor);
+
+    setOpen(false);
   };
 
   return (

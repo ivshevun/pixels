@@ -24,7 +24,7 @@ export const handleChangeFont = (
   editor
     ?.chain()
     .focus()
-    .setHeading({ level: level === 1 ? 1 : 2 })
+    .toggleHeading({ level: level === 1 ? 1 : 2 })
     .run();
 };
 
@@ -55,4 +55,8 @@ export const handleChangeAlign = (
   editor: Editor | null
 ) => {
   dispatch(changeAlign(align));
+
+  const focusedEditor = editor?.chain().focus();
+
+  focusedEditor?.setTextAlign(align).run();
 };
