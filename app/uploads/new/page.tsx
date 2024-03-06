@@ -116,7 +116,7 @@ export default function UploadPage() {
     >
       <Flex className="relative w-full">
         <motion.div
-          className="flex flex-col justify-center items-center text-center px-4 gap-16"
+          className="flex flex-col justify-center items-center text-center px-4"
           onClick={handleClick}
           initial={{
             width: isAside ? "80%" : "100%",

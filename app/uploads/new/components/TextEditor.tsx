@@ -31,7 +31,7 @@ export default function TextEditor() {
     content,
     editorProps: {
       attributes: {
-        class: `w-3/4 h-auto py-16 min-h-28 flex flex-col mx-auto whitespace-pre-wrap w-3/4 min-h-28 text-xl px-2 py-4 border-2 border-transparent rounded-lg placeholder:text-lg leading-7 hover:border-gray-200 transition-colors outline-purple-950 text-left`,
+        class: `w-3/4 mt-8 h-auto py-16 min-h-28 flex flex-col mx-auto whitespace-pre-wrap w-3/4 min-h-28 text-xl px-2 py-4 border-2 border-transparent rounded-lg placeholder:text-lg leading-7 hover:border-gray-200 transition-colors outline-purple-950 text-left`,
       },
     },
     onUpdate: ({ editor }) => {
