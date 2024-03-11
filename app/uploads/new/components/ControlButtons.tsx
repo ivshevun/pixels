@@ -19,7 +19,7 @@ export default function ControlButtons({
     <Flex
       width="100%"
       justify="between"
-      className="p-6 gap-4 xs:gap-24 sm:gap-4"
+      className="py-4 px-2 sm:p-6 gap-4 xs:gap-12 sm:gap-4"
     >
       <TransparentButton
         onClick={() => router.push(`/${session?.user?.username}`)}

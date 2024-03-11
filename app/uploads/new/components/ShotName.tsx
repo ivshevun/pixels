@@ -34,7 +34,7 @@ export default function ShotName({ file }: { file: File | null }) {
 
   if (!file)
     return (
-      <Heading className="text-3xl md:text-4xl ">
+      <Heading className="text-3xl md:text-4xl mb-16">
         What have you been working on?
       </Heading>
     );

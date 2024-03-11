@@ -1,3 +1,4 @@
+import log from "@/lib/log";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
@@ -11,9 +12,10 @@ const client = new S3Client({
 });
 
 async function uploadFileToStorage(file: Buffer, fileName: string) {
+  const nameInBucket = `${fileName}-${randomUUID()}`;
   const params = {
     Bucket: process.env.AWS_BUCKET_NAME!,
-    Key: `media/${fileName}-${randomUUID()}`,
+    Key: `media/${nameInBucket}`,
     Body: file,
   };
 
@@ -21,7 +23,7 @@ async function uploadFileToStorage(file: Buffer, fileName: string) {
 
   await client.send(command);
 
-  return fileName;
+  return "https://pixels-storage.s3.amazonaws.com/media/" + nameInBucket;
 }
 
 export async function POST(request: NextRequest) {
@@ -35,11 +37,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Image is required" }, { status: 400 });
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    const fileName = await uploadFileToStorage(buffer, file.name);
+    const response = await uploadFileToStorage(buffer, file.name);
 
-    return NextResponse.json({ fileName });
+    return NextResponse.json({ response });
   } catch (error) {
-    console.log(error);
+    log(error);
     return NextResponse.json(
       { error: "Error uploading file" },
       { status: 500 }
