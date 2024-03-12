@@ -5,7 +5,6 @@ export interface DisclosureState {
   isUserMenuOpen: boolean;
   isEditorOpen: boolean;
   isMediaControllerOpen: boolean;
-  isBlockInserterOpen: boolean;
 }
 
 const initialState: DisclosureState = {
@@ -13,7 +12,6 @@ const initialState: DisclosureState = {
   isUserMenuOpen: false,
   isEditorOpen: false,
   isMediaControllerOpen: false,
-  isBlockInserterOpen: false,
 };
 
 export const disclosureSlice = createSlice({
@@ -22,7 +20,7 @@ export const disclosureSlice = createSlice({
   reducers: {
     toggleNavMenu: (state) => {
       if (state.isUserMenuOpen) state.isUserMenuOpen = false;
-    
+
       state.isNavMenuOpen = !state.isNavMenuOpen;
     },
 
@@ -34,24 +32,15 @@ export const disclosureSlice = createSlice({
 
     setEditorOpen: (state, action) => {
       state.isMediaControllerOpen = false;
-      state.isBlockInserterOpen = false;
 
       state.isEditorOpen = action.payload;
     },
 
     setMediaControllerOpen: (state, action) => {
       state.isEditorOpen = false;
-      state.isBlockInserterOpen = false;
 
       state.isMediaControllerOpen = action.payload;
     },
-
-    setBlockInserterOpen: (state, action) => {
-      state.isEditorOpen = false;
-      state.isMediaControllerOpen = false;
-
-      state.isBlockInserterOpen = action.payload;
-    }
   },
 });
 
@@ -60,8 +49,6 @@ export const {
   toggleUserMenu,
   setEditorOpen,
   setMediaControllerOpen,
-  setBlockInserterOpen,
 } = disclosureSlice.actions;
-
 
 export default disclosureSlice.reducer;

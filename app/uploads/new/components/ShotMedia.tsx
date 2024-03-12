@@ -40,7 +40,6 @@ export default function ShotMedia({
           // open only on mobile
           if (window.innerWidth < 1024) dispatch(setMediaOpen(!isMediaOpen));
         }}
-        autoFocus
       />
       <ImageControls handleDelete={() => setFile(null)} />
     </motion.div>

@@ -4,11 +4,14 @@
   float: left;
   height: 0;
   pointer-events: none;
-  font-size: 16px;
-  
-  @media screen and (min-width: 375px) {
-    font-size: 24px;
-  }
+}
+
+p[data-placeholder="Give me a name"] {
+  font-size: 24px;
+}
+
+p[data-placeholder="Write what went into this design or add any details you’d like to mention"] {
+  font-size: clamp(1rem, 3vw, 1.3rem);
 }
 
 .tiptap h1 {

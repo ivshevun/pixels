@@ -75,12 +75,12 @@ model Shot {
   user   User   @relation(fields: [userId], references: [id])
   userId String
 
-  views    Int
-  saves    Int
-  likes    Int
-  comments Int
+  views    Int @default(0)
+  saves    Int @default(0)
+  likes    Int @default(0)
+  comments Int @default(0)
 
-  tags Tag[]
+  tags Tag[] @default([])
 }
 
 enum Tag {

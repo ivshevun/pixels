@@ -1,7 +1,6 @@
 "use client";
 import log from "@/lib/log";
 import {
-  setBlockInserterOpen as setBlockOpen,
   setEditorOpen,
   setMediaControllerOpen as setMediaOpen,
 } from "@/lib/redux/features/disclosure/disclosureSlice";
@@ -14,29 +13,23 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, KeyboardEvent, useState } from "react";
-import BlockInserter from "./components/BlockInserter";
 import ControlButtons from "./components/ControlButtons";
 import ImagePlaceholder from "./components/ImagePlaceholder";
 import ShotMedia from "./components/ShotMedia";
 import ShotName from "./components/ShotName";
 import TextEditor from "./components/TextEditor";
-import BlockController from "./components/controllers/BlockController";
 import MediaController from "./components/controllers/MediaController";
 
 export default function UploadPage() {
   const dispatch = useAppDispatch();
-  const {
-    isEditorOpen,
-    isMediaControllerOpen: isMediaOpen,
-    isBlockInserterOpen: isBlockOpen,
-  } = useDisclosure();
+  const { isEditorOpen, isMediaControllerOpen: isMediaOpen } = useDisclosure();
 
   const [file, setFile] = useState<File | null>(null);
 
   const { data: session } = useSession();
   const router = useRouter();
 
-  const disclosures = [isEditorOpen, isMediaOpen, isBlockOpen];
+  const disclosures = [isEditorOpen, isMediaOpen];
   const areDisclosuresOpen = disclosures.some((disclosure) => disclosure);
 
   const isMobile = areDisclosuresOpen && window.innerWidth < 1024;
@@ -63,15 +56,10 @@ export default function UploadPage() {
     if (isEscapeKey && isMediaOpen) {
       dispatch(setMediaOpen(false));
     }
-
-    if (isEscapeKey && isBlockOpen) {
-      dispatch(setBlockOpen(false));
-    }
   };
 
   const handleClick = () => {
     if (isMediaOpen) dispatch(setMediaOpen(false));
-    if (isBlockOpen) dispatch(setBlockOpen(false));
   };
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -110,7 +98,7 @@ export default function UploadPage() {
       onKeyDown={handleKeyDown}
       tabIndex={0}
       className={classNames(
-        "flex flex-col h-screen overflow-x-hidden",
+        "flex flex-col h-screen overflow-x-hidden xs:pb-16",
         !file && "overflow-y-hidden"
       )}
     >
@@ -145,10 +133,8 @@ export default function UploadPage() {
           )}
           {/* Editor */}
           {file && <TextEditor />}
-          <BlockInserter isMobile={isMobile} file={file} />
         </motion.div>
         <MediaController file={file} setFile={setFile} />
-        <BlockController />
       </Flex>
     </motion.div>
   );
