@@ -3,17 +3,16 @@ import { userSchema } from "@/app/validationSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Flex, Separator, Text } from "@radix-ui/themes";
 import axios from "axios";
-import { motion } from "framer-motion";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import DarkButton from "../../components/DarkButton";
+import AnimatedForm from "../components/AnimatedForm";
 import AuthInput from "../components/AuthInput";
 import ErrorHandling from "../components/ErrorHandling";
 import SmallText from "../components/SmallText";
-import AnimatedForm from "../components/AnimatedForm";
 
 type RegisterFormData = z.infer<typeof userSchema>;
 
@@ -89,7 +88,7 @@ export default function RegisterForm() {
         </Flex>
       </Flex>
       {/* Button */}
-      <DarkButton disabled={isSubmitting} className="py-4 my-2">
+      <DarkButton disabled={isSubmitting} className="py-4 my-2 w-full">
         Create Account
       </DarkButton>
       <Flex

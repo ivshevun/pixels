@@ -4,6 +4,7 @@ import {
   changeAlign,
   changeFont,
   changeModifiers,
+  changeTags,
 } from "../features/shotInfo/shotSlice";
 import { AppDispatch } from "../store";
 
@@ -48,6 +49,10 @@ export const handleChangeModifiers = (
     command();
   });
 };
+
+export const handleChangeTags = (tags: string[], dispatch: AppDispatch) => {
+  dispatch(changeTags(tags));
+}
 
 export const handleChangeAlign = (
   align: string,

@@ -3,17 +3,21 @@ import { createSlice } from "@reduxjs/toolkit";
 export interface ShotState {
   currentFont: string;
   currentModifiers: string[];
+  tags: string[];
   align: string;
   shotDescription: string;
   shotTitle: string;
+  fileUrl: string;
 }
 
 const initialState: ShotState = {
   currentFont: "text",
   currentModifiers: [],
+  tags: [],
   align: "left",
   shotDescription: "",
   shotTitle: "",
+  fileUrl: "",
 };
 
 export const shotSlice = createSlice({
@@ -26,6 +30,9 @@ export const shotSlice = createSlice({
     changeModifiers(state, action) {
       state.currentModifiers = action.payload;
     },
+    changeTags(state, action) {
+      state.tags = action.payload;
+    },
     changeAlign(state, action) {
       state.align = action.payload;
     },
@@ -35,15 +42,20 @@ export const shotSlice = createSlice({
     changeTitle(state, action) {
       state.shotTitle = action.payload;
     },
+    changeFileUrl(state, action) {
+      state.fileUrl = action.payload;
+    }
   },
 });
 
 export const {
   changeFont,
   changeModifiers,
+  changeTags,
   changeAlign,
   changeDescription,
   changeTitle,
+  changeFileUrl
 } = shotSlice.actions;
 
 export default shotSlice.reducer;

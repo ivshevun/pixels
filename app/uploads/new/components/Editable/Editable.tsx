@@ -6,6 +6,13 @@ interface EditableProps extends EditorContentProps {
   setContent?: (content: string) => void;
 }
 
-export default function Editable({ editor, onFocus }: EditableProps) {
-  return <EditorContent editor={editor} onFocus={onFocus} className="w-full" />;
+export default function Editable({ editor, onFocus, onBlur }: EditableProps) {
+  return (
+    <EditorContent
+      editor={editor}
+      onFocus={onFocus}
+      onBlur={onBlur}
+      className="w-full"
+    />
+  );
 }

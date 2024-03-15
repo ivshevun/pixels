@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { Dispatch, SetStateAction } from "react";
 import ImageControls from "./ImageControls";
+import { useShotInfo } from "@/lib/redux/features/shotInfo/hooks";
 
 export default function ShotMedia({
   file,
@@ -17,6 +18,7 @@ export default function ShotMedia({
 }) {
   const dispatch = useAppDispatch();
   const { isMediaControllerOpen: isMediaOpen } = useDisclosure();
+  const { fileUrl } = useShotInfo();
 
   return (
     <motion.div
@@ -30,18 +32,20 @@ export default function ShotMedia({
         isMediaOpen && "border-purple-500 hover:border-purple-500"
       )}
     >
-      <Image
-        className="w-full h-full object-cover rounded-lg "
-        src={URL.createObjectURL(file)}
-        alt="Shot Image"
-        width="1280"
-        height="1600"
-        onClick={() => {
-          // open only on mobile
-          if (window.innerWidth < 1024) dispatch(setMediaOpen(!isMediaOpen));
-        }}
-      />
-      <ImageControls handleDelete={() => setFile(null)} />
+      {fileUrl && (
+        <Image
+          className="w-full h-full object-cover rounded-lg "
+          src={fileUrl}
+          alt="Shot Image"
+          width="1280"
+          height="1600"
+          onClick={() => {
+            // open only on mobile
+            if (window.innerWidth < 1024) dispatch(setMediaOpen(!isMediaOpen));
+          }}
+        />
+      )}
+      <ImageControls file={file} setFile={setFile} />
     </motion.div>
   );
 }

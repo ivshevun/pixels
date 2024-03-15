@@ -3,18 +3,17 @@ import { passwordSchema } from "@/app/validationSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Flex, Heading, Text } from "@radix-ui/themes";
 import axios from "axios";
-import { motion } from "framer-motion";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import DarkButton from "../../../components/DarkButton";
+import AnimatedForm from "../../components/AnimatedForm";
 import AuthInput from "../../components/AuthInput";
 import { CenterResponsive } from "../../components/Center";
 import ErrorHandling from "../../components/ErrorHandling";
 import SmallText from "../../components/SmallText";
-import AnimatedForm from "../../components/AnimatedForm";
 
 type PasswordFormData = z.infer<typeof passwordSchema>;
 
@@ -77,7 +76,7 @@ export default function PasswordFormPage() {
             register={register("password")}
           />
           <SmallText>Minimum 6 characters</SmallText>
-          <DarkButton disabled={isSubmitting} className="py-3">
+          <DarkButton disabled={isSubmitting} className="py-3 w-full ">
             Change password
           </DarkButton>
         </Flex>

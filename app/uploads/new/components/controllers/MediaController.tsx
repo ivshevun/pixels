@@ -14,6 +14,7 @@ import React, {
   SetStateAction,
 } from "react";
 import Controller from "./Controller";
+import handleFileChange from "../../utils/handleFileChange";
 
 interface VideoControllerProps {
   file: File | null;
@@ -121,22 +122,14 @@ const MediaContent = ({
   );
 };
 
-const FileInput = ({
+export const FileInput = ({
   file,
   setFile,
   name,
   children,
   ...props
 }: FileInputProps) => {
-  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.files) return;
-
-    const currentFile = event.target.files[0];
-
-    setFile(currentFile);
-
-    log("File during uploading", currentFile);
-  };
+  const dispatch = useAppDispatch();
 
   return (
     <label htmlFor={name} {...props}>
@@ -147,7 +140,7 @@ const FileInput = ({
         name={name}
         accept="image/*"
         className="hidden"
-        onChange={handleFileChange}
+        onChange={(event) => handleFileChange(event, setFile, dispatch)}
       />
     </label>
   );

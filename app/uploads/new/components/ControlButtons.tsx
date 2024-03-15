@@ -1,17 +1,16 @@
 import TransparentButton from "@/app/[username]/components/TransparentButton";
-import DarkButton from "@/app/components/DarkButton";
 import { Flex, Text } from "@radix-ui/themes";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import BeigeButton from "./BeigeButton";
+import FinalTouches from "./FinalTouches/FinalTouches";
 
-export default function ControlButtons({
-  onSubmit,
-  file,
-}: {
+export interface SubmitterProps {
   onSubmit: () => void;
   file: File | null;
-}) {
+}
+
+export default function ControlButtons({ onSubmit, file }: SubmitterProps) {
   const router = useRouter();
   const { data: session } = useSession();
 
@@ -42,13 +41,7 @@ export default function ControlButtons({
           {/* Desktop text */}
           <Text className="hidden sm:block">Save as draft</Text>
         </BeigeButton>
-        <DarkButton
-          onClick={() => onSubmit()}
-          className="text-sm font-semibold py-2"
-          disabled={!file}
-        >
-          Continue
-        </DarkButton>
+        <FinalTouches onSubmit={onSubmit} />
       </Flex>
     </Flex>
   );

@@ -52,7 +52,7 @@ export default function TextEditor() {
     <Fragment>
       <Editable
         onFocus={() => dispatch(setEditorOpen(true))}
-        onBlur={() => dispatch(setEditorOpen(false))}
+        // onBlur={() => dispatch(setEditorOpen(false))}
         editor={editor}
       />
       <EditorController editor={editor} />

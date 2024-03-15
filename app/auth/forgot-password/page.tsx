@@ -1,18 +1,17 @@
 "use client";
 import { emailSchema } from "@/app/validationSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Flex, Heading, Text } from "@radix-ui/themes";
+import { Heading } from "@radix-ui/themes";
 import axios from "axios";
-import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { z } from "zod";
 import DarkButton from "../../components/DarkButton";
+import AnimatedForm from "../components/AnimatedForm";
 import AuthInput from "../components/AuthInput";
 import { Center } from "../components/Center";
 import SmallText from "../components/SmallText";
-import AnimatedForm from "../components/AnimatedForm";
 
 type ResetFormData = z.infer<typeof emailSchema>;
 
@@ -59,7 +58,7 @@ export default function ForgotPage() {
         <div className="w-3/4 mx-auto lg:mx-0">
           <label>Email</label>
           <AuthInput register={register("email")} />
-          <DarkButton>Submit</DarkButton>
+          <DarkButton className="w-full">Submit</DarkButton>
         </div>
       </AnimatedForm>
     </Center>

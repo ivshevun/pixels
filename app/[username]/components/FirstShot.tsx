@@ -23,7 +23,7 @@ export default function FirstShot() {
       </Text>
       <DarkButton
         onClick={() => router.push("/uploads/new")}
-        className="sm:w-1/2 text-sm py-4"
+        className="sm:w-1/2 text-sm py-4 w-full "
       >
         Upload your first shot
       </DarkButton>

@@ -2,7 +2,6 @@
 import { loginSchema } from "@/app/validationSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Flex, Separator, Text } from "@radix-ui/themes";
-import { motion } from "framer-motion";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -10,9 +9,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import DarkButton from "../../components/DarkButton";
+import AnimatedForm from "../components/AnimatedForm";
 import AuthInput from "../components/AuthInput";
 import ErrorHandling from "../components/ErrorHandling";
-import AnimatedForm from "../components/AnimatedForm";
 
 type AuthFormData = z.infer<typeof loginSchema>;
 
@@ -89,7 +88,7 @@ export default function AuthForm() {
           </Text>
         </Flex>
         <Flex direction="column">
-          <DarkButton disabled={isSubmitting} className="py-4 my-4">
+          <DarkButton disabled={isSubmitting} className="py-4 my-4 w-full ">
             Sign In
           </DarkButton>
           <Flex className="text-sm justify-center gap-1 text-gray-400">

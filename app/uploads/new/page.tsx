@@ -5,12 +5,12 @@ import {
   setMediaControllerOpen as setMediaOpen,
 } from "@/lib/redux/features/disclosure/disclosureSlice";
 import { useDisclosure } from "@/lib/redux/features/disclosure/hooks";
+import { changeFileUrl } from "@/lib/redux/features/shotInfo/shotSlice";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { Flex } from "@radix-ui/themes";
 import axios from "axios";
 import classNames from "classnames";
 import { AnimatePresence, motion } from "framer-motion";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, KeyboardEvent, useState } from "react";
 import ControlButtons from "./components/ControlButtons";
@@ -19,6 +19,7 @@ import ShotMedia from "./components/ShotMedia";
 import ShotName from "./components/ShotName";
 import TextEditor from "./components/TextEditor";
 import MediaController from "./components/controllers/MediaController";
+import handleFileChange from "./utils/handleFileChange";
 
 export default function UploadPage() {
   const dispatch = useAppDispatch();
@@ -26,27 +27,19 @@ export default function UploadPage() {
 
   const [file, setFile] = useState<File | null>(null);
 
-  const { data: session } = useSession();
   const router = useRouter();
 
   const disclosures = [isEditorOpen, isMediaOpen];
   const areDisclosuresOpen = disclosures.some((disclosure) => disclosure);
 
-  const isMobile = areDisclosuresOpen && window.innerWidth < 1024;
   const isAside = areDisclosuresOpen && window.innerWidth > 1024;
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    const isEnterKey = event.key === "Enter";
     const isEscapeKey = event.key === "Escape";
 
-    // if (isEnterKey && file && !isEditorOpen) {
-    //   uploadImage();
-    // }
-
     if (isEscapeKey && !areDisclosuresOpen) {
-      if (file) setFile(null);
       // if no file is uploaded, go back
-      else router.push("/" + session?.user.username);
+      if (!file) router.back();
     }
 
     if (isEscapeKey && isEditorOpen) {
@@ -60,16 +53,6 @@ export default function UploadPage() {
 
   const handleClick = () => {
     if (isMediaOpen) dispatch(setMediaOpen(false));
-  };
-
-  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.files) return;
-
-    const currentFile = event.target.files[0];
-
-    setFile(currentFile);
-
-    log("File during uploading", currentFile);
   };
 
   const uploadImage = async () => {
@@ -93,6 +76,11 @@ export default function UploadPage() {
     }
   };
 
+  const onSubmit = async () => {
+    // open final touches modal
+    // const imageUrl = await uploadImage();
+  };
+
   return (
     <motion.div
       onKeyDown={handleKeyDown}
@@ -114,7 +102,7 @@ export default function UploadPage() {
           }}
           transition={{ duration: 0.3 }}
         >
-          <ControlButtons file={file} onSubmit={uploadImage} />
+          <ControlButtons file={file} onSubmit={onSubmit} />
           <ShotName file={file} />
           {/* Conditional rendering because of how AnimatePresence works */}
           <AnimatePresence>
@@ -128,7 +116,7 @@ export default function UploadPage() {
               name="file"
               type="file"
               id="file"
-              onChange={handleFileChange}
+              onChange={(event) => handleFileChange(event, setFile, dispatch)}
             />
           )}
           {/* Editor */}
