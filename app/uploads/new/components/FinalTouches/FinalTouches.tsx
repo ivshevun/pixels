@@ -37,13 +37,14 @@ export default function FinalTouches({ onSubmit }: { onSubmit: () => void }) {
               <Text className="text-sm md:text-base text-center md:text-left whitespace-nowrap">
                 Thumbnail preview
               </Text>
-              <Image
-                src={fileUrl}
-                alt="Shot Thumbnail"
-                width="400"
-                height="192"
-                className="rounded-lg max-h-48 object-cover w-auto h-auto"
-              />
+              <div className="h-48 max-w-[34.5rem] w-full relative">
+                <Image
+                  src={fileUrl}
+                  alt="Shot Thumbnail"
+                  className="rounded-lg object-cover w-auto h-auto"
+                  fill
+                />
+              </div>
               <ShotStats />
             </Flex>
             <Flex direction="column" className="w-3/4 md:w-1/2">
