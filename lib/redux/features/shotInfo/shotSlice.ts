@@ -1,9 +1,10 @@
+import { Tag } from "@prisma/client";
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface ShotState {
   currentFont: string;
   currentModifiers: string[];
-  tags: string[];
+  tags: Tag[];
   align: string;
   shotDescription: string;
   shotTitle: string;
@@ -44,7 +45,7 @@ export const shotSlice = createSlice({
     },
     changeFileUrl(state, action) {
       state.fileUrl = action.payload;
-    }
+    },
   },
 });
 
@@ -55,7 +56,7 @@ export const {
   changeAlign,
   changeDescription,
   changeTitle,
-  changeFileUrl
+  changeFileUrl,
 } = shotSlice.actions;
 
 export default shotSlice.reducer;

@@ -13,6 +13,7 @@ import StarterKit from "@tiptap/starter-kit";
 import { Fragment } from "react";
 import Editable from "./Editable/Editable";
 import EditorController from "./controllers/Editor/EditorController";
+import CharacterCount from "@tiptap/extension-character-count";
 
 export default function TextEditor() {
   const dispatch = useAppDispatch();
@@ -27,6 +28,10 @@ export default function TextEditor() {
       }),
       Underline,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
+      CharacterCount.configure({
+        limit: 1000,
+        mode: "nodeSize",
+      }),
     ],
     content,
     editorProps: {

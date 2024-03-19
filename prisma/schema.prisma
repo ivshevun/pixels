@@ -66,10 +66,9 @@ model passwordResetToken {
 model Shot {
   id           String @id @default(cuid())
   imageUrl     String @db.VarChar(255)
-  thumbnailUrl String @db.VarChar(255)
 
   title       String
-  description String @db.VarChar(255)
+  description String @db.VarChar(255) @default("")
 
   // create a one-to-one relationship with user
   user   User   @relation(fields: [userId], references: [id])

@@ -4,6 +4,12 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import BeigeButton from "./BeigeButton";
 import FinalTouches from "./FinalTouches/FinalTouches";
+import {
+  changeTitle,
+  changeDescription,
+  changeTags,
+} from "@/lib/redux/features/shotInfo/shotSlice";
+import { useAppDispatch } from "@/lib/redux/hooks";
 
 export interface SubmitterProps {
   onSubmit: () => void;
@@ -11,6 +17,7 @@ export interface SubmitterProps {
 }
 
 export default function ControlButtons({ onSubmit, file }: SubmitterProps) {
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const { data: session } = useSession();
 
@@ -21,7 +28,14 @@ export default function ControlButtons({ onSubmit, file }: SubmitterProps) {
       className="py-4 px-2 sm:p-6 gap-4 xs:gap-12 sm:gap-4"
     >
       <TransparentButton
-        onClick={() => router.push(`/${session?.user?.username}`)}
+        onClick={() => {
+          router.push(`/${session?.user?.username}`);
+
+          // reset shot info
+          dispatch(changeTitle(""));
+          dispatch(changeDescription(""));
+          dispatch(changeTags([]));
+        }}
         className="px-4"
       >
         Cancel

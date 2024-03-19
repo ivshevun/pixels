@@ -1,13 +1,13 @@
 import TransparentButton from "@/app/[username]/components/TransparentButton";
 import DarkButton from "@/app/components/DarkButton";
 import { useShotInfo } from "@/lib/redux/features/shotInfo/hooks";
-import { Dialog, Flex, Text, Tooltip } from "@radix-ui/themes";
+import { Dialog, Flex, Text } from "@radix-ui/themes";
 import Image from "next/image";
 import { FaEye } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa6";
 import ComboOptions from "./ComboOptions";
 import Tags from "./Tags";
-import React from "react";
+import { useState } from "react";
 
 export default function FinalTouches({ onSubmit }: { onSubmit: () => void }) {
   const { fileUrl, shotTitle } = useShotInfo();
@@ -19,7 +19,6 @@ export default function FinalTouches({ onSubmit }: { onSubmit: () => void }) {
     <Dialog.Root>
       <Dialog.Trigger>
         <DarkButton
-          onClick={() => onSubmit()}
           className="text-sm font-semibold py-2 disabled:text-gray-300"
           disabled={!fileUrl || !title}
         >
@@ -49,7 +48,7 @@ export default function FinalTouches({ onSubmit }: { onSubmit: () => void }) {
             </Flex>
             <Flex direction="column" className="w-3/4 md:w-1/2">
               <ComboBox />
-              <Buttons />
+              <Buttons onSubmit={onSubmit} />
             </Flex>
           </Flex>
         </Dialog.Content>
@@ -89,13 +88,28 @@ const ComboBox = () => {
   );
 };
 
-const Buttons = () => {
+const Buttons = ({ onSubmit }: { onSubmit: () => void }) => {
+  // create a state to track if the button has been clicked for more safety
+  const [isClicked, setClicked] = useState(false);
+
+  // get current tags
+  const { tags } = useShotInfo();
+
   return (
     <Flex className="mt-36 gap-4 md:gap-0 justify-center md:justify-between">
       <Dialog.Close>
         <TransparentButton className="py-2 px-4">Cancel</TransparentButton>
       </Dialog.Close>
-      <DarkButton className="py-2 text-base">Continue</DarkButton>
+      <DarkButton
+        onClick={() => {
+          onSubmit();
+          setClicked(true);
+        }}
+        className="py-2 text-base"
+        disabled={tags.length < 1 || isClicked}
+      >
+        Continue
+      </DarkButton>
     </Flex>
   );
 };

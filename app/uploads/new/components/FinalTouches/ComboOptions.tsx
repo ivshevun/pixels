@@ -18,7 +18,7 @@ export default function ComboOptions() {
   );
 
   const handleChange = (tag: string) => {
-    if (currentTags.includes(tag)) return;
+    if (currentTags.includes(tag as Tag)) return;
 
     handleChangeTags([...currentTags, tag], dispatch);
   };

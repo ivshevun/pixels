@@ -25,7 +25,7 @@ export default function ImageControls({
       <Separator />
 
       <FaRegTrashCan
-        onClick={() => setFile}
+        onClick={() => setFile(null)}
         className="text-red-500 cursor-pointer"
         size="14"
       />

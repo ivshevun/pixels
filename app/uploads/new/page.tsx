@@ -5,14 +5,22 @@ import {
   setMediaControllerOpen as setMediaOpen,
 } from "@/lib/redux/features/disclosure/disclosureSlice";
 import { useDisclosure } from "@/lib/redux/features/disclosure/hooks";
-import { changeFileUrl } from "@/lib/redux/features/shotInfo/shotSlice";
+import { useShotInfo } from "@/lib/redux/features/shotInfo/hooks";
+import {
+  changeDescription,
+  changeTags,
+  changeTitle,
+} from "@/lib/redux/features/shotInfo/shotSlice";
 import { useAppDispatch } from "@/lib/redux/hooks";
+import { Shot } from "@prisma/client";
 import { Flex } from "@radix-ui/themes";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import classNames from "classnames";
 import { AnimatePresence, motion } from "framer-motion";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, KeyboardEvent, useState } from "react";
+import { KeyboardEvent, useState } from "react";
+import { toast } from "react-hot-toast";
 import ControlButtons from "./components/ControlButtons";
 import ImagePlaceholder from "./components/ImagePlaceholder";
 import ShotMedia from "./components/ShotMedia";
@@ -20,14 +28,17 @@ import ShotName from "./components/ShotName";
 import TextEditor from "./components/TextEditor";
 import MediaController from "./components/controllers/MediaController";
 import handleFileChange from "./utils/handleFileChange";
+import { totalmem } from "os";
 
 export default function UploadPage() {
   const dispatch = useAppDispatch();
   const { isEditorOpen, isMediaControllerOpen: isMediaOpen } = useDisclosure();
+  const shotInfo = useShotInfo();
 
   const [file, setFile] = useState<File | null>(null);
 
   const router = useRouter();
+  const session = useSession();
 
   const disclosures = [isEditorOpen, isMediaOpen];
   const areDisclosuresOpen = disclosures.some((disclosure) => disclosure);
@@ -65,11 +76,14 @@ export default function UploadPage() {
 
     try {
       // Make a request for uploading the image
-      const { data } = await axios.post("/api/upload", formData);
+      const { data }: AxiosResponse<{ response: string }> = await axios.post(
+        "/api/upload",
+        formData
+      );
 
       log("Image uploaded successfully", data);
 
-      //TODO: Make some toast to show that the image was uploaded and enhance UX
+      return data.response;
     } catch (error) {
       // Handle error
       log(error);
@@ -77,8 +91,44 @@ export default function UploadPage() {
   };
 
   const onSubmit = async () => {
-    // open final touches modal
-    // const imageUrl = await uploadImage();
+    const imageUrl = await uploadImage();
+
+    const shotData = {
+      title: shotInfo.shotTitle,
+      description: shotInfo.shotDescription,
+      tags: shotInfo.tags,
+      imageUrl: imageUrl!,
+      userId: session.data?.user.id!,
+    };
+    try {
+      const { data, status }: AxiosResponse<Shot> = await axios.post(
+        "/api/create-shot",
+        shotData
+      );
+
+      log("shot created", data);
+
+      if (status > 200) {
+        throw new Error("Something went wrong");
+      }
+
+      // reset shot info
+      dispatch(changeTitle(""));
+      dispatch(changeDescription(""));
+      dispatch(changeTags([]));
+
+      // return to profile page
+      router.back();
+
+      // show success toast
+      toast.success("Shot created", { duration: 3000 });
+    } catch (error) {
+      // show error to user and redirect him to the profile page
+      router.back();
+      toast.error("Something went wrong", { duration: 3000 });
+
+      log(error);
+    }
   };
 
   return (

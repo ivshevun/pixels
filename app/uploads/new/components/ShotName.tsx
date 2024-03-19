@@ -3,6 +3,7 @@ import { useShotInfo } from "@/lib/redux/features/shotInfo/hooks";
 import { changeTitle } from "@/lib/redux/features/shotInfo/shotSlice";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { Heading } from "@radix-ui/themes";
+import CharacterCount from "@tiptap/extension-character-count";
 import Placeholder from "@tiptap/extension-placeholder";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -17,6 +18,10 @@ export default function ShotName({ file }: { file: File | null }) {
       StarterKit,
       Placeholder.configure({
         placeholder: "Give me a name",
+      }),
+      CharacterCount.configure({
+        limit: 70,
+        mode: "nodeSize",
       }),
     ],
     content,
