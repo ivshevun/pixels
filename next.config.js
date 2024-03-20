@@ -10,6 +10,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "cdn.dribbble.com",
       },
+      {
+        protocol: "https",
+        hostname: "pixels-storage.s3.amazonaws.com",
+      },
     ],
   },
 };

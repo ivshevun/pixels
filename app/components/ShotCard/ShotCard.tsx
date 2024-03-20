@@ -1,13 +1,35 @@
 "use client";
-import { Avatar, Box, Flex, Link, Text } from "@radix-ui/themes";
+import { Tag } from "@prisma/client";
+import { Box, Flex, Text } from "@radix-ui/themes";
 import Image from "next/image";
-import NextLink from "next/link";
-import { PropsWithChildren, ReactNode, useState } from "react";
+import React, { PropsWithChildren, ReactNode, useState } from "react";
 import { FaEye, FaHeart, FaRegHeart } from "react-icons/fa";
 import { IoBookmarkOutline } from "react-icons/io5";
+import removeTags from "@/app/[username]/utils/removeTags";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-export default function ShotCard() {
+export interface Shot {
+  title: string;
+  description: string;
+  tags: Tag[];
+  imageUrl: string;
+  userId: string;
+  likes: number;
+  views: number;
+}
+
+export default function ShotCard({
+  shotData,
+  userName,
+  children,
+}: {
+  shotData: Shot;
+  userName: string;
+  children: React.ReactNode;
+}) {
   const [isHover, setHover] = useState(false);
+  const { data: session } = useSession();
 
   return (
     <Flex
@@ -18,18 +40,23 @@ export default function ShotCard() {
     >
       <Box className="relative">
         <Image
-          src="https://cdn.dribbble.com/userupload/12197547/file/original-8a85c5dfa65835b00643b2419499e20a.jpg?resize=1024x772"
+          src={shotData.imageUrl}
           alt=""
           width="400"
           height="300"
           className="max-h-80 object-cover rounded-2xl"
           priority={false}
         />
-        <ShotControl isHover={isHover} />
+        <ShotControl
+          isHover={isHover}
+          shotTitle={shotData.title}
+          userName={userName}
+          currentUser={session?.user.username || session?.user.name || ""}
+        />
       </Box>
       <Flex justify="between" align="center">
-        <UserInfo />
-        <ShotStats />
+        {children}
+        <ShotStats likes={shotData.likes} views={shotData.views} />
       </Flex>
     </Flex>
   );
@@ -63,7 +90,19 @@ const ShotButtons = () => {
   );
 };
 
-const ShotControl = ({ isHover }: { isHover: boolean }) => {
+const ShotControl = ({
+  isHover,
+  shotTitle,
+  userName,
+  currentUser,
+}: {
+  isHover: boolean;
+  shotTitle: string;
+  userName: string;
+  currentUser: string;
+}) => {
+  const title = removeTags(shotTitle);
+
   return (
     isHover && (
       <Box className="absolute bottom-0 left-0 w-full h-full pointer-events-none">
@@ -75,29 +114,11 @@ const ShotControl = ({ isHover }: { isHover: boolean }) => {
           justify="between"
           className="absolute bottom-0 left-0 w-full p-4 rounded-2xl"
         >
-          <Text className="text-white">Sold Out Branded Illustration</Text>
-          <ShotButtons />
+          <Text className="text-white">{title}</Text>
+          {userName !== currentUser && <ShotButtons />}
         </Flex>
       </Box>
     )
-  );
-};
-
-const UserInfo = () => {
-  return (
-    <Flex align="center" gap="3">
-      <Avatar
-        src="https://cdn.dribbble.com/users/3365798/avatars/small/27142d0984a19231593be35a9972bbc4.jpg?1673891024"
-        fallback="?"
-        radius="full"
-        size="1"
-      />
-      <NextLink href="#" passHref legacyBehavior>
-        <Link size="2" className="text-indigo-950 no-underline">
-          Coric Design
-        </Link>
-      </NextLink>
-    </Flex>
   );
 };
 
@@ -120,16 +141,16 @@ const ShotStat = ({
   );
 };
 
-const ShotStats = () => {
+const ShotStats = ({ likes, views }: { likes: number; views: number }) => {
   return (
     <Flex gap="3" className="text-gray-400">
-      <ShotStat count={63}>
+      <ShotStat count={likes}>
         <FaHeart
           size="16"
           className="text-gray-400 opacity-50 hover:text-indigo-700 transition "
         />
       </ShotStat>
-      <ShotStat count={9700}>
+      <ShotStat count={views}>
         <FaEye size="16" className="text-gray-400 opacity-50" />
       </ShotStat>
     </Flex>

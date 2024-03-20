@@ -1,10 +1,13 @@
 import prisma from "@/prisma/client";
-import { User } from "@prisma/client";
-import { Avatar, Flex, Heading } from "@radix-ui/themes";
+import { Shot, User } from "@prisma/client";
+import { Avatar, Box, Flex, Grid, Heading } from "@radix-ui/themes";
 import SmallText from "../auth/components/SmallText";
 import UserTabs from "./UserTabs";
 import TransparentButton from "./components/TransparentButton";
 import FirstShot from "./components/FirstShot";
+import { log } from "console";
+import ShotCard from "../components/ShotCard/ShotCard";
+import ShotUserInfo from "../components/ShotCard/UserInfo";
 
 interface Params {
   params: { username: string };
@@ -64,11 +67,34 @@ const UserInfo = ({ user }: { user: User }) => {
   );
 };
 
-const UserShots = ({ user }: { user: User }) => {
-  // todo: make it a grid
+const UserShots = async ({ user }: { user: User }) => {
+  const shots = await prisma.shot.findMany({
+    where: {
+      user,
+    },
+  });
+  log(shots);
+
   return (
     <div className="px-4 md:px-0">
-      <FirstShot />
+      {shots.length === 0 && <FirstShot />}
+      <Flex justify={{ initial: "center", lg: "start" }}>
+        <Grid
+          columns={{ initial: "1", md: "2", lg: "3", xl: "4" }}
+          gap="9"
+          className=""
+        >
+          {shots.map((shot) => (
+            <ShotCard
+              key={shot.id}
+              shotData={shot}
+              userName={user.username || user.name || ""}
+            >
+              <ShotUserInfo userId={user.id} />
+            </ShotCard>
+          ))}
+        </Grid>
+      </Flex>
     </div>
   );
 };
