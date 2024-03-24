@@ -1,4 +1,4 @@
-import { useShotInfo } from "@/lib/redux/features/shotCreation/hooks";
+import { useShotCreationInfo } from "@/lib/redux/features/shotCreation/hooks";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { handleChangeTags } from "@/lib/redux/utils/textHandlers";
 import { Tag } from "@prisma/client";
@@ -8,7 +8,7 @@ import ComboOption from "./ComboOption";
 import { useDisclosure } from "@/lib/redux/features/disclosure/hooks";
 
 export default function ComboOptions() {
-  const { tags: currentTags } = useShotInfo();
+  const { tags: currentTags } = useShotCreationInfo();
   const { isComboboxOpen: isOpen } = useDisclosure();
 
   const dispatch = useAppDispatch();

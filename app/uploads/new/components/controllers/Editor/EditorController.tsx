@@ -1,6 +1,6 @@
 import { setEditorOpen } from "@/lib/redux/features/disclosure/disclosureSlice";
 import { useDisclosure } from "@/lib/redux/features/disclosure/hooks";
-import { useShotInfo } from "@/lib/redux/features/shotCreation/hooks";
+import { useShotCreationInfo } from "@/lib/redux/features/shotCreation/hooks";
 import {
   handleChangeAlign,
   handleChangeModifiers,

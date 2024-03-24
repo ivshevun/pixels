@@ -1,14 +1,14 @@
 import { Tag } from "@prisma/client";
 import { createSlice } from "@reduxjs/toolkit";
 
-export interface ShotState {
+export interface ShotCreation {
   tags: Tag[];
   shotDescription: string;
   shotTitle: string;
   fileUrl: string;
 }
 
-const initialState: ShotState = {
+const initialState: ShotCreation = {
   tags: [],
   shotDescription: "",
   shotTitle: "",

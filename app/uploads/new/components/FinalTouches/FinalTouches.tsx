@@ -1,6 +1,6 @@
 import TransparentButton from "@/app/[username]/components/TransparentButton";
 import DarkButton from "@/app/components/DarkButton";
-import { useShotInfo } from "@/lib/redux/features/shotCreation/hooks";
+import { useShotCreationInfo } from "@/lib/redux/features/shotCreation/hooks";
 import { Dialog, Flex, Text } from "@radix-ui/themes";
 import Image from "next/image";
 import { FaEye } from "react-icons/fa";
@@ -10,7 +10,7 @@ import Tags from "./Tags";
 import { useState } from "react";
 
 export default function FinalTouches({ onSubmit }: { onSubmit: () => void }) {
-  const { fileUrl, shotTitle } = useShotInfo();
+  const { fileUrl, shotTitle } = useShotCreationInfo();
 
   // remove html tags
   const title = shotTitle.replace(/<\/?[^>]+(>|$)/g, "");
@@ -93,7 +93,7 @@ const Buttons = ({ onSubmit }: { onSubmit: () => void }) => {
   const [isClicked, setClicked] = useState(false);
 
   // get current tags
-  const { tags } = useShotInfo();
+  const { tags } = useShotCreationInfo();
 
   return (
     <Flex className="mt-36 gap-4 md:gap-0 justify-center md:justify-between">

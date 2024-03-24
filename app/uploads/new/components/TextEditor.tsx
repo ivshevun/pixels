@@ -1,5 +1,5 @@
 import { setEditorOpen } from "@/lib/redux/features/disclosure/disclosureSlice";
-import { useShotInfo } from "@/lib/redux/features/shotCreation/hooks";
+import { useShotCreationInfo } from "@/lib/redux/features/shotCreation/hooks";
 import { changeDescription } from "@/lib/redux/features/shotCreation/shotCreationSlice";
 import { changeFont } from "@/lib/redux/features/shotText/shotTextInfo";
 import { useAppDispatch } from "@/lib/redux/hooks";
@@ -15,7 +15,7 @@ import CharacterCount from "@tiptap/extension-character-count";
 
 export default function TextEditor() {
   const dispatch = useAppDispatch();
-  const { shotDescription: content } = useShotInfo();
+  const { shotDescription: content } = useShotCreationInfo();
 
   const editor = useEditor({
     extensions: [

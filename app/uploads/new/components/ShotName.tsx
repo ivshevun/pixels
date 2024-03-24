@@ -1,5 +1,5 @@
 import { setEditorOpen } from "@/lib/redux/features/disclosure/disclosureSlice";
-import { useShotInfo } from "@/lib/redux/features/shotCreation/hooks";
+import { useShotCreationInfo } from "@/lib/redux/features/shotCreation/hooks";
 import { changeTitle } from "@/lib/redux/features/shotCreation/shotCreationSlice";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { Heading } from "@radix-ui/themes";
@@ -11,7 +11,7 @@ import Editable from "./Editable/Editable";
 
 export default function ShotName({ file }: { file: File | null }) {
   const dispatch = useAppDispatch();
-  const { shotTitle: content } = useShotInfo();
+  const { shotTitle: content } = useShotCreationInfo();
 
   const editor = useEditor({
     extensions: [

@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { Dispatch, SetStateAction } from "react";
 import ImageControls from "./ImageControls";
-import { useShotInfo } from "@/lib/redux/features/shotCreation/hooks";
+import { useShotCreationInfo } from "@/lib/redux/features/shotCreation/hooks";
 
 export default function ShotMedia({
   file,
@@ -18,7 +18,7 @@ export default function ShotMedia({
 }) {
   const dispatch = useAppDispatch();
   const { isMediaControllerOpen: isMediaOpen } = useDisclosure();
-  const { fileUrl } = useShotInfo();
+  const { fileUrl } = useShotCreationInfo();
 
   return (
     <motion.div

@@ -1,5 +1,5 @@
 import { setComboboxOpen as setOpen } from "@/lib/redux/features/disclosure/disclosureSlice";
-import { useShotInfo } from "@/lib/redux/features/shotCreation/hooks";
+import { useShotCreationInfo } from "@/lib/redux/features/shotCreation/hooks";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { handleChangeTags } from "@/lib/redux/utils/textHandlers";
 import { Text } from "@radix-ui/themes";
@@ -10,7 +10,7 @@ import ContentEditable from "react-contenteditable";
 import format from "../../utils/format";
 
 export default function Tags({}: {}) {
-  const { tags: currentTags } = useShotInfo();
+  const { tags: currentTags } = useShotCreationInfo();
 
   const dispatch = useAppDispatch();
 

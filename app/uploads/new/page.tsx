@@ -5,7 +5,7 @@ import {
   setMediaControllerOpen as setMediaOpen,
 } from "@/lib/redux/features/disclosure/disclosureSlice";
 import { useDisclosure } from "@/lib/redux/features/disclosure/hooks";
-import { useShotInfo } from "@/lib/redux/features/shotCreation/hooks";
+import { useShotCreationInfo } from "@/lib/redux/features/shotCreation/hooks";
 import {
   changeDescription,
   changeTags,
@@ -32,7 +32,7 @@ import handleFileChange from "./utils/handleFileChange";
 export default function UploadPage() {
   const dispatch = useAppDispatch();
   const { isEditorOpen, isMediaControllerOpen: isMediaOpen } = useDisclosure();
-  const shotInfo = useShotInfo();
+  const shotInfo = useShotCreationInfo();
 
   const [file, setFile] = useState<File | null>(null);
 

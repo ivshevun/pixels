@@ -1,4 +1,4 @@
-import { useShotInfo } from "@/lib/redux/features/shotCreation/hooks";
+import { useShotCreationInfo } from "@/lib/redux/features/shotCreation/hooks";
 import {
   handleChangeFont,
   handleChangeModifiers,

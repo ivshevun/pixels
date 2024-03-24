@@ -5,10 +5,14 @@ import { Box, Flex, Text } from "@radix-ui/themes";
 import axios, { AxiosResponse } from "axios";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { FaEye, FaHeart, FaRegHeart } from "react-icons/fa";
 import { IoBookmarkOutline } from "react-icons/io5";
 import IconButton from "./IconButton";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
+import { changePredictedLikes } from "@/lib/redux/features/shotInfo/shotInfoSlice";
+import { useShotInfo } from "@/lib/redux/features/shotInfo/hooks";
+import log from "@/lib/log";
 
 export interface Shot {
   id: string;
@@ -30,16 +34,24 @@ export default function ShotCard({
   userName: string;
   children: React.ReactNode;
 }) {
-  const [predictedLikes, setPredictedLikes] = useState(shot.likes);
+  const dispatch = useAppDispatch();
   const [isHover, setHover] = useState(false);
   const { data: session } = useSession();
+
+  useEffect(() => {
+    dispatch(changePredictedLikes(shot.likes));
+  }, [dispatch, shot.likes]);
 
   return (
     <Flex
       direction="column"
       className="max-w-96 max-h-80 gap-2"
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
+      onMouseEnter={() => {
+        if (window.innerWidth > 768) setHover(true);
+      }}
+      onMouseLeave={() => {
+        if (window.innerWidth > 768) setHover(false);
+      }}
     >
       <Box className="relative">
         <Image
@@ -55,13 +67,11 @@ export default function ShotCard({
           shot={shot}
           userName={userName}
           currentUser={session?.user.username || session?.user.name || ""}
-          setPredictedLikes={setPredictedLikes}
-          // predictedLikes={predictedLikes}
         />
       </Box>
       <Flex justify="between" align="center">
         {children}
-        <ShotStats likes={predictedLikes} views={shot.views} />
+        <ShotStats views={shot.views} />
       </Flex>
     </Flex>
   );
@@ -73,14 +83,9 @@ const GradientOverlay = () => {
   );
 };
 
-const ShotButtons = ({
-  shot,
-  setPredictedLikes,
-}: {
-  shot: Shot;
-  setPredictedLikes: React.Dispatch<React.SetStateAction<number>>;
-}) => {
-  // its a bad approach
+const ShotButtons = ({ shot }: { shot: Shot }) => {
+  const dispatch = useAppDispatch();
+
   const handleClick = async (option: string) => {
     // update likes
     const { data: updatedShot }: AxiosResponse<Shot> = await axios.patch(
@@ -91,10 +96,10 @@ const ShotButtons = ({
       }
     );
 
-    setPredictedLikes(updatedShot.likes);
-
     // update state
-    console.log("likes updated!"); // but it does not rerender a component
+    dispatch(changePredictedLikes(updatedShot.likes));
+
+    log("likes updated!");
   };
 
   return (
@@ -115,13 +120,11 @@ const ShotControl = ({
   userName,
   currentUser,
   shot,
-  setPredictedLikes,
 }: {
   isHover: boolean;
   userName: string;
   currentUser: string;
   shot: Shot;
-  setPredictedLikes: React.Dispatch<React.SetStateAction<number>>;
 }) => {
   const title = removeTags(shot.title);
 
@@ -137,9 +140,7 @@ const ShotControl = ({
           className="absolute bottom-0 left-0 w-full p-4 rounded-2xl"
         >
           <Text className="text-white">{title}</Text>
-          {userName !== currentUser && (
-            <ShotButtons setPredictedLikes={setPredictedLikes} shot={shot} />
-          )}
+          {userName !== currentUser && <ShotButtons shot={shot} />}
         </Flex>
       </Box>
     )
@@ -165,7 +166,9 @@ const ShotStat = ({
   );
 };
 
-const ShotStats = ({ likes, views }: { likes: number; views: number }) => {
+const ShotStats = ({ views }: { views: number }) => {
+  const { predictedLikes: likes } = useShotInfo();
+
   return (
     <Flex gap="3" className="text-gray-400">
       <ShotStat count={likes}>

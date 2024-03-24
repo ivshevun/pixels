@@ -1,6 +1,6 @@
 import { useAppSelector } from "../../hooks";
 
-export const useShotInfo = () => {
+export const useShotCreationInfo = () => {
   const useSelector = useAppSelector();
 
   return useSelector((state) => state.shotCreation);
