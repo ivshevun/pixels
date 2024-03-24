@@ -28,7 +28,6 @@ import ShotName from "./components/ShotName";
 import TextEditor from "./components/TextEditor";
 import MediaController from "./components/controllers/MediaController";
 import handleFileChange from "./utils/handleFileChange";
-import { totalmem } from "os";
 
 export default function UploadPage() {
   const dispatch = useAppDispatch();
@@ -102,7 +101,7 @@ export default function UploadPage() {
     };
     try {
       const { data, status }: AxiosResponse<Shot> = await axios.post(
-        "/api/create-shot",
+        "/api/shot",
         shotData
       );
 

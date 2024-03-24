@@ -1,6 +1,7 @@
 import log from "@/lib/log";
 import prisma from "@/prisma/client";
 import { Tag, User } from "@prisma/client";
+import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -10,6 +11,11 @@ const shotSchema = z.object({
   imageUrl: z.string().url("Invalid URL"),
   tags: z.nativeEnum(Tag).array(),
   userId: z.string().cuid(),
+});
+
+const patchSchema = z.object({
+  shotId: z.string().cuid(),
+  option: z.union([z.literal("likes"), z.literal("views")]),
 });
 
 export async function POST(request: NextRequest) {
@@ -47,4 +53,40 @@ export async function POST(request: NextRequest) {
   });
 
   return NextResponse.json(newShot);
+}
+
+export async function PATCH(request: NextRequest) {
+  // check if user is logged in
+  const session = await getServerSession();
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // arrange
+  const body = (await request.json()) as z.infer<typeof patchSchema>;
+
+  // validate
+  const validation = patchSchema.safeParse(body);
+  if (!validation.success) {
+    console.log(body);
+    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+  }
+
+  // update
+  const shot = await prisma.shot.update({
+    where: {
+      id: body.shotId,
+    },
+    data: {
+      [body.option]: {
+        increment: 1,
+      },
+    },
+  });
+
+  if (!shot) {
+    return NextResponse.json({ error: "Shot not found" }, { status: 404 });
+  }
+
+  return NextResponse.json(shot);
 }

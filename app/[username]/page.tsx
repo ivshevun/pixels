@@ -73,7 +73,6 @@ const UserShots = async ({ user }: { user: User }) => {
       user,
     },
   });
-  log(shots);
 
   return (
     <div className="px-4 md:px-0">
@@ -87,7 +86,7 @@ const UserShots = async ({ user }: { user: User }) => {
           {shots.map((shot) => (
             <ShotCard
               key={shot.id}
-              shotData={shot}
+              shot={shot}
               userName={user.username || user.name || ""}
             >
               <ShotUserInfo userId={user.id} />

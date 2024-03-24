@@ -1,15 +1,18 @@
 "use client";
+import removeTags from "@/app/[username]/utils/removeTags";
 import { Tag } from "@prisma/client";
 import { Box, Flex, Text } from "@radix-ui/themes";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
-import React, { PropsWithChildren, ReactNode, useState } from "react";
+import React, { ReactNode, useState } from "react";
 import { FaEye, FaHeart, FaRegHeart } from "react-icons/fa";
 import { IoBookmarkOutline } from "react-icons/io5";
-import removeTags from "@/app/[username]/utils/removeTags";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import IconButton from "./IconButton";
+import prisma from "@/prisma/client";
+import axios from "axios";
 
 export interface Shot {
+  id: string;
   title: string;
   description: string;
   tags: Tag[];
@@ -20,11 +23,11 @@ export interface Shot {
 }
 
 export default function ShotCard({
-  shotData,
+  shot,
   userName,
   children,
 }: {
-  shotData: Shot;
+  shot: Shot;
   userName: string;
   children: React.ReactNode;
 }) {
@@ -40,7 +43,7 @@ export default function ShotCard({
     >
       <Box className="relative">
         <Image
-          src={shotData.imageUrl}
+          src={shot.imageUrl}
           alt=""
           width="400"
           height="300"
@@ -49,14 +52,14 @@ export default function ShotCard({
         />
         <ShotControl
           isHover={isHover}
-          shotTitle={shotData.title}
+          shot={shot}
           userName={userName}
           currentUser={session?.user.username || session?.user.name || ""}
         />
       </Box>
       <Flex justify="between" align="center">
         {children}
-        <ShotStats likes={shotData.likes} views={shotData.views} />
+        <ShotStats likes={shot.likes} views={shot.views} />
       </Flex>
     </Flex>
   );
@@ -68,19 +71,20 @@ const GradientOverlay = () => {
   );
 };
 
-const IconButton = ({ children }: PropsWithChildren) => {
-  return (
-    <button className="bg-white text-black p-3 rounded-full cursor-pointer">
-      {children}
-    </button>
-  );
-};
+const ShotButtons = ({ shot }: { shot: Shot }) => {
+  // its a bad approach
+  const handleClick = async (option: string) => {
+    // update likes
+    await axios.patch("/api/shot/", { shotId: shot.id, option });
 
-const ShotButtons = () => {
+    // update state
+    console.log("likes updated!"); // but it does not rerender a component
+  };
+
   return (
     <Flex gap="2" align="start" className="pointer-events-auto">
       {/* hover and pointer button styles does not work */}
-      <IconButton>
+      <IconButton onClick={() => handleClick("likes")}>
         <FaRegHeart size="16" className="hover:opacity-60" />
       </IconButton>
       <IconButton>
@@ -92,16 +96,16 @@ const ShotButtons = () => {
 
 const ShotControl = ({
   isHover,
-  shotTitle,
   userName,
   currentUser,
+  shot,
 }: {
   isHover: boolean;
-  shotTitle: string;
   userName: string;
   currentUser: string;
+  shot: Shot;
 }) => {
-  const title = removeTags(shotTitle);
+  const title = removeTags(shot.title);
 
   return (
     isHover && (
@@ -115,7 +119,7 @@ const ShotControl = ({
           className="absolute bottom-0 left-0 w-full p-4 rounded-2xl"
         >
           <Text className="text-white">{title}</Text>
-          {userName !== currentUser && <ShotButtons />}
+          {userName !== currentUser && <ShotButtons shot={shot} />}
         </Flex>
       </Box>
     )
