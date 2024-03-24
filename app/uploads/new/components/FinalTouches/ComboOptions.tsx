@@ -1,4 +1,4 @@
-import { useShotInfo } from "@/lib/redux/features/shotInfo/hooks";
+import { useShotInfo } from "@/lib/redux/features/shotCreation/hooks";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { handleChangeTags } from "@/lib/redux/utils/textHandlers";
 import { Tag } from "@prisma/client";

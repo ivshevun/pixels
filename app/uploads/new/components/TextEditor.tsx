@@ -1,9 +1,7 @@
 import { setEditorOpen } from "@/lib/redux/features/disclosure/disclosureSlice";
-import { useShotInfo } from "@/lib/redux/features/shotInfo/hooks";
-import {
-  changeDescription,
-  changeFont,
-} from "@/lib/redux/features/shotInfo/shotSlice";
+import { useShotInfo } from "@/lib/redux/features/shotCreation/hooks";
+import { changeDescription } from "@/lib/redux/features/shotCreation/shotCreationSlice";
+import { changeFont } from "@/lib/redux/features/shotText/shotTextInfo";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import Placeholder from "@tiptap/extension-placeholder";
 import TextAlign from "@tiptap/extension-text-align";

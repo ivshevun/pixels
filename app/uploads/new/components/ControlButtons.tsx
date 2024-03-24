@@ -8,7 +8,7 @@ import {
   changeTitle,
   changeDescription,
   changeTags,
-} from "@/lib/redux/features/shotInfo/shotSlice";
+} from "@/lib/redux/features/shotCreation/shotCreationSlice";
 import { useAppDispatch } from "@/lib/redux/hooks";
 
 export interface SubmitterProps {

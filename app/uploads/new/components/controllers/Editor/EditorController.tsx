@@ -1,6 +1,6 @@
 import { setEditorOpen } from "@/lib/redux/features/disclosure/disclosureSlice";
 import { useDisclosure } from "@/lib/redux/features/disclosure/hooks";
-import { useShotInfo } from "@/lib/redux/features/shotInfo/hooks";
+import { useShotInfo } from "@/lib/redux/features/shotCreation/hooks";
 import {
   handleChangeAlign,
   handleChangeModifiers,
@@ -17,6 +17,7 @@ import ButtonGroup from "../ButtonGroup";
 import Controller from "../Controller";
 import FontDropdown from "../FontDropdown";
 import MobileContent from "./MobileContent";
+import { useShotTextInfo } from "@/lib/redux/features/shotText/hooks";
 
 export interface EditorProps {
   editor: Editor | null;
@@ -60,7 +61,7 @@ export const alignComponents: Components = {
 };
 
 export const AsideContent = ({ editor }: EditorProps) => {
-  const { currentModifiers, align, currentFont } = useShotInfo();
+  const { currentModifiers, align, currentFont } = useShotTextInfo();
 
   return (
     <Flex direction="column" gap="6">

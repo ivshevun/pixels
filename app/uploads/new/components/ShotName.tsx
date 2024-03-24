@@ -1,6 +1,6 @@
 import { setEditorOpen } from "@/lib/redux/features/disclosure/disclosureSlice";
-import { useShotInfo } from "@/lib/redux/features/shotInfo/hooks";
-import { changeTitle } from "@/lib/redux/features/shotInfo/shotSlice";
+import { useShotInfo } from "@/lib/redux/features/shotCreation/hooks";
+import { changeTitle } from "@/lib/redux/features/shotCreation/shotCreationSlice";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { Heading } from "@radix-ui/themes";
 import CharacterCount from "@tiptap/extension-character-count";

@@ -1,5 +1,5 @@
 import log from "@/lib/log";
-import { changeFileUrl } from "@/lib/redux/features/shotInfo/shotSlice";
+import { changeFileUrl } from "@/lib/redux/features/shotCreation/shotCreationSlice";
 import { AppDispatch } from "@/lib/redux/store";
 import { ChangeEvent, SetStateAction } from "react";
 

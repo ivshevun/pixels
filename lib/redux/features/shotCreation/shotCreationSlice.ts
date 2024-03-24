@@ -2,40 +2,25 @@ import { Tag } from "@prisma/client";
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface ShotState {
-  currentFont: string;
-  currentModifiers: string[];
   tags: Tag[];
-  align: string;
   shotDescription: string;
   shotTitle: string;
   fileUrl: string;
 }
 
 const initialState: ShotState = {
-  currentFont: "text",
-  currentModifiers: [],
   tags: [],
-  align: "left",
   shotDescription: "",
   shotTitle: "",
   fileUrl: "",
 };
 
-export const shotSlice = createSlice({
-  name: "shotInfo",
+export const shotCreationSlice = createSlice({
+  name: "shotCreation",
   initialState,
   reducers: {
-    changeFont(state, action) {
-      state.currentFont = action.payload;
-    },
-    changeModifiers(state, action) {
-      state.currentModifiers = action.payload;
-    },
     changeTags(state, action) {
       state.tags = action.payload;
-    },
-    changeAlign(state, action) {
-      state.align = action.payload;
     },
     changeDescription(state, action) {
       state.shotDescription = action.payload;
@@ -49,14 +34,7 @@ export const shotSlice = createSlice({
   },
 });
 
-export const {
-  changeFont,
-  changeModifiers,
-  changeTags,
-  changeAlign,
-  changeDescription,
-  changeTitle,
-  changeFileUrl,
-} = shotSlice.actions;
+export const { changeTags, changeDescription, changeTitle, changeFileUrl } =
+  shotCreationSlice.actions;
 
-export default shotSlice.reducer;
+export default shotCreationSlice.reducer;

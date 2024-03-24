@@ -1,4 +1,4 @@
-import { useShotInfo } from "@/lib/redux/features/shotInfo/hooks";
+import { useShotInfo } from "@/lib/redux/features/shotCreation/hooks";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import {
   handleChangeAlign,
@@ -14,12 +14,14 @@ import {
   alignComponents,
   fontModifiers,
 } from "./EditorController";
+import { useShotTextInfo } from "@/lib/redux/features/shotText/hooks";
 
 const textOptions = ["text", "heading 1", "heading 2"];
 export default function MobileContent({ editor }: EditorProps) {
   const aligns = ["left", "right", "center"];
 
-  const { currentModifiers, currentFont, shotDescription } = useShotInfo();
+  const { currentModifiers, currentFont } = useShotTextInfo();
+  const { shotDescription } = useShotInfo();
   const isHeading = currentFont === "heading 1" || currentFont === "heading 2";
   const dispatch = useAppDispatch();
 

@@ -1,5 +1,5 @@
 import { setComboboxOpen as setOpen } from "@/lib/redux/features/disclosure/disclosureSlice";
-import { useShotInfo } from "@/lib/redux/features/shotInfo/hooks";
+import { useShotInfo } from "@/lib/redux/features/shotCreation/hooks";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { handleChangeTags } from "@/lib/redux/utils/textHandlers";
 import { Text } from "@radix-ui/themes";

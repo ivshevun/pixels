@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { Editor } from "@tiptap/react";
+import { changeTags } from "../features/shotCreation/shotCreationSlice";
+import { AppDispatch } from "../store";
 import {
   changeAlign,
   changeFont,
   changeModifiers,
-  changeTags,
-} from "../features/shotInfo/shotSlice";
-import { AppDispatch } from "../store";
+} from "../features/shotText/shotTextInfo";
 
 export const handleChangeFont = (
   font: string,
@@ -52,7 +52,7 @@ export const handleChangeModifiers = (
 
 export const handleChangeTags = (tags: string[], dispatch: AppDispatch) => {
   dispatch(changeTags(tags));
-}
+};
 
 export const handleChangeAlign = (
   align: string,

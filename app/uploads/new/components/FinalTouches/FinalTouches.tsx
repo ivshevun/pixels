@@ -1,6 +1,6 @@
 import TransparentButton from "@/app/[username]/components/TransparentButton";
 import DarkButton from "@/app/components/DarkButton";
-import { useShotInfo } from "@/lib/redux/features/shotInfo/hooks";
+import { useShotInfo } from "@/lib/redux/features/shotCreation/hooks";
 import { Dialog, Flex, Text } from "@radix-ui/themes";
 import Image from "next/image";
 import { FaEye } from "react-icons/fa";

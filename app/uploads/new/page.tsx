@@ -5,12 +5,12 @@ import {
   setMediaControllerOpen as setMediaOpen,
 } from "@/lib/redux/features/disclosure/disclosureSlice";
 import { useDisclosure } from "@/lib/redux/features/disclosure/hooks";
-import { useShotInfo } from "@/lib/redux/features/shotInfo/hooks";
+import { useShotInfo } from "@/lib/redux/features/shotCreation/hooks";
 import {
   changeDescription,
   changeTags,
   changeTitle,
-} from "@/lib/redux/features/shotInfo/shotSlice";
+} from "@/lib/redux/features/shotCreation/shotCreationSlice";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { Shot } from "@prisma/client";
 import { Flex } from "@radix-ui/themes";
