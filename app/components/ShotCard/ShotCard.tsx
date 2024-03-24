@@ -2,14 +2,13 @@
 import removeTags from "@/app/[username]/utils/removeTags";
 import { Tag } from "@prisma/client";
 import { Box, Flex, Text } from "@radix-ui/themes";
+import axios, { AxiosResponse } from "axios";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import React, { ReactNode, useState } from "react";
 import { FaEye, FaHeart, FaRegHeart } from "react-icons/fa";
 import { IoBookmarkOutline } from "react-icons/io5";
 import IconButton from "./IconButton";
-import prisma from "@/prisma/client";
-import axios from "axios";
 
 export interface Shot {
   id: string;
@@ -31,6 +30,7 @@ export default function ShotCard({
   userName: string;
   children: React.ReactNode;
 }) {
+  const [predictedLikes, setPredictedLikes] = useState(shot.likes);
   const [isHover, setHover] = useState(false);
   const { data: session } = useSession();
 
@@ -55,11 +55,13 @@ export default function ShotCard({
           shot={shot}
           userName={userName}
           currentUser={session?.user.username || session?.user.name || ""}
+          setPredictedLikes={setPredictedLikes}
+          // predictedLikes={predictedLikes}
         />
       </Box>
       <Flex justify="between" align="center">
         {children}
-        <ShotStats likes={shot.likes} views={shot.views} />
+        <ShotStats likes={predictedLikes} views={shot.views} />
       </Flex>
     </Flex>
   );
@@ -71,11 +73,25 @@ const GradientOverlay = () => {
   );
 };
 
-const ShotButtons = ({ shot }: { shot: Shot }) => {
+const ShotButtons = ({
+  shot,
+  setPredictedLikes,
+}: {
+  shot: Shot;
+  setPredictedLikes: React.Dispatch<React.SetStateAction<number>>;
+}) => {
   // its a bad approach
   const handleClick = async (option: string) => {
     // update likes
-    await axios.patch("/api/shot/", { shotId: shot.id, option });
+    const { data: updatedShot }: AxiosResponse<Shot> = await axios.patch(
+      "/api/shot/",
+      {
+        shotId: shot.id,
+        option,
+      }
+    );
+
+    setPredictedLikes(updatedShot.likes);
 
     // update state
     console.log("likes updated!"); // but it does not rerender a component
@@ -99,11 +115,13 @@ const ShotControl = ({
   userName,
   currentUser,
   shot,
+  setPredictedLikes,
 }: {
   isHover: boolean;
   userName: string;
   currentUser: string;
   shot: Shot;
+  setPredictedLikes: React.Dispatch<React.SetStateAction<number>>;
 }) => {
   const title = removeTags(shot.title);
 
@@ -119,7 +137,9 @@ const ShotControl = ({
           className="absolute bottom-0 left-0 w-full p-4 rounded-2xl"
         >
           <Text className="text-white">{title}</Text>
-          {userName !== currentUser && <ShotButtons shot={shot} />}
+          {userName !== currentUser && (
+            <ShotButtons setPredictedLikes={setPredictedLikes} shot={shot} />
+          )}
         </Flex>
       </Box>
     )
