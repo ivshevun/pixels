@@ -88,11 +88,15 @@ export default function ShotCard({
           shot={shot}
           userName={userName}
           currentUser={session?.user.username || session?.user.name || ""}
-          isLiked={isLiked}
-          isLoading={isAnyLoading}
-          setLoading={setLoading}
-          setLiked={setLiked}
-        />
+        >
+          <ShotButtons
+            setLoading={setLoading}
+            isLoading={isAnyLoading}
+            isLiked={isLiked}
+            shot={shot}
+            setLiked={setLiked}
+          />
+        </ShotControl>
       </Box>
       <Flex justify="between" align="center">
         {children}
@@ -158,19 +162,13 @@ const ShotControl = ({
   userName,
   currentUser,
   shot,
-  isLiked,
-  isLoading,
-  setLoading,
-  setLiked,
+  children,
 }: {
   isHover: boolean;
   userName: string;
   currentUser: string;
   shot: Shot;
-  isLiked: boolean;
-  isLoading: boolean;
-  setLoading: React.Dispatch<SetStateAction<boolean>>;
-  setLiked: React.Dispatch<SetStateAction<boolean>>;
+  children: React.ReactNode;
 }) => {
   const title = removeTags(shot.title);
 
@@ -186,15 +184,7 @@ const ShotControl = ({
           className="absolute bottom-0 left-0 w-full p-4 rounded-2xl"
         >
           <Text className="text-white">{title}</Text>
-          {userName !== currentUser && (
-            <ShotButtons
-              setLoading={setLoading}
-              isLoading={isLoading}
-              isLiked={isLiked}
-              shot={shot}
-              setLiked={setLiked}
-            />
-          )}
+          {userName !== currentUser && children}
         </Flex>
       </Box>
     )
