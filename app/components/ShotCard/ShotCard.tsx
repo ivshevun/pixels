@@ -1,19 +1,21 @@
 "use client";
+import { fetchLiked } from "@/app/hooks/useLiked";
 import removeTags from "@/app/utils/removeTags";
-import log from "@/lib/log";
 import { useShotInfo } from "@/lib/redux/features/shotInfo/hooks";
 import { changePredictedLikes } from "@/lib/redux/features/shotInfo/shotInfoSlice";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { Tag } from "@prisma/client";
 import { Box, Flex, Text } from "@radix-ui/themes";
+import { useQuery } from "@tanstack/react-query";
 import axios, { AxiosResponse } from "axios";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import React, { ReactNode, useEffect, useState } from "react";
-import { FaEye, FaHeart, FaRegHeart } from "react-icons/fa";
+import { useRouter } from "next/navigation";
+import React, { ReactNode, SetStateAction, useEffect, useState } from "react";
+import { FaEye, FaHeart } from "react-icons/fa";
 import { IoBookmarkOutline } from "react-icons/io5";
 import IconButton from "./IconButton";
-import { useRouter } from "next/navigation";
+import LikeContent from "./LikeContent";
 
 export interface Shot {
   id: string;
@@ -37,6 +39,7 @@ export default function ShotCard({
 }) {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const [isLoading, setLoading] = useState(false);
   const [isLiked, setLiked] = useState(false);
   const [isHover, setHover] = useState(false);
   const { data: session } = useSession();
@@ -46,24 +49,18 @@ export default function ShotCard({
     dispatch(changePredictedLikes(shot.likes));
   }, [dispatch, shot.likes]);
 
+  const { data, isLoading: initialLoading } = useQuery({
+    queryKey: ["liked", shot.id, session?.user.id, predictedLikes],
+    queryFn: () => fetchLiked(shot.id, session?.user.id || ""),
+  });
+
   useEffect(() => {
-    const fetchLikes = async () => {
-      try {
-        const { data }: AxiosResponse<{ liked: boolean }> = await axios.get(
-          "/api/like",
-          {
-            params: { shotId: shot.id, userId: session?.user.id },
-          }
-        );
+    if (data) {
+      setLiked(true);
+    }
+  }, [data]);
 
-        setLiked(data.liked);
-      } catch (error) {
-        log(error);
-      }
-    };
-
-    fetchLikes();
-  }, [shot.id, session?.user.id, predictedLikes]);
+  const isAnyLoading = initialLoading || isLoading;
 
   return (
     <Flex
@@ -92,6 +89,9 @@ export default function ShotCard({
           userName={userName}
           currentUser={session?.user.username || session?.user.name || ""}
           isLiked={isLiked}
+          isLoading={isAnyLoading}
+          setLoading={setLoading}
+          setLiked={setLiked}
         />
       </Box>
       <Flex justify="between" align="center">
@@ -108,11 +108,23 @@ const GradientOverlay = () => {
   );
 };
 
-const ShotButtons = ({ shot, isLiked }: { shot: Shot; isLiked: boolean }) => {
+const ShotButtons = ({
+  shot,
+  isLiked,
+  isLoading,
+  setLoading,
+  setLiked,
+}: {
+  shot: Shot;
+  isLiked: boolean;
+  isLoading: boolean;
+  setLoading: React.Dispatch<SetStateAction<boolean>>;
+  setLiked: React.Dispatch<SetStateAction<boolean>>;
+}) => {
   const dispatch = useAppDispatch();
-  // const [isLiked, setLiked] = useState(false);
 
   const handleClick = async (option: string) => {
+    setLoading(true);
     // update likes
     const { data: updatedShot }: AxiosResponse<Shot> = await axios.patch(
       "/api/shot/",
@@ -122,19 +134,17 @@ const ShotButtons = ({ shot, isLiked }: { shot: Shot; isLiked: boolean }) => {
       }
     );
 
+    setLoading(false);
+    setLiked((prevLiked) => !prevLiked);
+
     // update state
     dispatch(changePredictedLikes(updatedShot.likes));
   };
 
   return (
     <Flex gap="2" align="start" className="pointer-events-auto">
-      {/* hover and pointer button styles does not work */}
       <IconButton onClick={() => handleClick("likes")}>
-        {isLiked ? (
-          <FaHeart size="16" className="hover:opacity-60 text-indigo-900" />
-        ) : (
-          <FaRegHeart size="16" className="hover:opacity-60" />
-        )}
+        <LikeContent isLiked={isLiked} isLoading={isLoading} />
       </IconButton>
       <IconButton>
         <IoBookmarkOutline size="18" className="hover:opacity-60" />
@@ -149,12 +159,18 @@ const ShotControl = ({
   currentUser,
   shot,
   isLiked,
+  isLoading,
+  setLoading,
+  setLiked,
 }: {
   isHover: boolean;
   userName: string;
   currentUser: string;
   shot: Shot;
   isLiked: boolean;
+  isLoading: boolean;
+  setLoading: React.Dispatch<SetStateAction<boolean>>;
+  setLiked: React.Dispatch<SetStateAction<boolean>>;
 }) => {
   const title = removeTags(shot.title);
 
@@ -171,7 +187,13 @@ const ShotControl = ({
         >
           <Text className="text-white">{title}</Text>
           {userName !== currentUser && (
-            <ShotButtons isLiked={isLiked} shot={shot} />
+            <ShotButtons
+              setLoading={setLoading}
+              isLoading={isLoading}
+              isLiked={isLiked}
+              shot={shot}
+              setLiked={setLiked}
+            />
           )}
         </Flex>
       </Box>

@@ -18,6 +18,7 @@
     "@radix-ui/themes": "^2.0.3",
     "@react-email/components": "^0.0.13",
     "@reduxjs/toolkit": "^2.1.0",
+    "@tanstack/react-query": "^5.28.8",
     "@tiptap/extension-character-count": "^2.2.4",
     "@tiptap/extension-placeholder": "^2.2.4",
     "@tiptap/extension-text-align": "^2.2.4",
@@ -46,6 +47,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@tanstack/react-query-devtools": "^5.28.8",
     "@types/bcrypt": "^5.0.2",
     "@types/node": "^20",
     "@types/react": "^18",
