@@ -1,5 +1,5 @@
 "use client";
-import removeTags from "@/app/[username]/utils/removeTags";
+import removeTags from "@/app/utils/removeTags";
 import log from "@/lib/log";
 import { useShotInfo } from "@/lib/redux/features/shotInfo/hooks";
 import { changePredictedLikes } from "@/lib/redux/features/shotInfo/shotInfoSlice";
@@ -13,6 +13,7 @@ import React, { ReactNode, useEffect, useState } from "react";
 import { FaEye, FaHeart, FaRegHeart } from "react-icons/fa";
 import { IoBookmarkOutline } from "react-icons/io5";
 import IconButton from "./IconButton";
+import { useRouter } from "next/navigation";
 
 export interface Shot {
   id: string;
@@ -35,6 +36,7 @@ export default function ShotCard({
   children: React.ReactNode;
 }) {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const [isLiked, setLiked] = useState(false);
   const [isHover, setHover] = useState(false);
   const { data: session } = useSession();
@@ -66,7 +68,7 @@ export default function ShotCard({
   return (
     <Flex
       direction="column"
-      className="max-w-96 max-h-80 gap-2"
+      className="max-w-96 max-h-80 gap-2 cursor-pointer"
       onMouseEnter={() => {
         if (window.innerWidth > 768) setHover(true);
       }}
@@ -82,6 +84,7 @@ export default function ShotCard({
           height="300"
           className="max-h-80 object-cover rounded-2xl"
           priority={false}
+          onClick={() => router.push(`/shots/${shot.id}`)}
         />
         <ShotControl
           isHover={isHover}

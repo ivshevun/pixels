@@ -8,7 +8,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 const DarkButton = React.forwardRef<HTMLButtonElement, Props>(
   ({ children, className, ...rest }, ref) => {
     const styles = classNames(
-      "bg-gray-900 text-white px-6 rounded-full hover:bg-gray-400 transition duration-500 cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed",
+      "bg-gray-900 text-white rounded-full hover:bg-gray-400 transition duration-500 cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed",
       className
     );
 
