@@ -82,6 +82,12 @@ model Shot {
   tags Tag[] @default([])
 }
 
+model Like {
+  id        String @id @default(cuid())
+  shotId    String
+  userId    String
+}
+
 enum Tag {
   Mobile
   Typography

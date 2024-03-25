@@ -1,5 +1,9 @@
 "use client";
 import removeTags from "@/app/[username]/utils/removeTags";
+import log from "@/lib/log";
+import { useShotInfo } from "@/lib/redux/features/shotInfo/hooks";
+import { changePredictedLikes } from "@/lib/redux/features/shotInfo/shotInfoSlice";
+import { useAppDispatch } from "@/lib/redux/hooks";
 import { Tag } from "@prisma/client";
 import { Box, Flex, Text } from "@radix-ui/themes";
 import axios, { AxiosResponse } from "axios";
@@ -9,10 +13,6 @@ import React, { ReactNode, useEffect, useState } from "react";
 import { FaEye, FaHeart, FaRegHeart } from "react-icons/fa";
 import { IoBookmarkOutline } from "react-icons/io5";
 import IconButton from "./IconButton";
-import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
-import { changePredictedLikes } from "@/lib/redux/features/shotInfo/shotInfoSlice";
-import { useShotInfo } from "@/lib/redux/features/shotInfo/hooks";
-import log from "@/lib/log";
 
 export interface Shot {
   id: string;
@@ -35,12 +35,33 @@ export default function ShotCard({
   children: React.ReactNode;
 }) {
   const dispatch = useAppDispatch();
+  const [isLiked, setLiked] = useState(false);
   const [isHover, setHover] = useState(false);
   const { data: session } = useSession();
+  const { predictedLikes } = useShotInfo();
 
   useEffect(() => {
     dispatch(changePredictedLikes(shot.likes));
   }, [dispatch, shot.likes]);
+
+  useEffect(() => {
+    const fetchLikes = async () => {
+      try {
+        const { data }: AxiosResponse<{ liked: boolean }> = await axios.get(
+          "/api/like",
+          {
+            params: { shotId: shot.id, userId: session?.user.id },
+          }
+        );
+
+        setLiked(data.liked);
+      } catch (error) {
+        log(error);
+      }
+    };
+
+    fetchLikes();
+  }, [shot.id, session?.user.id, predictedLikes]);
 
   return (
     <Flex
@@ -67,6 +88,7 @@ export default function ShotCard({
           shot={shot}
           userName={userName}
           currentUser={session?.user.username || session?.user.name || ""}
+          isLiked={isLiked}
         />
       </Box>
       <Flex justify="between" align="center">
@@ -83,8 +105,9 @@ const GradientOverlay = () => {
   );
 };
 
-const ShotButtons = ({ shot }: { shot: Shot }) => {
+const ShotButtons = ({ shot, isLiked }: { shot: Shot; isLiked: boolean }) => {
   const dispatch = useAppDispatch();
+  // const [isLiked, setLiked] = useState(false);
 
   const handleClick = async (option: string) => {
     // update likes
@@ -98,15 +121,17 @@ const ShotButtons = ({ shot }: { shot: Shot }) => {
 
     // update state
     dispatch(changePredictedLikes(updatedShot.likes));
-
-    log("likes updated!");
   };
 
   return (
     <Flex gap="2" align="start" className="pointer-events-auto">
       {/* hover and pointer button styles does not work */}
       <IconButton onClick={() => handleClick("likes")}>
-        <FaRegHeart size="16" className="hover:opacity-60" />
+        {isLiked ? (
+          <FaHeart size="16" className="hover:opacity-60 text-indigo-900" />
+        ) : (
+          <FaRegHeart size="16" className="hover:opacity-60" />
+        )}
       </IconButton>
       <IconButton>
         <IoBookmarkOutline size="18" className="hover:opacity-60" />
@@ -120,11 +145,13 @@ const ShotControl = ({
   userName,
   currentUser,
   shot,
+  isLiked,
 }: {
   isHover: boolean;
   userName: string;
   currentUser: string;
   shot: Shot;
+  isLiked: boolean;
 }) => {
   const title = removeTags(shot.title);
 
@@ -140,7 +167,9 @@ const ShotControl = ({
           className="absolute bottom-0 left-0 w-full p-4 rounded-2xl"
         >
           <Text className="text-white">{title}</Text>
-          {userName !== currentUser && <ShotButtons shot={shot} />}
+          {userName !== currentUser && (
+            <ShotButtons isLiked={isLiked} shot={shot} />
+          )}
         </Flex>
       </Box>
     )

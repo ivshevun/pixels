@@ -1,13 +1,12 @@
 import prisma from "@/prisma/client";
-import { Shot, User } from "@prisma/client";
-import { Avatar, Box, Flex, Grid, Heading } from "@radix-ui/themes";
+import { User } from "@prisma/client";
+import { Avatar, Flex, Grid, Heading } from "@radix-ui/themes";
 import SmallText from "../auth/components/SmallText";
-import UserTabs from "./UserTabs";
-import TransparentButton from "./components/TransparentButton";
-import FirstShot from "./components/FirstShot";
-import { log } from "console";
 import ShotCard from "../components/ShotCard/ShotCard";
 import ShotUserInfo from "../components/ShotCard/UserInfo";
+import UserTabs from "./UserTabs";
+import FirstShot from "./components/FirstShot";
+import TransparentButton from "./components/TransparentButton";
 
 interface Params {
   params: { username: string };

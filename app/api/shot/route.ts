@@ -1,6 +1,5 @@
-import log from "@/lib/log";
 import prisma from "@/prisma/client";
-import { Tag, User } from "@prisma/client";
+import { Tag } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -68,25 +67,98 @@ export async function PATCH(request: NextRequest) {
   // validate
   const validation = patchSchema.safeParse(body);
   if (!validation.success) {
-    console.log(body);
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 
-  // update
-  const shot = await prisma.shot.update({
+  const user = await prisma.user.findUnique({
     where: {
-      id: body.shotId,
-    },
-    data: {
-      [body.option]: {
-        increment: 1,
-      },
+      email: session.user.email || undefined,
     },
   });
 
-  if (!shot) {
+  if (!user) {
+    return NextResponse.json({ error: "User not found" }, { status: 404 });
+  }
+
+  if (body.option === "views") {
+    const updatedShot = await prisma.shot.update({
+      where: {
+        id: body.shotId,
+      },
+      data: {
+        views: {
+          increment: 1,
+        },
+      },
+    });
+
+    if (!updatedShot) {
+      return NextResponse.json({ error: "Shot not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ views: updatedShot.views });
+  }
+
+  // looking for existing likes
+  const existingLike = await prisma.like.findFirst({
+    where: {
+      shotId: body.shotId,
+      userId: user.id,
+    },
+  });
+
+  if (existingLike) {
+    const [deletedLike, updatedShot] = await prisma.$transaction([
+      prisma.like.delete({
+        where: {
+          id: existingLike.id,
+        },
+      }),
+      prisma.shot.update({
+        where: {
+          id: body.shotId,
+        },
+        data: {
+          [body.option]: {
+            decrement: 1,
+          },
+        },
+      }),
+    ]);
+
+    if (!updatedShot) {
+      return NextResponse.json({ error: "Shot not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ likes: updatedShot.likes });
+  }
+
+  // TODO: implement transaction
+
+  const [createdLike, updatedShot] = await prisma.$transaction([
+    // create new like
+    prisma.like.create({
+      data: {
+        shotId: body.shotId,
+        userId: user.id,
+      },
+    }),
+    // update
+    prisma.shot.update({
+      where: {
+        id: body.shotId,
+      },
+      data: {
+        [body.option]: {
+          increment: 1,
+        },
+      },
+    }),
+  ]);
+
+  if (!updatedShot) {
     return NextResponse.json({ error: "Shot not found" }, { status: 404 });
   }
 
-  return NextResponse.json(shot);
+  return NextResponse.json(updatedShot);
 }
