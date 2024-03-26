@@ -56,7 +56,10 @@ export default async function ShotPage({ params: { shotId } }: Params) {
             </Flex>
           </Flex>
         </Flex>
-        <ShotButtons shot={shot} />
+        <ShotButtons
+          authorName={user?.username || user?.name || ""}
+          shot={shot}
+        />
       </Flex>
       <Image
         className="rounded-xl"

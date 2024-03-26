@@ -56,7 +56,8 @@ export default function ShotCard({
 
   useEffect(() => {
     if (data) {
-      setLiked(true);
+      setLiked(data);
+      console.log(data);
     }
   }, [data]);
 

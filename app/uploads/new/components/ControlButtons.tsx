@@ -1,4 +1,4 @@
-import TransparentButton from "@/app/[username]/components/TransparentButton";
+import TransparentButton from "@/app/components/TransparentButton";
 import { Flex, Text } from "@radix-ui/themes";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";

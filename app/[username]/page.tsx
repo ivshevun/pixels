@@ -6,7 +6,7 @@ import ShotCard from "../components/ShotCard/ShotCard";
 import ShotUserInfo from "../components/ShotCard/UserInfo";
 import UserTabs from "./UserTabs";
 import FirstShot from "./components/FirstShot";
-import TransparentButton from "./components/TransparentButton";
+import TransparentButton from "../components/TransparentButton";
 
 interface Params {
   params: { username: string };
