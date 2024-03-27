@@ -1,3 +1,4 @@
+import authOptions from "@/app/auth/authOptions";
 import prisma from "@/prisma/client";
 import { Tag } from "@prisma/client";
 import { getServerSession } from "next-auth";
@@ -56,7 +57,7 @@ export async function POST(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   // check if user is logged in
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -81,22 +82,39 @@ export async function PATCH(request: NextRequest) {
   }
 
   if (body.option === "views") {
-    const updatedShot = await prisma.shot.update({
+    const existingView = await prisma.view.findFirst({
       where: {
-        id: body.shotId,
-      },
-      data: {
-        views: {
-          increment: 1,
-        },
+        shotId: body.shotId,
+        userId: user.id,
       },
     });
+
+    if (existingView) return NextResponse.json(existingView);
+
+    const [createdView, updatedShot] = await prisma.$transaction([
+      prisma.view.create({
+        data: {
+          shotId: body.shotId,
+          userId: user.id,
+        },
+      }),
+      prisma.shot.update({
+        where: {
+          id: body.shotId,
+        },
+        data: {
+          views: {
+            increment: 1,
+          },
+        },
+      }),
+    ]);
 
     if (!updatedShot) {
       return NextResponse.json({ error: "Shot not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ views: updatedShot.views });
+    return NextResponse.json(updatedShot);
   }
 
   // looking for existing likes
@@ -132,8 +150,6 @@ export async function PATCH(request: NextRequest) {
 
     return NextResponse.json({ likes: updatedShot.likes });
   }
-
-  // TODO: implement transaction
 
   const [createdLike, updatedShot] = await prisma.$transaction([
     // create new like

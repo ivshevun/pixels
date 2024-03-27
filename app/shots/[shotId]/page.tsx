@@ -1,16 +1,25 @@
+import authOptions from "@/app/auth/authOptions";
 import removeTags from "@/app/utils/removeTags";
+import log from "@/lib/log";
 import prisma from "@/prisma/client";
 import { Avatar, Flex, Heading, Text } from "@radix-ui/themes";
+import { getServerSession } from "next-auth";
+import dynamic from "next/dynamic";
+import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
-import ShotButtons from "./ShotButtons";
 import "./styles.css";
+
+const ShotButtons = dynamic(() => import("@/app/shots/[shotId]/ShotButtons"), {
+  ssr: false,
+});
 
 interface Params {
   params: { shotId: string };
 }
 
 export default async function ShotPage({ params: { shotId } }: Params) {
+  const session = await getServerSession(authOptions);
   const shot = await prisma.shot.findUnique({
     where: {
       id: shotId,
@@ -25,6 +34,25 @@ export default async function ShotPage({ params: { shotId } }: Params) {
       id: shot.userId,
     },
   });
+
+  const isAuthor = session?.user.id === user?.id;
+
+  if (!isAuthor) {
+    // make an api request to shot.patch() and patch views
+    try {
+      await fetch(`${process.env.NEXTAUTH_URL}/api/shot/`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          shotId,
+          option: "views",
+        }),
+        headers: headers(),
+      }).then((res) => res.json());
+    } catch (error) {
+      // TODO: handle error
+      log(error);
+    }
+  }
 
   return (
     <Flex className="py-8 sm:py-14 md:py-16 flex-col justify-center w-full px-4 sm:px-0 sm:w-3/4 md:w-1/2 mx-auto gap-8">

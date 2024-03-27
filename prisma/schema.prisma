@@ -88,6 +88,12 @@ model Like {
   userId    String
 }
 
+model View {
+  id        String @id @default(cuid())
+  shotId    String
+  userId    String
+}
+
 enum Tag {
   Mobile
   Typography
