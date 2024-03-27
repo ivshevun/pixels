@@ -53,6 +53,7 @@ const UserInfo = ({ user }: { user: User }) => {
         direction="column"
         gap="1"
         align={{ initial: "center", sm: "start" }}
+        className="min-w-48"
       >
         <Heading className="font-semibold text-2xl md:text-4xl">
           {user.username || user.name}
