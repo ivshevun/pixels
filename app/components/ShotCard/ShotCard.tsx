@@ -2,7 +2,7 @@
 import { fetchLiked } from "@/app/hooks/useLiked";
 import removeTags from "@/app/utils/removeTags";
 import { useShotInfo } from "@/lib/redux/features/shotInfo/hooks";
-import { changePredictedLikes } from "@/lib/redux/features/shotInfo/shotInfoSlice";
+import { changeShotsLikes } from "@/lib/redux/features/shotInfo/shotInfoSlice";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { Tag } from "@prisma/client";
 import { Box, Flex, Text } from "@radix-ui/themes";
@@ -38,16 +38,13 @@ export default function ShotCard({
   children: React.ReactNode;
 }) {
   const dispatch = useAppDispatch();
+  const predictedLikes = useShotInfo()[shot.id];
+
   const router = useRouter();
   const [isLoading, setLoading] = useState(false);
   const [isLiked, setLiked] = useState(false);
   const [isHover, setHover] = useState(false);
   const { data: session } = useSession();
-  const { predictedLikes } = useShotInfo();
-
-  useEffect(() => {
-    dispatch(changePredictedLikes(shot.likes));
-  }, [dispatch, shot.likes]);
 
   const { data, isLoading: initialLoading } = useQuery({
     queryKey: ["liked", shot.id, session?.user.id, predictedLikes],
@@ -55,11 +52,12 @@ export default function ShotCard({
   });
 
   useEffect(() => {
-    if (data) {
-      setLiked(data);
-      console.log(data);
-    }
-  }, [data]);
+    dispatch(changeShotsLikes({ shotId: shot.id, likes: shot.likes }));
+  }, [shot.id, shot.likes, dispatch]);
+
+  useEffect(() => {
+    setLiked(Boolean(data));
+  }, [data, isLiked, predictedLikes]);
 
   const isAnyLoading = initialLoading || isLoading;
 
@@ -101,7 +99,7 @@ export default function ShotCard({
       </Box>
       <Flex justify="between" align="center">
         {children}
-        <ShotStats views={shot.views} />
+        <ShotStats shotId={shot.id} views={shot.views} />
       </Flex>
     </Flex>
   );
@@ -127,7 +125,6 @@ const ShotButtons = ({
   setLiked: React.Dispatch<SetStateAction<boolean>>;
 }) => {
   const dispatch = useAppDispatch();
-
   const handleClick = async (option: string) => {
     setLoading(true);
     // update likes
@@ -143,7 +140,7 @@ const ShotButtons = ({
     setLiked((prevLiked) => !prevLiked);
 
     // update state
-    dispatch(changePredictedLikes(updatedShot.likes));
+    dispatch(changeShotsLikes({ shotId: shot.id, likes: updatedShot.likes }));
   };
 
   return (
@@ -185,7 +182,7 @@ const ShotControl = ({
           className="absolute bottom-0 left-0 w-full p-4 rounded-2xl"
         >
           <Text className="text-white">{title}</Text>
-          {userName !== currentUser && children}
+          {userName !== currentUser && currentUser && children}
         </Flex>
       </Box>
     )
@@ -211,8 +208,8 @@ const ShotStat = ({
   );
 };
 
-const ShotStats = ({ views }: { views: number }) => {
-  const { predictedLikes: likes } = useShotInfo();
+const ShotStats = ({ shotId, views }: { shotId: string; views: number }) => {
+  const likes = useShotInfo()[shotId] || 0;
 
   return (
     <Flex gap="3" className="text-gray-400">

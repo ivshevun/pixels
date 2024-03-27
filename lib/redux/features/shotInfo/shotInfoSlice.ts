@@ -1,23 +1,21 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
-interface ShotInfo {
-  predictedLikes: number;
+interface ShotsLikes {
+  [shotId: string]: number;
 }
 
-const initialState: ShotInfo = {
-  predictedLikes: 0,
-};
+const initialState: ShotsLikes = {};
 
 export const shotInfoSlice = createSlice({
   name: "shotInfo",
   initialState,
   reducers: {
-    changePredictedLikes: (state, action: PayloadAction<number>) => {
-      state.predictedLikes = action.payload;
+    changeShotsLikes: (state, action) => {
+      state[action.payload.shotId] = action.payload.likes;
     },
   },
 });
 
-export const { changePredictedLikes } = shotInfoSlice.actions;
+export const { changeShotsLikes } = shotInfoSlice.actions;
 
 export default shotInfoSlice.reducer;

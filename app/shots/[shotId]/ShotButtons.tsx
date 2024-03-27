@@ -3,11 +3,11 @@ import DarkButton from "@/app/components/DarkButton";
 import LikeContent from "@/app/components/ShotCard/LikeContent";
 import TransparentButton from "@/app/components/TransparentButton";
 import useLiked from "@/app/hooks/useLiked";
-import { changePredictedLikes } from "@/lib/redux/features/shotInfo/shotInfoSlice";
+import { changeShotsLikes } from "@/lib/redux/features/shotInfo/shotInfoSlice";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { Shot } from "@prisma/client";
 import { Flex } from "@radix-ui/themes";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { FaRegBookmark } from "react-icons/fa";
@@ -36,6 +36,10 @@ export default function ShotButtons({
     }
   }, [data]);
 
+  useEffect(() => {
+    dispatch(changeShotsLikes({ shotId: shot.id, likes: shot.likes }));
+  }, [shot.id, shot.likes, dispatch]);
+
   const isAnyLoading = initialLoading || isLoading;
 
   const isButtonDisabled =
@@ -44,16 +48,18 @@ export default function ShotButtons({
   const handleClick = async (option: string) => {
     setLoading(true);
     // update likes
-    const { data: updatedShot } = await axios.patch("/api/shot/", {
-      shotId: shot.id,
-      option,
-    });
+    const { data: updatedShot }: AxiosResponse<Shot> = await axios.patch(
+      "/api/shot/",
+      {
+        shotId: shot.id,
+        option,
+      }
+    );
 
     setLoading(false);
 
-    setLiked((prevLiked) => !prevLiked);
-
-    dispatch(changePredictedLikes(updatedShot.likes));
+    updatedShot && setLiked((prevLiked) => !prevLiked);
+    dispatch(changeShotsLikes({ shotId: shot.id, likes: updatedShot.likes }));
   };
 
   return (
