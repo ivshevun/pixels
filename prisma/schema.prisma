@@ -94,6 +94,12 @@ model View {
   userId    String
 }
 
+model Favourite {
+  id        String @id @default(cuid())
+  shotId    String
+  userId    String
+}
+
 enum Tag {
   Mobile
   Typography

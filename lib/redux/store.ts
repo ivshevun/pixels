@@ -3,14 +3,16 @@ import { configureStore } from "@reduxjs/toolkit";
 import disclosureReducer from "./features/disclosure/disclosureSlice";
 import shotCreationReducer from "./features/shotCreation/shotCreationSlice";
 import shotTextInfoReducer from "./features/shotText/shotTextInfo";
-import shotInfoReducer from "./features/shotInfo/shotInfoSlice";
+import shotLikesReducer from "./features/shotsLikes/shotsLikesSlice";
+import favouritesReducer from "./features/favourites/favouritesSlice";
 
 export const store = configureStore({
   reducer: {
     disclosure: disclosureReducer,
     shotTextInfo: shotTextInfoReducer,
     shotCreation: shotCreationReducer,
-    shotInfo: shotInfoReducer,
+    shotLikes: shotLikesReducer,
+    favourites: favouritesReducer,
   },
 });
 

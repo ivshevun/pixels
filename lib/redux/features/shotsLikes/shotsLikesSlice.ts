@@ -6,7 +6,7 @@ interface ShotsLikes {
 
 const initialState: ShotsLikes = {};
 
-export const shotInfoSlice = createSlice({
+export const shotsLikesSlice = createSlice({
   name: "shotInfo",
   initialState,
   reducers: {
@@ -16,6 +16,6 @@ export const shotInfoSlice = createSlice({
   },
 });
 
-export const { changeShotsLikes } = shotInfoSlice.actions;
+export const { changeShotsLikes } = shotsLikesSlice.actions;
 
-export default shotInfoSlice.reducer;
+export default shotsLikesSlice.reducer;

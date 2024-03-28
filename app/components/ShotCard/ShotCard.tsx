@@ -1,8 +1,10 @@
 "use client";
+import useFavourited from "@/app/hooks/useFavourited";
 import { fetchLiked } from "@/app/hooks/useLiked";
 import removeTags from "@/app/utils/removeTags";
-import { useShotInfo } from "@/lib/redux/features/shotInfo/hooks";
-import { changeShotsLikes } from "@/lib/redux/features/shotInfo/shotInfoSlice";
+import { setFavourited } from "@/lib/redux/features/favourites/favouritesSlice";
+import { useShotInfo } from "@/lib/redux/features/shotsLikes/hooks";
+import { changeShotsLikes } from "@/lib/redux/features/shotsLikes/shotsLikesSlice";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { Tag } from "@prisma/client";
 import { Box, Flex, Text } from "@radix-ui/themes";
@@ -13,7 +15,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { ReactNode, SetStateAction, useEffect, useState } from "react";
 import { FaEye, FaHeart } from "react-icons/fa";
-import { IoBookmarkOutline } from "react-icons/io5";
+import FavouriteContent from "./FavouriteContent";
 import IconButton from "./IconButton";
 import LikeContent from "./LikeContent";
 
@@ -41,25 +43,37 @@ export default function ShotCard({
   const predictedLikes = useShotInfo()[shot.id];
 
   const router = useRouter();
-  const [isLoading, setLoading] = useState(false);
+  const [isLikeLoading, setLikeLoading] = useState(false);
   const [isLiked, setLiked] = useState(false);
+
+  const [isFavourite, setFavourite] = useState(false);
+  const [isFavouriteLoading, setFavouriteLoading] = useState(false);
+
   const [isHover, setHover] = useState(false);
   const { data: session } = useSession();
 
-  const { data, isLoading: initialLoading } = useQuery({
+  const { data: liked, isLoading: initialLikeLoading } = useQuery({
     queryKey: ["liked", shot.id, session?.user.id, predictedLikes],
     queryFn: () => fetchLiked(shot.id, session?.user.id || ""),
   });
+
+  const { data: favourited, isLoading: initialFavouriteLoading } =
+    useFavourited(shot.id, session?.user.id || "");
 
   useEffect(() => {
     dispatch(changeShotsLikes({ shotId: shot.id, likes: shot.likes }));
   }, [shot.id, shot.likes, dispatch]);
 
   useEffect(() => {
-    setLiked(Boolean(data));
-  }, [data, isLiked, predictedLikes]);
+    setLiked(Boolean(liked));
+  }, [liked, isLiked, predictedLikes]);
 
-  const isAnyLoading = initialLoading || isLoading;
+  useEffect(() => {
+    setFavourite(Boolean(favourited));
+  }, [favourited]);
+
+  const isAnyLikeLoading = initialLikeLoading || isLikeLoading;
+  const isAnyFavouriteLoading = initialFavouriteLoading || isFavouriteLoading;
 
   return (
     <Flex
@@ -89,11 +103,15 @@ export default function ShotCard({
           currentUser={session?.user.username || session?.user.name || ""}
         >
           <ShotButtons
-            setLoading={setLoading}
-            isLoading={isAnyLoading}
+            setLikeLoading={setLikeLoading}
+            isLikeLoading={isAnyLikeLoading}
             isLiked={isLiked}
             shot={shot}
             setLiked={setLiked}
+            isFavourite={isFavourite}
+            setFavourite={setFavourite}
+            isFavouriteLoading={isAnyFavouriteLoading}
+            setFavouriteLoading={setFavouriteLoading}
           />
         </ShotControl>
       </Box>
@@ -114,42 +132,84 @@ const GradientOverlay = () => {
 const ShotButtons = ({
   shot,
   isLiked,
-  isLoading,
-  setLoading,
   setLiked,
+
+  isLikeLoading,
+  setLikeLoading,
+
+  isFavourite,
+  setFavourite,
+
+  isFavouriteLoading,
+  setFavouriteLoading,
 }: {
   shot: Shot;
   isLiked: boolean;
-  isLoading: boolean;
-  setLoading: React.Dispatch<SetStateAction<boolean>>;
   setLiked: React.Dispatch<SetStateAction<boolean>>;
+
+  isFavourite: boolean;
+  setFavourite: React.Dispatch<SetStateAction<boolean>>;
+
+  isLikeLoading: boolean;
+  setLikeLoading: React.Dispatch<SetStateAction<boolean>>;
+
+  isFavouriteLoading: boolean;
+  setFavouriteLoading: React.Dispatch<SetStateAction<boolean>>;
 }) => {
   const dispatch = useAppDispatch();
-  const handleClick = async (option: string) => {
-    setLoading(true);
+  const { data: session } = useSession();
+  const handleLike = async () => {
+    setLikeLoading(true);
     // update likes
     const { data: updatedShot }: AxiosResponse<Shot> = await axios.patch(
       "/api/shot/",
       {
         shotId: shot.id,
-        option,
+        option: "likes",
       }
     );
 
-    setLoading(false);
+    setLikeLoading(false);
     setLiked((prevLiked) => !prevLiked);
 
     // update state
     dispatch(changeShotsLikes({ shotId: shot.id, likes: updatedShot.likes }));
   };
 
+  const handleFavourite = async () => {
+    setFavouriteLoading(true);
+    const {
+      data: { favourited },
+    }: AxiosResponse<{ favourited: boolean }> = await axios.post(
+      "/api/favourite/",
+      {
+        userId: session?.user?.id,
+        shotId: shot.id,
+      }
+    );
+
+    setFavourite(favourited);
+    setFavouriteLoading(false);
+
+    dispatch(
+      setFavourited({
+        userId: session?.user?.id,
+        shotId: shot.id,
+        isFavourite: favourited,
+      })
+    );
+  };
+
   return (
     <Flex gap="2" align="start" className="pointer-events-auto">
-      <IconButton onClick={() => handleClick("likes")}>
-        <LikeContent isLiked={isLiked} isLoading={isLoading} />
+      <IconButton onClick={handleLike}>
+        <LikeContent isLiked={isLiked} isLoading={isLikeLoading} />
       </IconButton>
-      <IconButton>
-        <IoBookmarkOutline size="18" className="hover:opacity-60" />
+      <IconButton onClick={handleFavourite}>
+        <FavouriteContent
+          isFavourite={isFavourite}
+          isLoading={isFavouriteLoading}
+        />
       </IconButton>
     </Flex>
   );
