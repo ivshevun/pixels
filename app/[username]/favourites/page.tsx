@@ -7,6 +7,7 @@ import NoShots from "../NoShots";
 import noFavourites from "@/public/assets/no-favourites.jpg";
 import { getServerSession } from "next-auth";
 import authOptions from "@/app/auth/authOptions";
+import { redirect } from "next/navigation";
 
 export default async function FavouritesPage({ params }: UsernameParams) {
   const session = await getServerSession(authOptions);
@@ -16,7 +17,7 @@ export default async function FavouritesPage({ params }: UsernameParams) {
     },
   });
 
-  if (!user) return null;
+  if (!user) return redirect("/not-found");
 
   const favourites = await prisma.favourite.findMany({
     where: {
@@ -62,7 +63,7 @@ export default async function FavouritesPage({ params }: UsernameParams) {
             },
           });
 
-          if (!author) return null;
+          if (!author) return redirect("/not-found");
 
           return (
             <ShotCard

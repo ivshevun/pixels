@@ -1,7 +1,10 @@
 import prisma from "@/prisma/client";
-import { Avatar, Flex, Heading } from "@radix-ui/themes";
 import { User } from "@prisma/client";
+import { Avatar, Flex, Heading } from "@radix-ui/themes";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 import React from "react";
+import authOptions from "../auth/authOptions";
 import SmallText from "../auth/components/SmallText";
 import TransparentButton from "../components/TransparentButton";
 import UserTabs from "./UserTabs";
@@ -16,8 +19,7 @@ export default async function UserLayout({ params, children }: UsernameParams) {
     where: { username: params.username },
   });
 
-  // TODO: make it return 404 page
-  if (!user) return null;
+  if (!user) return redirect("/not-found");
 
   return (
     <Flex
@@ -34,7 +36,8 @@ export default async function UserLayout({ params, children }: UsernameParams) {
   );
 }
 
-const UserInfo = ({ user }: { user: User }) => {
+const UserInfo = async ({ user }: { user: User }) => {
+  const session = await getServerSession(authOptions);
   return (
     <Flex
       gap="6"
@@ -58,9 +61,11 @@ const UserInfo = ({ user }: { user: User }) => {
           {user.username || user.name}
         </Heading>
         <SmallText className="text-sm text-gray-400">{user.email}</SmallText>
-        <TransparentButton className="w-3/5 py-3 px-4">
-          Edit profile
-        </TransparentButton>
+        {session?.user.id === user.id && (
+          <TransparentButton className="w-3/5 py-3 px-4">
+            Edit profile
+          </TransparentButton>
+        )}
       </Flex>
     </Flex>
   );

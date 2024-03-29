@@ -2,6 +2,7 @@
 import prisma from "@/prisma/client";
 import { Avatar, Flex, Link } from "@radix-ui/themes";
 import NextLink from "next/link";
+import { redirect } from "next/navigation";
 
 const UserInfo = async ({ userId }: { userId: string }) => {
   const user = await prisma.user.findUnique({
@@ -10,7 +11,7 @@ const UserInfo = async ({ userId }: { userId: string }) => {
     },
   });
 
-  if (!user) return null;
+  if (!user) return redirect("/not-found");
 
   return (
     <Flex align="center" gap="3">

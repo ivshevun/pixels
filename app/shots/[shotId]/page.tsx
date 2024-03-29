@@ -9,6 +9,7 @@ import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import "./styles.css";
+import { redirect } from "next/navigation";
 
 const ShotButtons = dynamic(() => import("@/app/shots/[shotId]/ShotButtons"), {
   ssr: false,
@@ -27,7 +28,7 @@ export default async function ShotPage({ params: { shotId } }: Params) {
   });
 
   // TODO: return 404 page
-  if (!shot) return null;
+  if (!shot) return redirect("/not-found");
 
   const user = await prisma.user.findUnique({
     where: {

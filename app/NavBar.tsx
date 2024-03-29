@@ -18,7 +18,7 @@ import logo from "@/public/logo.svg";
 export default function NavBar() {
   const pathname = usePathname();
 
-  const restrictedPaths = ["auth", "uploads", "shots"];
+  const restrictedPaths = ["auth", "uploads", "shots", "not-found"];
 
   // check if path is restricted
   if (pathname.split("/").some((path) => restrictedPaths.includes(path)))

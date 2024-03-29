@@ -8,6 +8,7 @@ import { getServerSession } from "next-auth";
 import authOptions from "../auth/authOptions";
 import NoShots from "./NoShots";
 import noResults from "@/public/assets/no-shots.jpg";
+import { redirect } from "next/navigation";
 
 export interface UsernameParams {
   params: { username: string };
@@ -18,8 +19,7 @@ export default async function Dashboard({ params }: UsernameParams) {
     where: { username: params.username },
   });
 
-  // TODO: make it return 404 page
-  if (!user) return null;
+  if (!user) return redirect("/not-found");
 
   return (
     <div className="px-4 md:px-0">
