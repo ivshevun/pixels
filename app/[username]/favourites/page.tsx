@@ -5,8 +5,11 @@ import ShotsGrid from "../components/ShotsGrid";
 import { UsernameParams } from "../page";
 import NoShots from "../NoShots";
 import noFavourites from "@/public/assets/no-favourites.jpg";
+import { getServerSession } from "next-auth";
+import authOptions from "@/app/auth/authOptions";
 
 export default async function FavouritesPage({ params }: UsernameParams) {
+  const session = await getServerSession(authOptions);
   const user = await prisma.user.findUnique({
     where: {
       username: params.username,
@@ -21,13 +24,18 @@ export default async function FavouritesPage({ params }: UsernameParams) {
     },
   });
 
+  const isAuthor = session?.user.id === user.id;
+
+  const heading = isAuthor ? "Save your inspiration" : "No favourites";
+  const message = isAuthor
+    ? "Save interesting shots and discover new and interesting recommendations along the way."
+    : `It looks like ${
+        user.username || user.name
+      } hasn’t uploaded any favourites yet. Check back soon!`;
+
   if (favourites.length === 0)
     return (
-      <NoShots
-        imageSource={noFavourites}
-        heading="Save your inspiration"
-        message="Save interesting shots and discover new and interesting recommendations along the way."
-      />
+      <NoShots imageSource={noFavourites} heading={heading} message={message} />
     );
 
   const shotIds = favourites.map((favourite) => favourite.shotId);
@@ -41,11 +49,7 @@ export default async function FavouritesPage({ params }: UsernameParams) {
 
   if (shots.length === 0)
     return (
-      <NoShots
-        imageSource={noFavourites}
-        heading="Save your inspiration"
-        message="Save interesting shots and discover new and interesting recommendations along the way."
-      />
+      <NoShots imageSource={noFavourites} heading={heading} message={message} />
     );
 
   return (

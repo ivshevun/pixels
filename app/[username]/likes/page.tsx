@@ -5,8 +5,11 @@ import ShotsGrid from "../components/ShotsGrid";
 import { UsernameParams } from "../page";
 import NoShots from "../NoShots";
 import noLikes from "@/public/assets/no-likes.png";
+import { getServerSession } from "next-auth";
+import authOptions from "@/app/auth/authOptions";
 
 export default async function LikesPage({ params }: UsernameParams) {
+  const session = await getServerSession(authOptions);
   const user = await prisma.user.findUnique({
     where: {
       username: params.username,
@@ -21,13 +24,18 @@ export default async function LikesPage({ params }: UsernameParams) {
     },
   });
 
+  const isAuthor = session?.user.id === user.id;
+
+  const heading = isAuthor ? "Express your appreciation" : "No Likes :(";
+  const message = isAuthor
+    ? "Show your appreciation for other's work by liking the shots you love. We'll collect all of your likes here for you to revisit anytime. "
+    : `It looks like ${
+        user.username || user.name
+      } hasn’t liked any Shots yet. Check back soon!`;
+
   if (likes.length === 0)
     return (
-      <NoShots
-        imageSource={noLikes}
-        heading="Express your appreciation"
-        message="Show your appreciation for other's work by liking the shots you love. We'll collect all of your likes here for you to revisit anytime. "
-      />
+      <NoShots imageSource={noLikes} heading={heading} message={message} />
     );
 
   const shotIds = likes.map((like) => like.shotId);
@@ -41,11 +49,7 @@ export default async function LikesPage({ params }: UsernameParams) {
 
   if (shots.length === 0)
     return (
-      <NoShots
-        imageSource={noLikes}
-        heading="Express your appreciation"
-        message="Show your appreciation for other's work by liking the shots you love. We'll collect all of your likes here for you to revisit anytime. "
-      />
+      <NoShots imageSource={noLikes} heading={heading} message={message} />
     );
 
   return (
