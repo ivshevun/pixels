@@ -13,6 +13,7 @@ import { FaMagnifyingGlass } from "react-icons/fa6";
 import Login, { Auth } from "./Login";
 import AnimatedMenu from "./components/AnimatedMenu";
 import Overlay from "./components/Overlay";
+import logo from "@/public/logo.svg";
 
 export default function NavBar() {
   const pathname = usePathname();
@@ -109,9 +110,7 @@ const NavLogo = ({ children }: PropsWithChildren) => {
       {children}
       <Link href="/" className="flex justify-center items-center ">
         <NextImage
-          width="150"
-          height="55"
-          src="/logo.svg"
+          src={logo}
           alt="Pixels"
           className="max-w-36 w-auto h-auto"
           priority

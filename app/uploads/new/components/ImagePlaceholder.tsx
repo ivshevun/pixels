@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Flex, Text } from "@radix-ui/themes";
 import MediaFeatures from "./MediaFeatures";
 import SmallText from "@/app/auth/components/SmallText";
+import imagePlaceholder from "@/public/assets/image-placeholder.png";
 
 export default function ImagePlaceholder() {
   return (
@@ -11,11 +12,9 @@ export default function ImagePlaceholder() {
     >
       <Flex direction="column" gap="2" align="center" className="mt-2">
         <Image
-          src="/assets/image-placeholder.png"
+          src={imagePlaceholder}
+          className="hidden sm:block w-[85px] h-[92px]"
           alt=""
-          width="85"
-          height="92"
-          className="hidden sm:block"
         />
         <Text>
           Drag and drop an image, or{" "}

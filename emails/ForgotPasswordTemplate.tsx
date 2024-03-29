@@ -1,4 +1,5 @@
 import SmallText from "@/app/auth/components/SmallText";
+import logo from "@/public/logo.svg";
 import {
   Body,
   Button,
@@ -8,7 +9,6 @@ import {
   Html,
   Img,
   Preview,
-  Section,
   Tailwind,
   Text,
 } from "@react-email/components";
@@ -26,10 +26,7 @@ const ForgotPasswordTemplate = ({
       <Tailwind>
         <Body className="bg-white text-black my-auto mx-auto font-sans">
           <Container className="my-10 mx-auto p-5 w-[465px]">
-            <Img
-              className="w-24 mx-auto"
-              src="https://i.imgur.com/aFyMRUi.jpg"
-            />
+            <Img className="w-24 mx-auto" src={logo} />
             <Heading>Hi, {username}!</Heading>
             <SmallText>Here are your password reset instructions.</SmallText>
             <Hr />

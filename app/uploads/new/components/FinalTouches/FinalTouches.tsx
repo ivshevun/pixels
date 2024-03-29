@@ -19,7 +19,7 @@ export default function FinalTouches({ onSubmit }: { onSubmit: () => void }) {
     <Dialog.Root>
       <Dialog.Trigger>
         <DarkButton
-          className="text-sm font-semibold py-2 disabled:text-gray-300"
+          className="text-sm font-semibold py-2 disabled:text-gray-300 px-6"
           disabled={!fileUrl || !title}
         >
           Continue
