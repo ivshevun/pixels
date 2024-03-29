@@ -3,6 +3,8 @@ import prisma from "@/prisma/client";
 import ShotUserInfo from "../../components/ShotCard/UserInfo";
 import ShotsGrid from "../components/ShotsGrid";
 import { UsernameParams } from "../page";
+import NoShots from "../NoShots";
+import noFavourites from "@/public/assets/no-favourites.jpg";
 
 export default async function FavouritesPage({ params }: UsernameParams) {
   const user = await prisma.user.findUnique({
@@ -19,7 +21,14 @@ export default async function FavouritesPage({ params }: UsernameParams) {
     },
   });
 
-  if (favourites.length === 0) return null;
+  if (favourites.length === 0)
+    return (
+      <NoShots
+        imageSource={noFavourites}
+        heading="Save your inspiration"
+        message="Save interesting shots and discover new and interesting recommendations along the way."
+      />
+    );
 
   const shotIds = favourites.map((favourite) => favourite.shotId);
   const shots = await prisma.shot.findMany({
@@ -30,7 +39,14 @@ export default async function FavouritesPage({ params }: UsernameParams) {
     },
   });
 
-  if (shots.length === 0) return null;
+  if (shots.length === 0)
+    return (
+      <NoShots
+        imageSource={noFavourites}
+        heading="Save your inspiration"
+        message="Save interesting shots and discover new and interesting recommendations along the way."
+      />
+    );
 
   return (
     <ShotsGrid>
