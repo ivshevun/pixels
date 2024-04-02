@@ -7,7 +7,7 @@ export default function BeigeButton({
   ...props
 }: ButtonProps) {
   const styles = classNames(
-    "bg-yellow-100 hover:bg-yellow-200 rounded-full px-4 text-sm font-semibold py-2 disabled:cursor-not-allowed",
+    "bg-yellow-100 hover:bg-yellow-200 rounded-full disabled:cursor-not-allowed text-sm",
     className
   );
   return (

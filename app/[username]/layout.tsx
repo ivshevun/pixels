@@ -1,13 +1,9 @@
 import prisma from "@/prisma/client";
-import { User } from "@prisma/client";
-import { Avatar, Flex, Heading } from "@radix-ui/themes";
-import { getServerSession } from "next-auth";
+import { Flex } from "@radix-ui/themes";
 import { redirect } from "next/navigation";
 import React from "react";
-import authOptions from "../auth/authOptions";
-import SmallText from "../auth/components/SmallText";
-import TransparentButton from "../components/TransparentButton";
 import UserTabs from "./UserTabs";
+import UserInfo from "./components/UserInfo";
 
 interface UsernameParams {
   params: { username: string };
@@ -35,38 +31,3 @@ export default async function UserLayout({ params, children }: UsernameParams) {
     </Flex>
   );
 }
-
-const UserInfo = async ({ user }: { user: User }) => {
-  const session = await getServerSession(authOptions);
-  return (
-    <Flex
-      gap="6"
-      align="center"
-      justify="center"
-      direction={{ initial: "column", sm: "row" }}
-    >
-      <Avatar
-        size={{ initial: "7", md: "8" }}
-        radius="full"
-        src={user.image!}
-        fallback="?"
-      />
-      <Flex
-        direction="column"
-        gap="1"
-        align={{ initial: "center", sm: "start" }}
-        className="min-w-48"
-      >
-        <Heading className="font-semibold text-2xl md:text-4xl">
-          {user.username || user.name}
-        </Heading>
-        <SmallText className="text-sm text-gray-400">{user.email}</SmallText>
-        {session?.user.id === user.id && (
-          <TransparentButton className="w-3/5 py-3 px-4">
-            Edit profile
-          </TransparentButton>
-        )}
-      </Flex>
-    </Flex>
-  );
-};

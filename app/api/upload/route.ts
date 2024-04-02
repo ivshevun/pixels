@@ -1,35 +1,12 @@
 import log from "@/lib/log";
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
-
-const client = new S3Client({
-  region: process.env.AWS_BUCKET_REGION!,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY!,
-    secretAccessKey: process.env.AWS_SECRET_KEY!,
-  },
-});
-
-async function uploadFileToStorage(file: Buffer, fileName: string) {
-  const nameInBucket = `${fileName}-${randomUUID()}`;
-  const params = {
-    Bucket: process.env.AWS_BUCKET_NAME!,
-    Key: `media/${nameInBucket}`,
-    Body: file,
-  };
-
-  const command = new PutObjectCommand(params);
-
-  await client.send(command);
-
-  return "https://pixels-storage.s3.amazonaws.com/media/" + nameInBucket;
-}
+import { uploadFileToStorage } from "../storage";
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File;
+    const folder = (formData.get("folder") as string) || "media";
 
     // TODO: convert image to webp
 
@@ -37,7 +14,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Image is required" }, { status: 400 });
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    const response = await uploadFileToStorage(buffer, file.name);
+    const response = await uploadFileToStorage(buffer, file.name, folder);
 
     return NextResponse.json({ response });
   } catch (error) {

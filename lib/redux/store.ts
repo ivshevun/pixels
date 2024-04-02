@@ -5,6 +5,7 @@ import shotCreationReducer from "./features/shotCreation/shotCreationSlice";
 import shotTextInfoReducer from "./features/shotText/shotTextInfo";
 import shotLikesReducer from "./features/shotsLikes/shotsLikesSlice";
 import favouritesReducer from "./features/favourites/favouritesSlice";
+import settingsReducer from "./features/settings/settingsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     shotCreation: shotCreationReducer,
     shotLikes: shotLikesReducer,
     favourites: favouritesReducer,
+    settings: settingsReducer,
   },
 });
 

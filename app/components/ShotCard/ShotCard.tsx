@@ -99,8 +99,8 @@ export default function ShotCard({
         <ShotControl
           isHover={isHover}
           shot={shot}
-          userName={userName}
-          currentUser={session?.user.username || session?.user.name || ""}
+          userId={session?.user.id || ""}
+          currentUserId={session?.user.id || ""}
         >
           <ShotButtons
             setLikeLoading={setLikeLoading}
@@ -217,14 +217,14 @@ const ShotButtons = ({
 
 const ShotControl = ({
   isHover,
-  userName,
-  currentUser,
+  userId: userName,
+  currentUserId: currentUser,
   shot,
   children,
 }: {
   isHover: boolean;
-  userName: string;
-  currentUser: string;
+  userId: string;
+  currentUserId: string;
   shot: Shot;
   children: React.ReactNode;
 }) => {

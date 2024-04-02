@@ -8,11 +8,13 @@ import dynamic from "next/dynamic";
 import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
-import "./styles.css";
 import { redirect } from "next/navigation";
+import ButtonsLoading from "./ButtonsLoading";
+import "./styles.css";
 
 const ShotButtons = dynamic(() => import("@/app/shots/[shotId]/ShotButtons"), {
   ssr: false,
+  loading: ButtonsLoading,
 });
 
 interface Params {
@@ -85,10 +87,7 @@ export default async function ShotPage({ params: { shotId } }: Params) {
             </Flex>
           </Flex>
         </Flex>
-        <ShotButtons
-          authorName={user?.username || user?.name || ""}
-          shot={shot}
-        />
+        <ShotButtons authorId={user?.id || ""} shot={shot} />
       </Flex>
       <Image
         className="rounded-xl"

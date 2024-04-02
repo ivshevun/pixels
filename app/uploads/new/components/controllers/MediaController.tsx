@@ -15,6 +15,7 @@ import React, {
 } from "react";
 import Controller from "./Controller";
 import handleFileChange from "../../utils/handleFileChange";
+import { changeFileUrl } from "@/lib/redux/features/shotCreation/shotCreationSlice";
 
 interface VideoControllerProps {
   file: File | null;
@@ -131,6 +132,10 @@ export const FileInput = ({
 }: FileInputProps) => {
   const dispatch = useAppDispatch();
 
+  const changeUrl = (url: string) => {
+    dispatch(changeFileUrl(url));
+  };
+
   return (
     <label htmlFor={name} {...props}>
       {children}
@@ -140,7 +145,7 @@ export const FileInput = ({
         name={name}
         accept="image/*"
         className="hidden"
-        onChange={(event) => handleFileChange(event, setFile, dispatch)}
+        onChange={(event) => handleFileChange(event, setFile, changeUrl)}
       />
     </label>
   );

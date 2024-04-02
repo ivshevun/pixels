@@ -12,15 +12,15 @@ import { Shot } from "@prisma/client";
 import { Flex } from "@radix-ui/themes";
 import axios, { AxiosResponse } from "axios";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { MdOutlineEmail } from "react-icons/md";
 
 export default function ShotButtons({
   shot,
-  authorName,
+  authorId,
 }: {
   shot: Shot;
-  authorName: string;
+  authorId: string;
 }) {
   const dispatch = useAppDispatch();
   const { data: session } = useSession();
@@ -54,8 +54,7 @@ export default function ShotButtons({
   const isAnyLikeLoading = initialLikeLoading || isLikeLoading;
   const isAnyFavouriteLoading = initialFavouriteLoading || isFavouriteLoading;
 
-  const isButtonDisabled =
-    authorName === session?.user.username || authorName === session?.user.name;
+  const isButtonDisabled = authorId === session?.user.id;
 
   const handleLike = async () => {
     setLikeLoading(true);

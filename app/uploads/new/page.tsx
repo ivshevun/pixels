@@ -8,6 +8,7 @@ import { useDisclosure } from "@/lib/redux/features/disclosure/hooks";
 import { useShotCreationInfo } from "@/lib/redux/features/shotCreation/hooks";
 import {
   changeDescription,
+  changeFileUrl,
   changeTags,
   changeTitle,
 } from "@/lib/redux/features/shotCreation/shotCreationSlice";
@@ -130,6 +131,10 @@ export default function UploadPage() {
     }
   };
 
+  const changeUrl = (url: string) => {
+    dispatch(changeFileUrl(url));
+  };
+
   return (
     <motion.div
       onKeyDown={handleKeyDown}
@@ -165,7 +170,7 @@ export default function UploadPage() {
               name="file"
               type="file"
               id="file"
-              onChange={(event) => handleFileChange(event, setFile, dispatch)}
+              onChange={(event) => handleFileChange(event, setFile, changeUrl)}
             />
           )}
           {/* Editor */}

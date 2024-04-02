@@ -48,7 +48,10 @@ export default function ControlButtons({ onSubmit, file }: SubmitterProps) {
         className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/5 2xl:w-1/6"
       >
         {/* Make it disabled if no image is provided */}
-        <BeigeButton className="w-full" disabled={!file}>
+        <BeigeButton
+          className="w-full text-sm px-4 py-2 font-semibold "
+          disabled={!file}
+        >
           {/* Mobile text */}
           <Text className="sm:hidden">Save</Text>
 
