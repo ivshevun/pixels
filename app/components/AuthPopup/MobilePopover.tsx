@@ -4,7 +4,7 @@ import { useAppDispatch } from "@/lib/redux/hooks";
 import { Flex, Separator, Text } from "@radix-ui/themes";
 import { signOut } from "next-auth/react";
 import { Fragment, useRef } from "react";
-import AnimatedMenu from "../AnimatedMenu";
+import AnimatedMenu from "../Animated/AnimatedMenu";
 import Overlay from "../Overlay";
 import { ILink, IUser, PopupLink, UserInfo, UserTrigger } from "./AuthPopover";
 

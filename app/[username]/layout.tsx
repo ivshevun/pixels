@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import React from "react";
 import authOptions from "../auth/authOptions";
 import SmallText from "../auth/components/SmallText";
-import TransparentButton from "../components/TransparentButton";
+import TransparentButton from "../components/Buttons/TransparentButton";
 import UserTabs from "./UserTabs";
 
 interface UsernameParams {

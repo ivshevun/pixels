@@ -8,9 +8,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
-import DarkButton from "../../../components/DarkButton";
-import AnimatedForm from "../../components/AnimatedForm";
-import AuthInput from "../../components/AuthInput";
+import DarkButton from "../../../components/Buttons/DarkButton";
+import AnimatedForm from "../../../components/Animated/AnimatedForm";
+import Input from "../../../components/Input";
 import { CenterResponsive } from "../../components/Center";
 import ErrorHandling from "../../components/ErrorHandling";
 import SmallText from "../../components/SmallText";
@@ -71,7 +71,7 @@ export default function PasswordFormPage() {
               {showPassword ? "Hide password" : "Show password"}
             </Text>
           </Flex>
-          <AuthInput
+          <Input
             type={showPassword ? "text" : "password"}
             register={register("password")}
           />

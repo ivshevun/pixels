@@ -1,4 +1,4 @@
-import TransparentButton from "@/app/components/TransparentButton";
+import TransparentButton from "@/app/components/Buttons/TransparentButton";
 import log from "@/lib/log";
 import { setMediaControllerOpen } from "@/lib/redux/features/disclosure/disclosureSlice";
 import { useDisclosure } from "@/lib/redux/features/disclosure/hooks";

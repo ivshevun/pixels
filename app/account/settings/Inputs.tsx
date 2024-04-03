@@ -1,5 +1,5 @@
 "use client";
-import AuthInput from "@/app/auth/components/AuthInput";
+import Input from "@/app/components/Input";
 import { Flex } from "@radix-ui/themes";
 import { UseFormRegisterReturn } from "react-hook-form";
 
@@ -28,7 +28,7 @@ const LabeledInput = ({
   return (
     <Flex direction="column" className="w-full">
       <label className="text-sm text-gray-400">{label}</label>
-      <AuthInput className="py-1" register={register} />
+      <Input className="py-1" register={register} />
     </Flex>
   );
 };

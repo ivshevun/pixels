@@ -1,6 +1,6 @@
 "use client";
 import ErrorHandling from "@/app/auth/components/ErrorHandling";
-import DarkButton from "@/app/components/DarkButton";
+import DarkButton from "@/app/components/Buttons/DarkButton";
 import { Flex } from "@radix-ui/themes";
 import { FieldErrors } from "react-hook-form";
 

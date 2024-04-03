@@ -8,9 +8,9 @@ import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import DarkButton from "../../components/DarkButton";
-import AnimatedForm from "../components/AnimatedForm";
-import AuthInput from "../components/AuthInput";
+import DarkButton from "../../components/Buttons/DarkButton";
+import AnimatedForm from "../../components/Animated/AnimatedForm";
+import Input from "../../components/Input";
 import ErrorHandling from "../components/ErrorHandling";
 import SmallText from "../components/SmallText";
 
@@ -63,17 +63,17 @@ export default function RegisterForm() {
         >
           <Flex direction="column">
             <label>Username</label>
-            <AuthInput register={register("username")} maxLength={20} />
+            <Input register={register("username")} maxLength={20} />
           </Flex>
           <Flex direction="column">
             <label>Email</label>
-            <AuthInput maxLength={45} register={register("email")} />
+            <Input maxLength={45} register={register("email")} />
           </Flex>
         </Flex>
         {/* Password input */}
         <Flex direction="column">
           <label>Password</label>
-          <AuthInput
+          <Input
             type={showPassword ? "text" : "password"}
             placeholder="6+ characters"
             maxLength={25}

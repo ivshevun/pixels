@@ -1,5 +1,5 @@
 "use client";
-import DarkButton from "@/app/components/DarkButton";
+import DarkButton from "@/app/components/Buttons/DarkButton";
 import { Flex, Heading, Text } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
 import { FaPencilRuler } from "react-icons/fa";

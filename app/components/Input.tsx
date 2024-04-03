@@ -7,7 +7,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   register: UseFormRegisterReturn;
 }
 
-const AuthInput = ({
+const Input = ({
   placeholder,
   register,
   type = "text",
@@ -32,4 +32,4 @@ const AuthInput = ({
   );
 };
 
-export default AuthInput;
+export default Input;

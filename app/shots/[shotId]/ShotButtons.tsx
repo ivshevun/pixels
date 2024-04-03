@@ -1,8 +1,8 @@
 "use client";
-import DarkButton from "@/app/components/DarkButton";
+import DarkButton from "@/app/components/Buttons/DarkButton";
 import FavouriteContent from "@/app/components/ShotCard/FavouriteContent";
 import LikeContent from "@/app/components/ShotCard/LikeContent";
-import TransparentButton from "@/app/components/TransparentButton";
+import TransparentButton from "@/app/components/Buttons/TransparentButton";
 import useFavourited from "@/app/hooks/useFavourited";
 import useLiked from "@/app/hooks/useLiked";
 import { setFavourited } from "@/lib/redux/features/favourites/favouritesSlice";

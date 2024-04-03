@@ -8,9 +8,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import DarkButton from "../../components/DarkButton";
-import AnimatedForm from "../components/AnimatedForm";
-import AuthInput from "../components/AuthInput";
+import DarkButton from "../../components/Buttons/DarkButton";
+import AnimatedForm from "../../components/Animated/AnimatedForm";
+import Input from "../../components/Input";
 import ErrorHandling from "../components/ErrorHandling";
 
 type AuthFormData = z.infer<typeof loginSchema>;
@@ -58,7 +58,7 @@ export default function AuthForm() {
         {/* Username input */}
         <Flex direction="column">
           <label>Email or Username</label>
-          <AuthInput
+          <Input
             width="400px"
             register={register("login")}
             maxLength={255}
@@ -74,7 +74,7 @@ export default function AuthForm() {
               Forgot?
             </Link>
           </Flex>
-          <AuthInput
+          <Input
             type={showPassword ? "text" : "password"}
             register={register("password")}
             maxLength={20}

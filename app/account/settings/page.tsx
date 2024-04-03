@@ -1,5 +1,5 @@
 "use client";
-import AnimatedForm from "@/app/auth/components/AnimatedForm";
+import AnimatedForm from "@/app/components/Animated/AnimatedForm";
 import handleFileChange from "@/app/uploads/new/utils/handleFileChange";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";

@@ -11,7 +11,7 @@ import { usePathname } from "next/navigation";
 import { PropsWithChildren } from "react";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import Login, { Auth } from "./Login";
-import AnimatedMenu from "./components/AnimatedMenu";
+import AnimatedMenu from "./components/Animated/AnimatedMenu";
 import Overlay from "./components/Overlay";
 import logo from "@/public/logo.svg";
 

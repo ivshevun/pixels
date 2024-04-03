@@ -1,5 +1,5 @@
-import TransparentButton from "@/app/components/TransparentButton";
-import DarkButton from "@/app/components/DarkButton";
+import TransparentButton from "@/app/components/Buttons/TransparentButton";
+import DarkButton from "@/app/components/Buttons/DarkButton";
 import { useShotCreationInfo } from "@/lib/redux/features/shotCreation/hooks";
 import { Dialog, Flex, Text } from "@radix-ui/themes";
 import Image from "next/image";
