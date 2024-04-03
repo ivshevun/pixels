@@ -70,7 +70,13 @@ const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
+      if (trigger === "update") {
+        if (session.name) token.name = session.name;
+        if (session.username) token.username = session.username;
+        if (session.image) token.image = session.image;
+      }
+
       if (user) token.user = user;
 
       return token;

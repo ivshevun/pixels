@@ -5,16 +5,8 @@ import { z } from "zod";
 const userUpdateSchema = z.object({
   userId: z.string().cuid(),
   avatarUrl: z.string().url().optional(),
-  username: z
-    .string()
-    .min(3, "Username is too short")
-    .max(20, "Username is too long")
-    .optional(),
-  name: z
-    .string()
-    .min(2, "Name is too short")
-    .max(50, "Name is too long")
-    .optional(),
+  username: z.string().max(20, "Username is too long").optional(),
+  name: z.string().max(50, "Name is too long").optional(),
 });
 
 export async function PATCH(request: NextRequest) {
@@ -42,20 +34,43 @@ export async function PATCH(request: NextRequest) {
         { status: 404 }
       );
 
-    const updatedUser = await prisma.user.update({
-      where: { id: body.userId },
-      data: {
-        image: body.avatarUrl,
-        username: body.username,
-        name: body.name,
-      },
-    });
+    if (body.username && !body.avatarUrl) {
+      const userByUsername = await prisma.user.findUnique({
+        where: {
+          username: body.username,
+        },
+      });
 
-    return NextResponse.json(updatedUser);
+      if (user.username === body.username || userByUsername) {
+        return NextResponse.json(
+          { error: "Username must be changed or it was already used." },
+          { status: 400 }
+        );
+      }
+
+      const updatedUser = await prisma.user.update({
+        where: { id: body.userId },
+        data: {
+          image: body.avatarUrl,
+          username: body.username,
+          name: body.name,
+        },
+      });
+
+      return NextResponse.json(updatedUser);
+    }
+
+    if (body.avatarUrl) {
+      const updatedUser = await prisma.user.update({
+        where: { id: body.userId },
+        data: {
+          image: body.avatarUrl,
+        },
+      });
+
+      return NextResponse.json(updatedUser);
+    }
   } catch (error) {
-    return NextResponse.json(
-      { error: "Error updating a user" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error }, { status: 500 });
   }
 }

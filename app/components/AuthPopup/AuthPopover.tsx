@@ -23,7 +23,7 @@ const links: ILink[] = [
   },
   {
     label: "Settings",
-    href: "/account",
+    href: "/account/settings",
   },
 ];
 

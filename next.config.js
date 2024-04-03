@@ -14,6 +14,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "pixels-storage.s3.amazonaws.com",
       },
+      {
+        protocol: "https",
+        hostname: "i.pinimg.com",
+      },
     ],
   },
 };
