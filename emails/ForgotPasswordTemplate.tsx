@@ -1,5 +1,4 @@
-import SmallText from "@/app/auth/components/SmallText";
-import logo from "@/public/logo.svg";
+import logo from "../public/logo.svg";
 import {
   Body,
   Button,
@@ -28,7 +27,9 @@ const ForgotPasswordTemplate = ({
           <Container className="my-10 mx-auto p-5 w-[465px]">
             <Img className="w-24 mx-auto" src={logo} />
             <Heading>Hi, {username}!</Heading>
-            <SmallText>Here are your password reset instructions.</SmallText>
+            <Text className="text-sm text-gray-400">
+              Here are your password reset instructions.
+            </Text>
             <Hr />
             <Text>
               A request to reset your Pixels password has been made. If you did
@@ -41,7 +42,9 @@ const ForgotPasswordTemplate = ({
             >
               Reset password
             </Button>
-            <SmallText className="text-left">Cheers, Pixels Team</SmallText>
+            <Text className="text-sm text-gray-400 text-left">
+              Cheers, Pixels Team
+            </Text>
           </Container>
         </Body>
       </Tailwind>
