@@ -99,7 +99,7 @@ export default function ShotCard({
         <ShotControl
           isHover={isHover}
           shot={shot}
-          userId={session?.user.id || ""}
+          userId={shot.userId}
           currentUserId={session?.user.id || ""}
         >
           <ShotButtons
@@ -217,8 +217,8 @@ const ShotButtons = ({
 
 const ShotControl = ({
   isHover,
-  userId: userName,
-  currentUserId: currentUser,
+  userId,
+  currentUserId,
   shot,
   children,
 }: {
@@ -242,7 +242,7 @@ const ShotControl = ({
           className="absolute bottom-0 left-0 w-full p-4 rounded-2xl"
         >
           <Text className="text-white">{title}</Text>
-          {userName !== currentUser && currentUser && children}
+          {userId !== currentUserId && currentUserId && children}
         </Flex>
       </Box>
     )

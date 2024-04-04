@@ -1,12 +1,13 @@
 import prisma from "@/prisma/client";
 import { Avatar, Flex, Heading, Link } from "@radix-ui/themes";
-import { User, getServerSession } from "next-auth";
+import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import React from "react";
 import authOptions from "../auth/authOptions";
 import SmallText from "../auth/components/SmallText";
 import TransparentButton from "../components/Buttons/TransparentButton";
 import UserTabs from "./UserTabs";
+import { User } from "@prisma/client";
 
 interface UsernameParams {
   params: { username: string };
@@ -58,7 +59,7 @@ const UserInfo = async ({ user }: { user: User }) => {
         className="min-w-48"
       >
         <Heading className="font-semibold text-2xl md:text-4xl">
-          {session?.user.username || session?.user.name}
+          {user.username || user.username}
         </Heading>
         <SmallText className="text-sm text-gray-400">{user.email}</SmallText>
         {session?.user.id === user.id && (

@@ -33,7 +33,7 @@ const UserShots = async ({ user }: { user: User }) => {
 
   const shots = await prisma.shot.findMany({
     where: {
-      user,
+      userId: user.id,
     },
   });
 
