@@ -2,14 +2,13 @@ import { setEditorOpen } from "@/lib/redux/features/disclosure/disclosureSlice";
 import { useShotCreationInfo } from "@/lib/redux/features/shotCreation/hooks";
 import { changeTitle } from "@/lib/redux/features/shotCreation/shotCreationSlice";
 import { useAppDispatch } from "@/lib/redux/hooks";
-import { Heading } from "@radix-ui/themes";
 import CharacterCount from "@tiptap/extension-character-count";
 import Placeholder from "@tiptap/extension-placeholder";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Editable from "./Editable/Editable";
 
-export default function ShotName({ file }: { file: File | null }) {
+export default function ShotName() {
   const dispatch = useAppDispatch();
   const { shotTitle: content } = useShotCreationInfo();
 
@@ -36,13 +35,6 @@ export default function ShotName({ file }: { file: File | null }) {
     injectCSS: false,
     editable: true,
   });
-
-  if (!file)
-    return (
-      <Heading className="text-3xl md:text-4xl mb-16">
-        What have you been working on?
-      </Heading>
-    );
 
   return (
     <Editable editor={editor} onFocus={() => dispatch(setEditorOpen(false))} />

@@ -39,6 +39,7 @@ export default function ShotMedia({
           alt="Shot Image"
           width="1280"
           height="1600"
+          priority
           onClick={() => {
             // open only on mobile
             if (window.innerWidth < 1024) dispatch(setMediaOpen(!isMediaOpen));

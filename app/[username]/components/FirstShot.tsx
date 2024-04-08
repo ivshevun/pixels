@@ -22,7 +22,7 @@ export default function FirstShot() {
         community.
       </Text>
       <DarkButton
-        onClick={() => router.push("/uploads/new")}
+        onClick={() => router.push("/upload")}
         className="sm:w-1/2 text-sm py-4 w-full "
       >
         Upload your first shot

@@ -19,7 +19,7 @@ export interface ILink {
 const links: ILink[] = [
   {
     label: "Upload design work",
-    href: "/uploads/new",
+    href: "/upload",
   },
   {
     label: "Settings",

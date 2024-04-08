@@ -15,7 +15,12 @@ const shotSchema = z.object({
 
 const patchSchema = z.object({
   shotId: z.string().cuid(),
-  option: z.union([z.literal("likes"), z.literal("views")]),
+  option: z.union([z.literal("likes"), z.literal("views")]).optional(),
+
+  title: z.string().max(100, "Title is too long").optional(),
+  description: z.string().max(1000, "Description is too long").optional(),
+  imageUrl: z.string().url("Invalid URL").optional(),
+  tags: z.nativeEnum(Tag).array().optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -73,7 +78,7 @@ export async function PATCH(request: NextRequest) {
 
   const user = await prisma.user.findUnique({
     where: {
-      email: session.user.email || undefined,
+      email: session?.user.email || undefined,
     },
   });
 
@@ -81,6 +86,10 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
+  // 1. найти шот и достать него userId
+  // 2. проверить, что создатель шота - человек, отправляющий запрос.
+
+  // updating views
   if (body.option === "views") {
     const existingView = await prisma.view.findFirst({
       where: {
@@ -117,28 +126,57 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json(updatedShot);
   }
 
-  // looking for existing likes
-  const existingLike = await prisma.like.findFirst({
-    where: {
-      shotId: body.shotId,
-      userId: user.id,
-    },
-  });
+  // updating likes
+  if (body.option === "likes") {
+    const existingLike = await prisma.like.findFirst({
+      where: {
+        shotId: body.shotId,
+        userId: user.id,
+      },
+    });
 
-  if (existingLike) {
-    const [deletedLike, updatedShot] = await prisma.$transaction([
-      prisma.like.delete({
-        where: {
-          id: existingLike.id,
+    if (existingLike) {
+      const [deletedLike, updatedShot] = await prisma.$transaction([
+        prisma.like.delete({
+          where: {
+            id: existingLike.id,
+          },
+        }),
+        prisma.shot.update({
+          where: {
+            id: body.shotId,
+          },
+          data: {
+            [body.option]: {
+              decrement: 1,
+            },
+          },
+        }),
+      ]);
+
+      if (!updatedShot) {
+        return NextResponse.json({ error: "Shot not found" }, { status: 404 });
+      }
+
+      return NextResponse.json({ likes: updatedShot.likes });
+    }
+
+    const [createdLike, updatedShot] = await prisma.$transaction([
+      // create new like
+      prisma.like.create({
+        data: {
+          shotId: body.shotId,
+          userId: user.id,
         },
       }),
+      // update
       prisma.shot.update({
         where: {
           id: body.shotId,
         },
         data: {
           [body.option]: {
-            decrement: 1,
+            increment: 1,
           },
         },
       }),
@@ -148,33 +186,41 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: "Shot not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ likes: updatedShot.likes });
+    return NextResponse.json(updatedShot);
   }
 
-  const [createdLike, updatedShot] = await prisma.$transaction([
-    // create new like
-    prisma.like.create({
-      data: {
-        shotId: body.shotId,
-        userId: user.id,
-      },
-    }),
-    // update
-    prisma.shot.update({
-      where: {
-        id: body.shotId,
-      },
-      data: {
-        [body.option]: {
-          increment: 1,
-        },
-      },
-    }),
-  ]);
+  const shot = await prisma.shot.findUnique({
+    where: {
+      id: body.shotId,
+    },
+  });
 
-  if (!updatedShot) {
-    return NextResponse.json({ error: "Shot not found" }, { status: 404 });
+  if (!shot) {
+    return NextResponse.json(
+      { error: "There is no shot with this id." },
+      { status: 404 }
+    );
   }
+
+  const isAuthor = session.user.id === shot.userId;
+
+  if (!isAuthor)
+    return NextResponse.json(
+      { error: "You can`t edit this shot" },
+      { status: 403 }
+    );
+
+  const updatedShot = await prisma.shot.update({
+    where: {
+      id: body.shotId,
+    },
+    data: {
+      title: body.title,
+      description: body.description,
+      tags: body.tags,
+      imageUrl: body.imageUrl,
+    },
+  });
 
   return NextResponse.json(updatedShot);
 }

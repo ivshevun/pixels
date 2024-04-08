@@ -14,14 +14,15 @@ import {
 } from "@/lib/redux/features/shotCreation/shotCreationSlice";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { Shot } from "@prisma/client";
-import { Flex } from "@radix-ui/themes";
+import { Flex, Heading } from "@radix-ui/themes";
 import axios, { AxiosResponse } from "axios";
 import classNames from "classnames";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { KeyboardEvent, useState } from "react";
+import { KeyboardEvent, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import useShotImage from "../hooks/useShotImage";
 import ControlButtons from "./components/ControlButtons";
 import ImagePlaceholder from "./components/ImagePlaceholder";
 import ShotMedia from "./components/ShotMedia";
@@ -30,7 +31,7 @@ import TextEditor from "./components/TextEditor";
 import MediaController from "./components/controllers/MediaController";
 import handleFileChange from "./utils/handleFileChange";
 
-export default function UploadPage() {
+export default function UploadForm({ shot }: { shot?: Shot }) {
   const dispatch = useAppDispatch();
   const { isEditorOpen, isMediaControllerOpen: isMediaOpen } = useDisclosure();
   const shotInfo = useShotCreationInfo();
@@ -91,7 +92,11 @@ export default function UploadPage() {
   };
 
   const onSubmit = async () => {
-    const imageUrl = await uploadImage();
+    let imageUrl: string | undefined = "";
+
+    if (shotInfo.fileUrl !== shot?.imageUrl || !shot) {
+      imageUrl = await uploadImage();
+    } else imageUrl = shot.imageUrl;
 
     const shotData = {
       title: shotInfo.shotTitle,
@@ -99,14 +104,26 @@ export default function UploadPage() {
       tags: shotInfo.tags,
       imageUrl: imageUrl!,
       userId: session.data?.user.id!,
+      shotId: shot?.id || undefined,
     };
     try {
-      const { data, status }: AxiosResponse<Shot> = await axios.post(
-        "/api/shot",
-        shotData
-      );
+      // If no initial shot. It means that it checks if we are on the /upload or on the /edit.
+      if (!shot) {
+        const { data, status }: AxiosResponse<Shot> = await axios.post(
+          "/api/shot",
+          shotData
+        );
 
-      log("shot created", data);
+        log("shot created", data);
+
+        if (status > 200) {
+          throw new Error("Something went wrong");
+        }
+      }
+
+      const { data, status } = await axios.patch("/api/shot", shotData);
+
+      log("shot updated", data);
 
       if (status > 200) {
         throw new Error("Something went wrong");
@@ -118,13 +135,13 @@ export default function UploadPage() {
       dispatch(changeTags([]));
 
       // return to profile page
-      router.back();
+      router.push("/" + session.data?.user.username);
 
       // show success toast
-      toast.success("Shot created", { duration: 3000 });
+      toast.success(`Shot ${shot ? "updated" : "created"}`, { duration: 3000 });
     } catch (error) {
       // show error to user and redirect him to the profile page
-      router.back();
+      router.push("/" + session.data?.user.username);
       toast.error("Something went wrong", { duration: 3000 });
 
       log(error);
@@ -134,6 +151,31 @@ export default function UploadPage() {
   const changeUrl = (url: string) => {
     dispatch(changeFileUrl(url));
   };
+
+  const {
+    data: fetchedFile,
+    isLoading,
+    isError,
+    error,
+  } = useShotImage(shot?.imageUrl);
+
+  // set the file if it exists
+  useEffect(() => {
+    fetchedFile && setFile(fetchedFile);
+  }, [fetchedFile]);
+
+  useEffect(() => {
+    if (shot) {
+      dispatch(changeTitle(shot.title));
+      dispatch(changeDescription(shot.description));
+      dispatch(changeFileUrl(shot.imageUrl));
+      dispatch(changeTags(shot.tags));
+    }
+  }, [dispatch, shot]);
+
+  if (isError) toast.error(error.message);
+
+  const areButtonsDisabled = isLoading || isError;
 
   return (
     <motion.div
@@ -156,13 +198,24 @@ export default function UploadPage() {
           }}
           transition={{ duration: 0.3 }}
         >
-          <ControlButtons file={file} onSubmit={onSubmit} />
-          <ShotName file={file} />
+          <ControlButtons
+            disabled={areButtonsDisabled}
+            file={file}
+            onSubmit={onSubmit}
+          />
+          {file ? (
+            <ShotName />
+          ) : (
+            <Heading className="text-3xl md:text-4xl mb-16">
+              What have you been working on?
+            </Heading>
+          )}
+
           {/* Conditional rendering because of how AnimatePresence works */}
           <AnimatePresence>
             {file && <ShotMedia setFile={setFile} file={file} />}
           </AnimatePresence>
-          {!file && <ImagePlaceholder />}
+          {!file && <ImagePlaceholder isLoading={isLoading} />}
           {!file && (
             <input
               accept="image/*"
@@ -176,7 +229,7 @@ export default function UploadPage() {
           {/* Editor */}
           {file && <TextEditor />}
         </motion.div>
-        <MediaController file={file} setFile={setFile} />
+        <MediaController shot={shot} file={file} setFile={setFile} />
       </Flex>
     </motion.div>
   );

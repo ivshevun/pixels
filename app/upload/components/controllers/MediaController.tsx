@@ -16,10 +16,14 @@ import React, {
 import Controller from "./Controller";
 import handleFileChange from "../../utils/handleFileChange";
 import { changeFileUrl } from "@/lib/redux/features/shotCreation/shotCreationSlice";
+import { Shot } from "@prisma/client";
+import { useShotCreationInfo } from "@/lib/redux/features/shotCreation/hooks";
+import { usePathname } from "next/navigation";
 
 interface VideoControllerProps {
   file: File | null;
   setFile: Dispatch<SetStateAction<File | null>>;
+  shot?: Shot;
 }
 
 interface FileInputProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
@@ -32,6 +36,7 @@ interface FileInputProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
 export default function MediaController({
   file,
   setFile,
+  shot,
 }: VideoControllerProps) {
   const dispatch = useAppDispatch();
   const { isMediaControllerOpen: isMediaOpen } = useDisclosure();
@@ -43,7 +48,7 @@ export default function MediaController({
       title="Media"
     >
       {/* Aside content */}
-      <MediaContent file={file} setFile={setFile} className="p-4" />
+      <MediaContent shot={shot} file={file} setFile={setFile} className="p-4" />
 
       {/* Mobile content */}
       <Flex
@@ -52,7 +57,12 @@ export default function MediaController({
         align="center"
         className="h-full"
       >
-        <MediaContent file={file} setFile={setFile} className="px-32 py-8" />
+        <MediaContent
+          shot={shot}
+          file={file}
+          setFile={setFile}
+          className="px-32 py-8"
+        />
       </Flex>
     </Controller>
   );
@@ -62,11 +72,16 @@ const MediaContent = ({
   className,
   file,
   setFile,
+  shot,
 }: {
   className?: string;
   file: File | null;
   setFile: Dispatch<SetStateAction<File | null>>;
+  shot?: Shot;
 }) => {
+  const shotInfo = useShotCreationInfo();
+  const pathName = usePathname();
+
   if (!file)
     return (
       <FileInput name="media" setFile={setFile} file={file}>
@@ -89,19 +104,32 @@ const MediaContent = ({
       </FileInput>
     );
 
+  const imageUrl =
+    shot?.imageUrl === shotInfo.fileUrl && shot
+      ? shot?.imageUrl
+      : URL.createObjectURL(file);
+
+  const isEditing = pathName === "/edit";
+
   return (
     <Fragment>
       <Box className="w-3/4 h-3/4 rounded-xl border border-gray-200 p-4">
         <Box className="w-full h-full relative">
           <Image
             className="object-cover"
-            src={URL.createObjectURL(file)}
+            src={imageUrl}
             alt="Shot media"
             fill
           />
         </Box>
       </Box>
-      <Flex gap="6" className="py-4 w-3/4">
+      <Flex
+        gap="6"
+        className={classNames(
+          "py-4",
+          isEditing ? "w-full justify-center" : "w-3/4"
+        )}
+      >
         <FileInput
           file={file}
           setFile={setFile}
@@ -112,12 +140,14 @@ const MediaContent = ({
             Change
           </TransparentButton>
         </FileInput>
-        <TransparentButton
-          className="py-2 w-1/2 border-gray-300"
-          onClick={() => setFile(null)}
-        >
-          Remove
-        </TransparentButton>
+        {isEditing && (
+          <TransparentButton
+            className="py-2 w-1/2 border-gray-300"
+            onClick={() => setFile(null)}
+          >
+            Remove
+          </TransparentButton>
+        )}
       </Flex>
     </Fragment>
   );
@@ -129,7 +159,7 @@ export const FileInput = ({
   name,
   children,
   ...props
-}: FileInputProps) => {
+}: Omit<FileInputProps, "shot">) => {
   const dispatch = useAppDispatch();
 
   const changeUrl = (url: string) => {

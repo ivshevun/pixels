@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction } from "react";
 import { FaExchangeAlt } from "react-icons/fa";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { FileInput } from "./controllers/MediaController";
+import { usePathname } from "next/navigation";
 
 export default function ImageControls({
   file,
@@ -11,6 +12,9 @@ export default function ImageControls({
   file: File | null;
   setFile: Dispatch<SetStateAction<File | null>>;
 }) {
+  const pathName = usePathname();
+  const isEditing = pathName === "/edit";
+
   return (
     <button className="flex-col justify-center items-center border py-4 px-3 bg-white rounded-full shadow-xl absolute -right-14 top-10 h-auto gap-3 text-black active:bg-white hidden lg:flex">
       {/* <Flex direction="column" className="*:cursor-pointer" gap="2">
@@ -22,13 +26,15 @@ export default function ImageControls({
       <FileInput name="image-swapper" file={file} setFile={setFile}>
         <FaExchangeAlt size="14" className="text-black cursor-pointer" />
       </FileInput>
-      <Separator />
+      {!isEditing && <Separator />}
 
-      <FaRegTrashCan
-        onClick={() => setFile(null)}
-        className="text-red-500 cursor-pointer"
-        size="14"
-      />
+      {!isEditing && (
+        <FaRegTrashCan
+          onClick={() => setFile(null)}
+          className="text-red-500 cursor-pointer"
+          size="14"
+        />
+      )}
     </button>
   );
 }

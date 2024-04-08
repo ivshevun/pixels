@@ -13,12 +13,12 @@ import { FaMagnifyingGlass } from "react-icons/fa6";
 import Login, { Auth } from "./Login";
 import AnimatedMenu from "./components/Animated/AnimatedMenu";
 import Overlay from "./components/Overlay";
-import logo from "@/public/logo.svg";
+import logo from "@/public/logo.jpg";
 
 export default function NavBar() {
   const pathname = usePathname();
 
-  const restrictedPaths = ["auth", "uploads", "shots", "not-found"];
+  const restrictedPaths = ["auth", "upload", "edit", "shots", "not-found"];
 
   // check if path is restricted
   if (pathname.split("/").some((path) => restrictedPaths.includes(path)))
@@ -106,13 +106,13 @@ const NavLinks = () => {
 
 const NavLogo = ({ children }: PropsWithChildren) => {
   return (
-    <Flex align="center">
+    <Flex align="center" className="select-none">
       {children}
       <Link href="/" className="flex justify-center items-center ">
         <NextImage
           src={logo}
           alt="Pixels"
-          className="max-w-36 w-auto h-auto"
+          className="max-w-28 w-auto h-auto"
           priority
         />
       </Link>

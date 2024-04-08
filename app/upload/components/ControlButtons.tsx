@@ -14,9 +14,14 @@ import { useAppDispatch } from "@/lib/redux/hooks";
 export interface SubmitterProps {
   onSubmit: () => void;
   file: File | null;
+  disabled?: boolean;
 }
 
-export default function ControlButtons({ onSubmit, file }: SubmitterProps) {
+export default function ControlButtons({
+  onSubmit,
+  file,
+  disabled = false,
+}: SubmitterProps) {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { data: session } = useSession();
@@ -58,7 +63,7 @@ export default function ControlButtons({ onSubmit, file }: SubmitterProps) {
           {/* Desktop text */}
           <Text className="hidden sm:block">Save as draft</Text>
         </BeigeButton>
-        <FinalTouches onSubmit={onSubmit} />
+        <FinalTouches disabled={disabled} onSubmit={onSubmit} />
       </Flex>
     </Flex>
   );

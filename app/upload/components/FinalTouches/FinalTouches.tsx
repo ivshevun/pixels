@@ -9,7 +9,13 @@ import ComboOptions from "./ComboOptions";
 import Tags from "./Tags";
 import { useState } from "react";
 
-export default function FinalTouches({ onSubmit }: { onSubmit: () => void }) {
+export default function FinalTouches({
+  onSubmit,
+  disabled = false,
+}: {
+  onSubmit: () => void;
+  disabled?: boolean;
+}) {
   const { fileUrl, shotTitle } = useShotCreationInfo();
 
   // remove html tags
@@ -19,8 +25,8 @@ export default function FinalTouches({ onSubmit }: { onSubmit: () => void }) {
     <Dialog.Root>
       <Dialog.Trigger>
         <DarkButton
-          className="text-sm font-semibold py-2 disabled:text-gray-300 px-6"
-          disabled={!fileUrl || !title}
+          className="text-sm font-semibold py-2 disabled:text-gray-300 px-6  "
+          disabled={!fileUrl || !title || disabled}
         >
           Continue
         </DarkButton>
@@ -105,7 +111,7 @@ const Buttons = ({ onSubmit }: { onSubmit: () => void }) => {
           onSubmit();
           setClicked(true);
         }}
-        className="py-2 text-base"
+        className="py-2 text-sm px-6"
         disabled={tags.length < 1 || isClicked}
       >
         Continue

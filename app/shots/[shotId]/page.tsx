@@ -101,6 +101,17 @@ export default async function ShotPage({ params: { shotId } }: Params) {
         id="description"
         dangerouslySetInnerHTML={{ __html: shot.description }}
       />
+      {session?.user.id === shot.userId && (
+        <Flex
+          justify="center"
+          align="center"
+          gap="6"
+          className="text-sm text-zinc-400 text-$[#3d3d4e] font-normal"
+        >
+          <Link href={`/edit?shotId=${shot.id}`}>Edit</Link>
+          <Text className="cursor-pointer">Delete</Text>
+        </Flex>
+      )}
     </Flex>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 import AnimatedForm from "@/app/components/Animated/AnimatedForm";
-import handleFileChange from "@/app/uploads/new/utils/handleFileChange";
+import handleFileChange from "@/app/upload/utils/handleFileChange";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
 import axios, { AxiosError, AxiosResponse } from "axios";

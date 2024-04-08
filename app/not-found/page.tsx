@@ -3,7 +3,7 @@ import errorImage from "@/public/assets/404.jpg";
 import { Button, Flex, Heading, Link, Text } from "@radix-ui/themes";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import logo from "@/public/logo.svg";
+import logo from "@/public/logo.jpg";
 
 export default function NotFoundPage() {
   const router = useRouter();
@@ -14,11 +14,13 @@ export default function NotFoundPage() {
       align="center"
       className="w-full h-screen border relative py-48 gap-4"
     >
-      <Image
-        src={logo}
-        alt="Pixels"
-        className="absolute top-0 left-0 w-36 opacity-50"
-      />
+      <Link href="/">
+        <Image
+          src={logo}
+          alt="Pixels"
+          className="absolute top-7 left-7 w-36 opacity-70 select-none"
+        />
+      </Link>
       <Image src={errorImage} alt="404" />
       <Heading className="text-4xl md:text-6xl">Oooops!</Heading>
       <Text className="text-2xl md:text-3xl font-bold text-center">

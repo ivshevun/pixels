@@ -1,4 +1,4 @@
-import logo from "../public/logo.svg";
+import logo from "../public/logo.jpg";
 import {
   Body,
   Button,
@@ -25,7 +25,7 @@ const ForgotPasswordTemplate = ({
       <Tailwind>
         <Body className="bg-white text-black my-auto mx-auto font-sans">
           <Container className="my-10 mx-auto p-5 w-[465px]">
-            <Img className="w-24 mx-auto" src={logo} />
+            <Img className="w-24 mx-auto" src={logo.src} />
             <Heading>Hi, {username}!</Heading>
             <Text className="text-sm text-gray-400">
               Here are your password reset instructions.
