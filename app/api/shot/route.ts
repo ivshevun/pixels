@@ -23,6 +23,10 @@ const patchSchema = z.object({
   tags: z.nativeEnum(Tag).array().optional(),
 });
 
+const deleteSchema = z.object({
+  shotId: z.string().cuid(),
+});
+
 export async function POST(request: NextRequest) {
   // arrange
   const body = (await request.json()) as z.infer<typeof shotSchema>;
@@ -223,4 +227,43 @@ export async function PATCH(request: NextRequest) {
   });
 
   return NextResponse.json(updatedShot);
+}
+
+export async function DELETE(request: NextRequest) {
+  // arrange
+  const body = (await request.json()) as z.infer<typeof deleteSchema>;
+  const session = await getServerSession(authOptions);
+
+  // validate
+  const validation = deleteSchema.safeParse(body);
+  if (!validation.success)
+    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+
+  const shot = await prisma.shot.findUnique({
+    where: {
+      id: body.shotId,
+    },
+  });
+  if (!shot) {
+    return NextResponse.json(
+      { error: "There is no shot with this id." },
+      { status: 404 }
+    );
+  }
+
+  const isAuthor = session?.user.id === shot.userId;
+
+  if (!isAuthor)
+    return NextResponse.json(
+      { error: "You can`t delete this shot" },
+      { status: 403 }
+    );
+
+  const deletedShot = await prisma.shot.delete({
+    where: {
+      id: body.shotId,
+    },
+  });
+
+  return NextResponse.json(deletedShot);
 }

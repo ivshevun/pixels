@@ -11,6 +11,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import ButtonsLoading from "./ButtonsLoading";
 import "./styles.css";
+import ShotEditing from "./ShotEditing";
 
 const ShotButtons = dynamic(() => import("@/app/shots/[shotId]/ShotButtons"), {
   ssr: false,
@@ -101,17 +102,7 @@ export default async function ShotPage({ params: { shotId } }: Params) {
         id="description"
         dangerouslySetInnerHTML={{ __html: shot.description }}
       />
-      {session?.user.id === shot.userId && (
-        <Flex
-          justify="center"
-          align="center"
-          gap="6"
-          className="text-sm text-zinc-400 text-$[#3d3d4e] font-normal"
-        >
-          <Link href={`/edit?shotId=${shot.id}`}>Edit</Link>
-          <Text className="cursor-pointer">Delete</Text>
-        </Flex>
-      )}
+      {session?.user.id === shot.userId && <ShotEditing shotId={shot.id} />}
     </Flex>
   );
 }
