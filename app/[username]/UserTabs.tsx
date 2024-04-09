@@ -4,6 +4,7 @@ import { Flex, Separator } from "@radix-ui/themes";
 import classNames from "classnames";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import SortDropdown from "./SortDropdown";
 
 export default function UserTabs({ user }: { user: User }) {
   const tabs = [
@@ -36,7 +37,12 @@ export default function UserTabs({ user }: { user: User }) {
       direction="column"
       align={{ initial: "center", md: "start" }}
     >
-      <Flex gap={{ initial: "0", sm: "4" }} align="center">
+      <Flex
+        gap={{ initial: "0", sm: "4" }}
+        align="center"
+        justify="center"
+        className="w-full"
+      >
         {tabs.map((tab) => (
           <Link
             key={tab.href}
@@ -49,8 +55,10 @@ export default function UserTabs({ user }: { user: User }) {
             {tab.label}
           </Link>
         ))}
+        <SortDropdown className="hidden md:flex ml-auto" />
       </Flex>
       <Separator className="w-full" />
+      <SortDropdown className="flex md:hidden" />
     </Flex>
   );
 }

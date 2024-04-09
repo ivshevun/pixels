@@ -80,6 +80,8 @@ model Shot {
   comments Int @default(0)
 
   tags Tag[] @default([])
+
+  createdAt DateTime @default(now())
 }
 
 model Like {

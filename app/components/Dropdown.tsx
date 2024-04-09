@@ -1,27 +1,25 @@
-import { useAppDispatch } from "@/lib/redux/hooks";
-import { AppDispatch } from "@/lib/redux/store";
 import { Flex, Text } from "@radix-ui/themes";
-import { Editor } from "@tiptap/react";
 import classNames from "classnames";
 import { AnimatePresence, Variants, motion } from "framer-motion";
-import { Dispatch, ReactNode, SetStateAction, useState } from "react";
+import { Dispatch, ReactNode, SetStateAction } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import { TiTick } from "react-icons/ti";
 
-type Props = {
+interface DropdownProps {
+  isOpen: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
   currentItem: string;
-  setCurrentItem: (
-    font: string,
-    dispatch: AppDispatch,
-    editor: Editor | null
-  ) => void;
-  changeModifiers: (
-    modifiers: string[],
-    dispatch: AppDispatch,
-    editor: Editor | null
-  ) => void;
-  editor: Editor | null;
-};
+  onOptionChange: (option: string) => void;
+  options: string[];
+  isCovering?: boolean;
+  className?: string;
+}
+
+interface DropdownItemProps {
+  children: ReactNode;
+  currentItem: string;
+  onOptionChange: (option: string) => void;
+}
 
 const variants: Variants = {
   hidden: {
@@ -39,16 +37,19 @@ const variants: Variants = {
 };
 
 export default function Dropdown({
+  isOpen,
+  setOpen,
   currentItem,
-  setCurrentItem,
   options,
-  changeModifiers,
-  editor,
-}: Props & { options: string[] }) {
-  const [isOpen, setOpen] = useState(false);
-
+  onOptionChange,
+  className,
+  isCovering = false,
+}: DropdownProps) {
   return (
-    <Flex direction="column" className="overflow-hidden">
+    <Flex
+      direction="column"
+      className={classNames("overflow-visible relative", className)}
+    >
       <button
         className="flex justify-between items-center text-left text-sm border border-gray-200 rounded-lg p-4"
         onClick={() => setOpen((prevOpen) => !prevOpen)}
@@ -64,16 +65,16 @@ export default function Dropdown({
             animate="visible"
             exit="hidden"
             key="dropdown"
-            className="flex flex-col border rounded-lg shadow-md overflow-hidden"
+            className={classNames(
+              "flex flex-col border rounded-lg shadow-md overflow-hidden",
+              isCovering && "absolute bg-white top-16 w-full z-10"
+            )}
           >
             {options.map((option) => (
               <DropDownItem
+                onOptionChange={onOptionChange}
                 currentItem={currentItem}
-                setCurrentItem={setCurrentItem}
-                changeModifiers={changeModifiers}
                 key={option}
-                editor={editor}
-                setOpen={setOpen}
               >
                 {option}
               </DropDownItem>
@@ -84,27 +85,13 @@ export default function Dropdown({
     </Flex>
   );
 }
+
 const DropDownItem = ({
   currentItem,
-  setCurrentItem,
   children,
-  changeModifiers,
-  editor,
-  setOpen,
-}: Props & {
-  children: ReactNode;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-}) => {
+  onOptionChange,
+}: DropdownItemProps) => {
   const isCurrent = currentItem === children;
-  const dispatch = useAppDispatch();
-
-  const handleChangeFont = () => {
-    setCurrentItem(children?.toString() || "", dispatch, editor);
-
-    changeModifiers([], dispatch, editor);
-
-    setOpen(false);
-  };
 
   return (
     <Flex
@@ -113,7 +100,7 @@ const DropDownItem = ({
         "text-xs font-medium p-2 items-center capitalize cursor-pointer transition-colors duration-200",
         isCurrent && "bg-[#f3f3f4] rounded-md"
       )}
-      onClick={handleChangeFont}
+      onClick={() => onOptionChange(children?.toString() || "")}
     >
       <Text>{children}</Text>
       {isCurrent && <TiTick />}

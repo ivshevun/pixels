@@ -1,4 +1,5 @@
 import prisma from "@/prisma/client";
+import { request } from "http";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -8,6 +9,29 @@ const userUpdateSchema = z.object({
   username: z.string().max(20, "Username is too long").optional(),
   name: z.string().max(50, "Name is too long").optional(),
 });
+
+export async function GET(request: NextRequest) {
+  const params = request.nextUrl.searchParams;
+
+  const userId = params.get("userId");
+
+  if (!userId)
+    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+
+  if (!user)
+    return NextResponse.json(
+      { error: "There is no user with this id." },
+      { status: 404 }
+    );
+
+  return NextResponse.json(user);
+}
 
 export async function PATCH(request: NextRequest) {
   try {

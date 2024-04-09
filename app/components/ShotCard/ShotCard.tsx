@@ -78,7 +78,7 @@ export default function ShotCard({
   return (
     <Flex
       direction="column"
-      className="max-w-96 max-h-80 gap-2 cursor-pointer"
+      className="max-w-96 h-80 gap-2 cursor-pointer"
       onMouseEnter={() => {
         if (window.innerWidth > 768) setHover(true);
       }}
@@ -92,8 +92,8 @@ export default function ShotCard({
           alt=""
           width="400"
           height="300"
-          className="max-h-80 object-cover rounded-2xl"
-          priority={false}
+          className="h-80 object-cover rounded-2xl"
+          priority={true}
           onClick={() => router.push(`/shots/${shot.id}`)}
         />
         <ShotControl

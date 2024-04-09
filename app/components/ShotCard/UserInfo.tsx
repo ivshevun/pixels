@@ -1,17 +1,16 @@
-"use server";
-import prisma from "@/prisma/client";
+import { UserSkeleton } from "@/app/[username]/ShotSkeletons";
+import useUser from "@/app/hooks/useUser";
 import { Avatar, Flex, Link } from "@radix-ui/themes";
 import NextLink from "next/link";
 import { redirect } from "next/navigation";
 
-const UserInfo = async ({ userId }: { userId: string }) => {
-  const user = await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-  });
+const UserInfo = ({ userId }: { userId: string }) => {
+  const { data: response, isLoading, isError } = useUser(userId);
+  const user = response?.data;
 
-  if (!user) return redirect("/not-found");
+  if (isLoading || !user) return <UserSkeleton />;
+
+  if (isError) return redirect("/not-found");
 
   return (
     <Flex align="center" gap="3">
