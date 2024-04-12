@@ -12,6 +12,7 @@ import AnimatedForm from "../../components/Animated/AnimatedForm";
 import Input from "../../components/Input";
 import { Center } from "../components/Center";
 import SmallText from "../components/SmallText";
+import { useState } from "react";
 
 type ResetFormData = z.infer<typeof emailSchema>;
 
@@ -19,11 +20,13 @@ export default function ForgotPage() {
   const { register, handleSubmit } = useForm<ResetFormData>({
     resolver: zodResolver(emailSchema),
   });
+  const [isLoading, setLoading] = useState(false);
   const router = useRouter();
 
   const onSubmit = async (data: ResetFormData) => {
     try {
       // make forgot password request
+      setLoading(true);
       await axios.post("/api/auth/forgot-password", data);
 
       // navigate to login page
@@ -36,6 +39,7 @@ export default function ForgotPage() {
           duration: 10000,
         }
       );
+      setLoading(false);
     } catch (error) {
       toast.error("A user with this account does not exist.");
     }
@@ -55,10 +59,12 @@ export default function ForgotPage() {
           Enter the email address you used when you joined and we’ll send you
           instructions to reset your password.
         </SmallText>
-        <div className="w-3/4 mx-auto lg:mx-0">
+        <div className="w-3/4 mx-auto lg:mx-0 ">
           <label>Email</label>
           <Input register={register("email")} />
-          <DarkButton className="w-full">Submit</DarkButton>
+          <DarkButton disabled={isLoading} className="w-full py-3 my-2">
+            Submit
+          </DarkButton>
         </div>
       </AnimatedForm>
     </Center>

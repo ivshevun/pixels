@@ -1,3 +1,4 @@
+"use client";
 import { UserSkeleton } from "@/app/[username]/ShotSkeletons";
 import useUser from "@/app/hooks/useUser";
 import { Avatar, Flex, Link } from "@radix-ui/themes";

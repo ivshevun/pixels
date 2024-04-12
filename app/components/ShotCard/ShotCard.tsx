@@ -32,11 +32,9 @@ export interface Shot {
 
 export default function ShotCard({
   shot,
-  userName,
   children,
 }: {
   shot: Shot;
-  userName: string;
   children: React.ReactNode;
 }) {
   const dispatch = useAppDispatch();
@@ -93,7 +91,7 @@ export default function ShotCard({
           width="400"
           height="300"
           className="h-80 object-cover rounded-2xl"
-          priority={true}
+          loading="lazy"
           onClick={() => router.push(`/shots/${shot.id}`)}
         />
         <ShotControl

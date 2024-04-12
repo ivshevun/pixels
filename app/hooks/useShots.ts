@@ -1,10 +1,26 @@
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import ms from "ms";
 
-const useShots = (userId: string, orderBy?: string) =>
-  useQuery({
-    queryKey: ["shots", userId, orderBy],
-    queryFn: () => axios.get("/api/shots", { params: { userId, orderBy } }),
+const fetchShots = async ({ pageParam = 1 }: { pageParam: number }) => {
+  const res = await fetch(`/api/shots?page=${pageParam}`);
+
+  const data = await res.json();
+
+  return { ...data, prevPage: pageParam };
+};
+
+const useShots = () =>
+  useInfiniteQuery({
+    queryKey: ["shots"],
+    queryFn: ({ pageParam = 1 }) => fetchShots({ pageParam }),
+    getNextPageParam: (lastPage) => {
+      console.log("lastPage", lastPage);
+      if (!lastPage.hasNextPage) return null;
+      return lastPage.prevPage + 1;
+    },
+
+    initialPageParam: 1,
+    staleTime: ms("24h"), // 24 hours
   });
 
 export default useShots;

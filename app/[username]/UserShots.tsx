@@ -7,7 +7,7 @@ import { AxiosResponse } from "axios";
 import { useSession } from "next-auth/react";
 import ShotCard from "../components/ShotCard/ShotCard";
 import ShotUserInfo from "../components/ShotCard/UserInfo";
-import useShots from "../hooks/useShots";
+import useUserShots from "../hooks/useUserShots";
 import NoShots from "./NoShots";
 import ShotSkeleton from "./ShotSkeletons";
 import FirstShot from "./components/FirstShot";
@@ -23,7 +23,7 @@ export default function UserShots({ user }: { user: User }) {
     data: response,
     isLoading,
     isError,
-  }: UseQueryResult<AxiosResponse<Shot[], any>, Error> = useShots(
+  }: UseQueryResult<AxiosResponse<Shot[], any>, Error> = useUserShots(
     user.id,
     orderBy
   );
@@ -31,7 +31,7 @@ export default function UserShots({ user }: { user: User }) {
 
   if (isLoading)
     return (
-      <ShotsGrid>
+      <ShotsGrid className="lg:justify-start">
         {[1, 2, 3, 4].map((num) => (
           <ShotSkeleton key={num} />
         ))}
@@ -65,13 +65,9 @@ export default function UserShots({ user }: { user: User }) {
     );
 
   return (
-    <ShotsGrid>
+    <ShotsGrid className="lg:justify-start">
       {shots?.map((shot) => (
-        <ShotCard
-          key={shot.id}
-          shot={shot}
-          userName={user.username || user.name || ""}
-        >
+        <ShotCard key={shot.id} shot={shot}>
           <ShotUserInfo userId={user.id} />
         </ShotCard>
       ))}
