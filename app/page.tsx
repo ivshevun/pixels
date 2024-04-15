@@ -12,7 +12,6 @@ import { Flex, Text } from "@radix-ui/themes";
 
 interface Page {
   shots: Shot[];
-  prevPage: number;
   shotCount: number;
   hasNextPage: boolean;
 }
@@ -28,11 +27,12 @@ export default function Home() {
   if (isLoading)
     return (
       <ShotsGrid className="mx-auto px-8 py-4">
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((num) => (
+        {Array.from(Array(12).keys()).map((num) => (
           <ShotSkeleton key={num} />
         ))}
       </ShotsGrid>
     );
+
   const fetchedShotsCount = data?.pages.reduce(
     (total, page) => total + page.shots.length,
     0

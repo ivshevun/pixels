@@ -17,6 +17,7 @@ const useFavourited = (shotId: string, userId: string) =>
   useQuery({
     queryKey: ["favourites", shotId, userId],
     queryFn: () => fetchFavourited(shotId, userId),
+    enabled: userId !== shotId,
   });
 
 export default useFavourited;

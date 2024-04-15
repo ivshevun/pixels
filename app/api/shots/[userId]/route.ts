@@ -14,6 +14,8 @@ export async function GET(
   const params = request.nextUrl.searchParams;
 
   const orderBy = params.get("orderBy");
+  const page = params.get("page") || 1;
+  const perPage = params.get("perPage") || 12;
 
   const sortByDate = orderBy === "recent" ? "desc" : undefined;
 
@@ -27,7 +29,19 @@ export async function GET(
       createdAt: sortByDate,
       views: (!sortByDate && "desc") || undefined,
     },
+    skip: (Number(page) - 1) * Number(perPage),
+    take: Number(perPage),
   });
 
-  return NextResponse.json(shots);
+  const totalCount = await prisma.shot.count({
+    where: {
+      userId,
+    },
+  });
+
+  const totalPages = Math.ceil(totalCount / Number(perPage));
+
+  const hasNextPage = Number(page) < totalPages;
+
+  return NextResponse.json({ shots, shotCount: totalCount, hasNextPage });
 }

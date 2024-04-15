@@ -29,6 +29,7 @@ export default function NoShots({
             ? "w-24 sm:w-28 md:w-36 lg:w-48"
             : "w-64 sm:w-72 md:w-[450px] lg:w-[510px]"
         )}
+        priority
       />
       <Heading
         as="h3"

@@ -14,11 +14,9 @@ const useShots = () =>
     queryKey: ["shots"],
     queryFn: ({ pageParam = 1 }) => fetchShots({ pageParam }),
     getNextPageParam: (lastPage) => {
-      console.log("lastPage", lastPage);
       if (!lastPage.hasNextPage) return null;
       return lastPage.prevPage + 1;
     },
-
     initialPageParam: 1,
     staleTime: ms("24h"), // 24 hours
   });

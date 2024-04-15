@@ -53,11 +53,13 @@ export default function ShotCard({
   const { data: liked, isLoading: initialLikeLoading } = useQuery({
     queryKey: ["liked", shot.id, session?.user.id, predictedLikes],
     queryFn: () => fetchLiked(shot.id, session?.user.id || ""),
+    enabled: session?.user.id !== shot.userId,
   });
 
   const { data: favourited, isLoading: initialFavouriteLoading } =
     useFavourited(shot.id, session?.user.id || "");
 
+  //  error is not here
   useEffect(() => {
     dispatch(changeShotsLikes({ shotId: shot.id, likes: shot.likes }));
   }, [shot.id, shot.likes, dispatch]);
