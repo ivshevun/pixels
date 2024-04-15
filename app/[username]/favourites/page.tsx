@@ -66,11 +66,7 @@ export default async function FavouritesPage({ params }: UsernameParams) {
           if (!author) return redirect("/not-found");
 
           return (
-            <ShotCard
-              key={shot.id}
-              shot={shot}
-              userName={author?.username || author?.name || ""}
-            >
+            <ShotCard key={shot.id} shot={shot}>
               <ShotUserInfo userId={shot.userId} />
             </ShotCard>
           );
