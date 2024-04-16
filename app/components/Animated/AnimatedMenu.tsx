@@ -9,7 +9,14 @@ interface Props extends HTMLMotionProps<"div"> {
 
 const variants = {
   visible: { opacity: 1, height: "auto" },
-  hidden: { opacity: 0, height: 0 },
+  hidden: {
+    opacity: 0,
+    height: 0,
+    padding: "16px",
+    gap: "14px",
+    top: "86px",
+    left: 0,
+  },
 };
 
 export default function AnimatedMenu({
@@ -19,7 +26,7 @@ export default function AnimatedMenu({
   ...rest
 }: Props) {
   const styles = classNames(
-    "flex flex-col absolute left-0 top-[86px] h-auto w-full p-4 gap-3 overflow-hidden bg-white border-t z-10",
+    "flex flex-col absolute h-auto w-full overflow-hidden bg-white border-t z-10",
     className
   );
 

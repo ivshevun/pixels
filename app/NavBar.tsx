@@ -2,18 +2,19 @@
 import { toggleNavMenu } from "@/lib/redux/features/disclosure/disclosureSlice";
 import { useDisclosure } from "@/lib/redux/features/disclosure/hooks";
 import { useAppDispatch } from "@/lib/redux/hooks";
-import { Flex, TextField } from "@radix-ui/themes";
+import logo from "@/public/logo.jpg";
+import { Flex } from "@radix-ui/themes";
 import { motion } from "framer-motion";
 import Hamburger from "hamburger-react";
 import NextImage from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { PropsWithChildren } from "react";
+import { FormEvent, PropsWithChildren, useState } from "react";
+import { CiSearch } from "react-icons/ci";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import Login, { Auth } from "./Login";
 import AnimatedMenu from "./components/Animated/AnimatedMenu";
 import Overlay from "./components/Overlay";
-import logo from "@/public/logo.jpg";
 
 export default function NavBar() {
   const pathname = usePathname();
@@ -46,8 +47,8 @@ const navigation = [
 ];
 
 const linkVariants = {
-  visible: { x: 0 },
-  hidden: { x: -500 },
+  visible: { opacity: 1 },
+  hidden: { opacity: 0 },
 };
 
 const NavMenu = () => {
@@ -120,21 +121,34 @@ const NavLogo = ({ children }: PropsWithChildren) => {
   );
 };
 
+const SearchInput = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  };
+
+  return (
+    <form
+      className="hidden lg:flex items-center px-4 py-3 bg-[#f4f5fb] rounded-full text-base font-normal w-64 xl:w-72 gap-2"
+      onSubmit={handleSubmit}
+    >
+      <CiSearch className="w-6 h-5" />
+      <input
+        className="flex-grow outline-none bg-transparent"
+        type="text"
+        placeholder="Search..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
+    </form>
+  );
+};
+
 const NavControl = () => {
   return (
     <Flex justify="between" align="center" gap="5">
-      <TextField.Root className="hidden lg:flex p-1 shadow-none focus:border-none">
-        <TextField.Slot>
-          <FaMagnifyingGlass size="16" />
-        </TextField.Slot>
-        <TextField.Input
-          size="3"
-          placeholder="Search..."
-          radius="full"
-          variant="soft"
-          className="max-w-72 placeholder:text-gray-600 placeholder:text-base"
-        />
-      </TextField.Root>
+      <SearchInput />
       <Link className="lg:hidden" href="/search">
         <FaMagnifyingGlass size="20" />
       </Link>
