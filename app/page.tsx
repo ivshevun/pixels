@@ -1,14 +1,14 @@
 "use client";
 import { Shot } from "@prisma/client";
-import ShotSkeleton from "./[username]/ShotSkeletons";
+import { Flex } from "@radix-ui/themes";
+import { InfiniteData, UseInfiniteQueryResult } from "@tanstack/react-query";
+import InfiniteScroll from "react-infinite-scroll-component";
+import ClipLoader from "react-spinners/ClipLoader";
 import ShotsGrid from "./[username]/components/ShotsGrid";
+import ShotsLoading from "./components/MainPage/ShotsLoading";
 import ShotCard from "./components/ShotCard/ShotCard";
 import ShotUserInfo from "./components/ShotCard/UserInfo";
 import useShots from "./hooks/useShots";
-import { UseInfiniteQueryResult, InfiniteData } from "@tanstack/react-query";
-import InfiniteScroll from "react-infinite-scroll-component";
-import ClipLoader from "react-spinners/ClipLoader";
-import { Flex, Text } from "@radix-ui/themes";
 
 interface Page {
   shots: Shot[];
@@ -24,14 +24,7 @@ export default function Home() {
     hasNextPage,
   }: UseInfiniteQueryResult<InfiniteData<Page, unknown>, Error> = useShots();
 
-  if (isLoading)
-    return (
-      <ShotsGrid className="mx-auto px-8 py-4">
-        {Array.from(Array(12).keys()).map((num) => (
-          <ShotSkeleton key={num} />
-        ))}
-      </ShotsGrid>
-    );
+  if (isLoading) return <ShotsLoading />;
 
   const fetchedShotsCount = data?.pages.reduce(
     (total, page) => total + page.shots.length,

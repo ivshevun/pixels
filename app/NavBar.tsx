@@ -8,15 +8,13 @@ import { motion } from "framer-motion";
 import Hamburger from "hamburger-react";
 import NextImage from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FormEvent, PropsWithChildren, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import Login, { Auth } from "./Login";
 import AnimatedMenu from "./components/Animated/AnimatedMenu";
 import Overlay from "./components/Overlay";
-import useSearchQuery from "@/lib/redux/features/search/hooks";
-import { changeSearchQuery } from "@/lib/redux/features/search/searchSlice";
 
 export default function NavBar() {
   const pathname = usePathname();
@@ -124,15 +122,12 @@ const NavLogo = ({ children }: PropsWithChildren) => {
 };
 
 const SearchInput = () => {
-  const dispatch = useAppDispatch();
-  const { searchQuery } = useSearchQuery();
+  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-  };
-
-  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(changeSearchQuery(event.target.value));
+    router.push(`/search/${searchQuery}`);
   };
 
   return (
@@ -146,7 +141,7 @@ const SearchInput = () => {
         type="text"
         placeholder="Search..."
         value={searchQuery}
-        onChange={handleQueryChange}
+        onChange={(event) => setSearchQuery(event.target.value)}
       />
     </form>
   );
