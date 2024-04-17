@@ -119,16 +119,15 @@ export default function UploadForm({ shot }: { shot?: Shot }) {
         if (status > 200) {
           throw new Error("Something went wrong");
         }
+      } else {
+        const { data, status } = await axios.patch("/api/shot", shotData);
+
+        log("shot updated", data);
+
+        if (status > 200) {
+          throw new Error("Something went wrong");
+        }
       }
-
-      const { data, status } = await axios.patch("/api/shot", shotData);
-
-      log("shot updated", data);
-
-      if (status > 200) {
-        throw new Error("Something went wrong");
-      }
-
       // reset shot info
       dispatch(changeTitle(""));
       dispatch(changeDescription(""));
@@ -138,7 +137,9 @@ export default function UploadForm({ shot }: { shot?: Shot }) {
       router.push("/" + session.data?.user.username);
 
       // show success toast
-      toast.success(`Shot ${shot ? "updated" : "created"}`, { duration: 3000 });
+      toast.success(`Shot ${shot ? "updated" : "created"}`, {
+        duration: 3000,
+      });
     } catch (error) {
       // show error to user and redirect him to the profile page
       router.push("/" + session.data?.user.username);

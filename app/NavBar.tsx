@@ -1,6 +1,8 @@
 "use client";
 import { toggleNavMenu } from "@/lib/redux/features/disclosure/disclosureSlice";
 import { useDisclosure } from "@/lib/redux/features/disclosure/hooks";
+import useSearchQuery from "@/lib/redux/features/search/hooks";
+import { changeSearchQuery } from "@/lib/redux/features/search/searchSlice";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import logo from "@/public/logo.jpg";
 import { Flex } from "@radix-ui/themes";
@@ -9,7 +11,7 @@ import Hamburger from "hamburger-react";
 import NextImage from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { FormEvent, PropsWithChildren, useState } from "react";
+import { ChangeEvent, FormEvent, PropsWithChildren, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import Login, { Auth } from "./Login";
@@ -122,12 +124,25 @@ const NavLogo = ({ children }: PropsWithChildren) => {
 };
 
 const SearchInput = () => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const { searchQuery: initialSearchQuery } = useSearchQuery();
+  const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
+
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     router.push(`/search/${searchQuery}`);
+
+    setSearchQuery("");
+  };
+
+  const handleValueChange = (event: ChangeEvent<HTMLInputElement>) => {
+    // update redux state
+    dispatch(changeSearchQuery(event.target.value));
+
+    // update local state
+    setSearchQuery(event.target.value);
   };
 
   return (
@@ -141,7 +156,7 @@ const SearchInput = () => {
         type="text"
         placeholder="Search..."
         value={searchQuery}
-        onChange={(event) => setSearchQuery(event.target.value)}
+        onChange={handleValueChange}
       />
     </form>
   );

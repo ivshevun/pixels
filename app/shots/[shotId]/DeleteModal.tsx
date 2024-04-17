@@ -23,7 +23,6 @@ export default function DeleteModal({ shotId }: { shotId: string }) {
       if (status === 200 && deletedShot) {
         toast.success("Shot deleted");
         router.push(`/${session?.user.username}`);
-        router.refresh();
       }
     } catch (error) {
       toast.error("Something went wrong. Try again later.");

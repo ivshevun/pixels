@@ -60,7 +60,7 @@ export default async function ShotPage({ params: { shotId } }: Params) {
 
   return (
     <Flex className="py-8 sm:py-14 md:py-16 flex-col justify-center w-full px-4 sm:px-0 sm:w-3/4 md:w-1/2 mx-auto gap-8">
-      <Heading>{removeTags(shot.title)}</Heading>
+      <Heading>{shot.titleText}</Heading>
       <Flex justify="between" gap="3">
         <Flex gap="2" align="center">
           <Link href={`/${user?.username}`}>

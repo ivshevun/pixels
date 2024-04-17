@@ -7,6 +7,7 @@ import shotLikesReducer from "./features/shotsLikes/shotsLikesSlice";
 import favouritesReducer from "./features/favourites/favouritesSlice";
 import settingsReducer from "./features/settings/settingsSlice";
 import profileShotsReducer from "./features/profileShots/profileShotsSlice";
+import searchReducer from "./features/search/searchSlice";
 
 export const store = configureStore({
   reducer: {
@@ -17,6 +18,7 @@ export const store = configureStore({
     favourites: favouritesReducer,
     settings: settingsReducer,
     profileShots: profileShotsReducer,
+    search: searchReducer,
   },
 });
 

@@ -92,8 +92,11 @@ export default function UserShots({ user }: { user: User }) {
         </div>
       }
       endMessage={
-        <Flex justify="center" className="text-center text-purple-500 pt-8">
-          Oops! No more shots to load.
+        <Flex
+          justify="center"
+          className="text-center text-sm text-zinc-600 pt-8"
+        >
+          You’ve reached the end of the list
         </Flex>
       }
       className="overflow-hidden"

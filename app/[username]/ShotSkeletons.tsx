@@ -2,7 +2,7 @@ import { Flex, Skeleton } from "@radix-ui/themes";
 
 export default function ShotSkeleton() {
   return (
-    <Flex direction="column" className="w-96 md:w-80 h-96">
+    <Flex direction="column" className="w-64 xs:w-80 sm:w-96 h-96">
       <Skeleton className="rounded-lg w-full h-80" />
       <Flex align="center" justify="between" className="pt-2 px-2">
         <UserSkeleton />

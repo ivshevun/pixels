@@ -54,7 +54,7 @@ export default function ShotButtons({
   const isAnyLikeLoading = initialLikeLoading || isLikeLoading;
   const isAnyFavouriteLoading = initialFavouriteLoading || isFavouriteLoading;
 
-  const isButtonDisabled = authorId === session?.user.id;
+  const isButtonDisabled = authorId === session?.user.id || !session?.user.id;
 
   const handleLike = async () => {
     setLikeLoading(true);

@@ -1,4 +1,5 @@
 import authOptions from "@/app/auth/authOptions";
+import removeTags from "@/app/utils/removeTags";
 import prisma from "@/prisma/client";
 import { Tag } from "@prisma/client";
 import { getServerSession } from "next-auth";
@@ -50,7 +51,11 @@ export async function POST(request: NextRequest) {
   const newShot = await prisma.shot.create({
     data: {
       title: body.title,
+      titleText: removeTags(body.title),
       description: body.description,
+      descriptionText: body.description
+        ? removeTags(body.description)
+        : undefined,
       imageUrl: body.imageUrl,
       tags: body.tags,
       user: {
@@ -220,7 +225,11 @@ export async function PATCH(request: NextRequest) {
     },
     data: {
       title: body.title,
+      titleText: body.title ? removeTags(body.title) : undefined,
       description: body.description,
+      descriptionText: body.description
+        ? removeTags(body.description)
+        : undefined,
       tags: body.tags,
       imageUrl: body.imageUrl,
     },
@@ -262,6 +271,23 @@ export async function DELETE(request: NextRequest) {
   const deletedShot = await prisma.shot.delete({
     where: {
       id: body.shotId,
+    },
+  });
+
+  // delete shot from likes, views, and favourites
+  await prisma.like.deleteMany({
+    where: {
+      shotId: body.shotId,
+    },
+  });
+  await prisma.view.deleteMany({
+    where: {
+      shotId: body.shotId,
+    },
+  });
+  await prisma.favourite.deleteMany({
+    where: {
+      shotId: body.shotId,
     },
   });
 

@@ -22,6 +22,7 @@ import LikeContent from "./LikeContent";
 export interface Shot {
   id: string;
   title: string;
+  titleText: string;
   description: string;
   tags: Tag[];
   imageUrl: string;
@@ -95,6 +96,7 @@ export default function ShotCard({
           className="h-80 object-cover rounded-2xl"
           loading="lazy"
           onClick={() => router.push(`/shots/${shot.id}`)}
+          priority={false}
         />
         <ShotControl
           isHover={isHover}
@@ -228,7 +230,7 @@ const ShotControl = ({
   shot: Shot;
   children: React.ReactNode;
 }) => {
-  const title = removeTags(shot.title);
+  // const title = removeTags(shot.title);
 
   return (
     isHover && (
@@ -241,7 +243,7 @@ const ShotControl = ({
           justify="between"
           className="absolute bottom-0 left-0 w-full p-4 rounded-2xl"
         >
-          <Text className="text-white">{title}</Text>
+          <Text className="text-white">{shot.titleText}</Text>
           {userId !== currentUserId && currentUserId && children}
         </Flex>
       </Box>

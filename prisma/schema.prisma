@@ -68,7 +68,10 @@ model Shot {
   imageUrl     String @db.VarChar(255)
 
   title       String
+  titleText   String 
+
   description String @db.VarChar(255) @default("")
+  descriptionText String @default("")
 
   // create a one-to-one relationship with user
   user   User   @relation(fields: [userId], references: [id])

@@ -31,7 +31,6 @@ const useUserShots = (userId: string, orderBy?: string) =>
       return lastPage.prevPage + 1;
     },
     initialPageParam: 1,
-    staleTime: ms("24h"),
   });
 
 export default useUserShots;

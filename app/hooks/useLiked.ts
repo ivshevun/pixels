@@ -11,10 +11,11 @@ export const fetchLiked = async (shotId: string, userId: string) => {
   return data.liked;
 };
 
-const useLiked = (shotId: string, userId: string) =>
+const useLiked = (shotId: string, userId: string | null) =>
   useQuery({
     queryKey: ["likes", shotId, userId],
-    queryFn: () => fetchLiked(shotId, userId),
+    queryFn: () => fetchLiked(shotId, userId || ""),
+    enabled: !!userId,
   });
 
 export default useLiked;

@@ -4,7 +4,7 @@ import React from "react";
 
 export default function ShotsLoading() {
   return (
-    <ShotsGrid className="mx-auto px-8 py-4">
+    <ShotsGrid className="mx-auto px-8 py-16 md:py-4 ">
       {Array.from(Array(12).keys()).map((num) => (
         <ShotSkeleton key={num} />
       ))}
