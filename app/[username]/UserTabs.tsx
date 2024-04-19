@@ -20,10 +20,6 @@ export default function UserTabs({ user }: { user: User }) {
       label: "favourites",
       href: `/${user.username}/favourites`,
     },
-    {
-      label: "about",
-      href: `/${user.username}/about`,
-    },
   ];
   const currentTab = usePathname();
 
@@ -40,7 +36,7 @@ export default function UserTabs({ user }: { user: User }) {
       <Flex
         gap={{ initial: "0", sm: "4" }}
         align="center"
-        justify="center"
+        justify={{ initial: "center", md: "start" }}
         className="w-full"
       >
         {tabs.map((tab) => (
@@ -55,7 +51,9 @@ export default function UserTabs({ user }: { user: User }) {
             {tab.label}
           </Link>
         ))}
-        <SortDropdown className="hidden md:flex ml-auto" />
+        {currentTab === `/${user.username}` && (
+          <SortDropdown className="hidden md:flex ml-auto" />
+        )}
       </Flex>
       <Separator className="w-full" />
       <SortDropdown className="flex md:hidden" />

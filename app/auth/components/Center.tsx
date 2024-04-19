@@ -7,7 +7,7 @@ interface CenterProps extends PropsWithChildren {
 }
 
 export function Center({ children, className }: CenterProps) {
-  const styles = classNames("mx-auto lg:mx-0 lg:mr-auto px-8", className);
+  const styles = classNames("mx-auto px-8", className);
 
   return (
     <Flex

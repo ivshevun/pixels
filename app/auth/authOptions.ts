@@ -3,8 +3,6 @@ import { User } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import GithubProvider from "next-auth/providers/github";
-import GoogleProvider from "next-auth/providers/google";
 
 const authOptions: NextAuthOptions = {
   session: {
@@ -59,14 +57,6 @@ const authOptions: NextAuthOptions = {
 
         return user; // success
       },
-    }),
-    GithubProvider({
-      clientId: process.env.GITHUB_ID!,
-      clientSecret: process.env.GITHUB_SECRET!,
-    }),
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
   callbacks: {
