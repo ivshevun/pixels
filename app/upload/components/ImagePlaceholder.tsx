@@ -3,13 +3,8 @@ import imagePlaceholder from "@/public/assets/image-placeholder.png";
 import { Flex, Text } from "@radix-ui/themes";
 import classNames from "classnames";
 import Image from "next/image";
-import { Fragment } from "react";
+import ClipLoader from "react-spinners/ClipLoader";
 import MediaFeatures from "./MediaFeatures";
-import { ImSpinner10 } from "react-icons/im";
-
-interface PlaceholderProps {
-  isLoading?: boolean;
-}
 
 const styles =
   "flex flex-col justify-center items-center rounded-xl w-full lg:w-3/4 xl:w-3/5 h-full md:h-[700px] gap-12 relative overflow-hidden border-2 border-dashed py-4";
@@ -21,7 +16,7 @@ export default function ImagePlaceholder({
 }) {
   return isLoading ? (
     <div className={classNames(styles, "cursor-default")}>
-      <ImSpinner10 size="72" className="text-purple-500 animate-spin " />
+      <ClipLoader size="60px" color="purple" />
     </div>
   ) : (
     <PlaceholderContent />

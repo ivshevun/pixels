@@ -140,7 +140,7 @@ const MediaContent = ({
             Change
           </TransparentButton>
         </FileInput>
-        {isEditing && (
+        {!isEditing && (
           <TransparentButton
             className="py-2 w-1/2 border-gray-300"
             onClick={() => setFile(null)}
