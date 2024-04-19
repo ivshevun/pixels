@@ -6,6 +6,7 @@ export interface DisclosureState {
   isEditorOpen: boolean;
   isMediaControllerOpen: boolean;
   isComboboxOpen: boolean;
+  isCommentsOpen: boolean;
 }
 
 const initialState: DisclosureState = {
@@ -14,6 +15,7 @@ const initialState: DisclosureState = {
   isEditorOpen: false,
   isMediaControllerOpen: false,
   isComboboxOpen: false,
+  isCommentsOpen: false,
 };
 
 export const disclosureSlice = createSlice({
@@ -48,6 +50,9 @@ export const disclosureSlice = createSlice({
       state.isComboboxOpen = action.payload;
     },
 
+    setCommentsOpen: (state, action) => {
+      state.isCommentsOpen = action.payload;
+    },
   },
 });
 
@@ -57,6 +62,7 @@ export const {
   setEditorOpen,
   setMediaControllerOpen,
   setComboboxOpen,
+  setCommentsOpen,
 } = disclosureSlice.actions;
 
 export default disclosureSlice.reducer;

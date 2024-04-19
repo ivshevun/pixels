@@ -1,11 +1,8 @@
+import { ButtonProps } from "@/app/interfaces/ButtonProps";
 import classNames from "classnames";
 import React, { ButtonHTMLAttributes, ReactNode } from "react";
 
-interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-  children: ReactNode;
-}
-
-const DarkButton = React.forwardRef<HTMLButtonElement, Props>(
+const DarkButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ children, className, ...rest }, ref) => {
     const styles = classNames(
       "bg-gray-900 text-white rounded-full hover:bg-gray-400 transition duration-500 cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed",

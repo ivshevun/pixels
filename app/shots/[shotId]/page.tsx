@@ -1,5 +1,5 @@
 import authOptions from "@/app/auth/authOptions";
-import removeTags from "@/app/utils/removeTags";
+import TransparentButton from "@/app/components/Buttons/TransparentButton";
 import log from "@/lib/log";
 import prisma from "@/prisma/client";
 import { Avatar, Flex, Heading, Text } from "@radix-ui/themes";
@@ -9,14 +9,24 @@ import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { FaRegComment } from "react-icons/fa";
 import ButtonsLoading from "./ButtonsLoading";
-import "./styles.css";
 import ShotEditing from "./ShotEditing";
+import ShotInfoDialog from "./ShotInfoDialog";
+import "./styles.css";
+import ShotInfoButtons from "./ShotInfoButtons";
 
 const ShotButtons = dynamic(() => import("@/app/shots/[shotId]/ShotButtons"), {
   ssr: false,
   loading: ButtonsLoading,
 });
+
+const ShotCommentsDrawer = dynamic(
+  () => import("@/app/shots/[shotId]/ShotCommentsDrawer"),
+  {
+    ssr: false,
+  }
+);
 
 interface Params {
   params: { shotId: string };
@@ -102,6 +112,8 @@ export default async function ShotPage({ params: { shotId } }: Params) {
         id="description"
         dangerouslySetInnerHTML={{ __html: shot.description }}
       />
+      <ShotInfoButtons shot={shot} />
+      <ShotCommentsDrawer shotId={shot.id} />
       {session?.user.id === shot.userId && <ShotEditing shotId={shot.id} />}
     </Flex>
   );
