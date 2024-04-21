@@ -69,7 +69,6 @@ model Shot {
   imageUrl     String @db.VarChar(255)
 
   title       String
-  titleText   String 
 
   description String @db.VarChar(255) @default("")
   descriptionText String @default("")

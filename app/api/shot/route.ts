@@ -50,7 +50,6 @@ export async function POST(request: NextRequest) {
   const newShot = await prisma.shot.create({
     data: {
       title: body.title,
-      titleText: removeTags(body.title),
       description: body.description,
       descriptionText: body.description
         ? removeTags(body.description)
@@ -224,7 +223,6 @@ export async function PATCH(request: NextRequest) {
     },
     data: {
       title: body.title,
-      titleText: body.title ? removeTags(body.title) : undefined,
       description: body.description,
       descriptionText: body.description
         ? removeTags(body.description)

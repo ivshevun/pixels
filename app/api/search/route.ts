@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 interface ShotWhere {
   OR: (
     | {
-        titleText: {
+        title: {
           contains: string | undefined;
           mode: "insensitive";
         };
@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
   const where: ShotWhere = {
     OR: [
       {
-        titleText: {
+        title: {
           contains: formattedQuery || undefined,
           mode: "insensitive",
         },
