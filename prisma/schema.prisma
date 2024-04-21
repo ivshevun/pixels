@@ -83,7 +83,7 @@ model Shot {
   likes    Int @default(0)
   comments Int @default(0)
 
-  tags Tag[] @default([])
+  tags String[] @default([])
 
   createdAt DateTime @default(now())
 }
@@ -117,112 +117,4 @@ model Comment {
   createdAt DateTime @default(now())
 }
 
-enum Tag {
-  Mobile
-  Typography
-  WebDesign
-  Animations
-  Illustrations
-  ThreeD
-  ProductDesign
-  UIUX
-  Photography
-  Minimalism
-  FlatDesign
-  Responsive
-  Branding
-  Ecommerce
-  LandingPage
-  Portfolio
-  DarkMode
-  LightMode
-  Sketch
-  Figma
-  AdobeXD
-  Photoshop
-  Illustrator
-  Sketching
-  Wireframing
-  Prototyping
-  MotionGraphics
-  MaterialDesign
-  Colorful
-  Monochrome
-  Retro
-  Vintage
-  HandLettering
-  Calligraphy
-  Graffiti
-  VectorArt
-  PixelArt
-  Abstract
-  Surreal
-  Conceptual
-  Infographics
-  Charts
-  Graphs
-  Maps
-  Icons
-  Logos
-  Badges
-  Stickers
-  Emojis
-  SocialMedia
-  Marketing
-  Podcast
-  Music
-  Video
-  VR
-  AR
-  Wearables
-  IoT
-  GameDesign
-  VRGames
-  ARGames
-  AugmentedReality
-  VirtualReality
-  Coding
-  Programming
-  Development
-  CodeSnippets
-  Algorithms
-  DataStructures
-  AI
-  MachineLearning
-  Blockchain
-  Cryptocurrency
-  Bitcoin
-  Ethereum
-  SmartContracts
-  NFT
-  CyberSecurity
-  Privacy
-  Accessibility
-  InclusiveDesign
-  Sustainability
-  Environment
-  Health
-  Fitness
-  Cooking
-  Travel
-  Nature
-  Space
-  Astronomy
-  Science
-  History
-  Literature
-  Movies
-  TVShows
-  Anime
-  Gaming
-  Comics
-  Fantasy
-  SciFi
-  Horror
-  Web
-  Design
-  Ux
-  Ui
-  Startup
-  Service
-}
+

@@ -1,8 +1,7 @@
-import { Tag } from "@prisma/client";
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface ShotCreation {
-  tags: Tag[];
+  tags: string[];
   shotDescription: string;
   shotTitle: string;
   fileUrl: string;

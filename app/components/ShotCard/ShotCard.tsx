@@ -1,12 +1,10 @@
 "use client";
 import useFavourited from "@/app/hooks/useFavourited";
 import { fetchLiked } from "@/app/hooks/useLiked";
-import removeTags from "@/app/utils/removeTags";
 import { setFavourited } from "@/lib/redux/features/favourites/favouritesSlice";
 import { useShotInfo } from "@/lib/redux/features/shotsLikes/hooks";
 import { changeShotsLikes } from "@/lib/redux/features/shotsLikes/shotsLikesSlice";
 import { useAppDispatch } from "@/lib/redux/hooks";
-import { Tag } from "@prisma/client";
 import { Box, Flex, Text } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
 import axios, { AxiosResponse } from "axios";
@@ -24,7 +22,7 @@ export interface Shot {
   title: string;
   titleText: string;
   description: string;
-  tags: Tag[];
+  tags: string[];
   imageUrl: string;
   userId: string;
   likes: number;

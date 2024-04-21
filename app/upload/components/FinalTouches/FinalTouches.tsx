@@ -83,13 +83,15 @@ const ShotStats = () => {
 };
 
 const ComboBox = () => {
+  const [tagContent, setTagContent] = useState("");
+
   return (
     <Flex direction="column" gap="1" className="relative overflow-visible ">
       <label className="text-base">
-        Tags <span className="text-xs font-light">(maximum 20)</span>
+        Tags <span className="text-xs font-light">(maximum 5)</span>
       </label>
-      <Tags />
-      <ComboOptions />
+      <Tags content={tagContent} setContent={setTagContent} />
+      <ComboOptions content={tagContent} />
     </Flex>
   );
 };

@@ -1,7 +1,6 @@
 import authOptions from "@/app/auth/authOptions";
 import removeTags from "@/app/utils/removeTags";
 import prisma from "@/prisma/client";
-import { Tag } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -10,7 +9,7 @@ const shotSchema = z.object({
   title: z.string().max(100, "Title is too long"),
   description: z.string().max(1000, "Description is too long").optional(),
   imageUrl: z.string().url("Invalid URL"),
-  tags: z.nativeEnum(Tag).array(),
+  tags: z.string().array(),
   userId: z.string().cuid(),
 });
 
@@ -21,7 +20,7 @@ const patchSchema = z.object({
   title: z.string().max(100, "Title is too long").optional(),
   description: z.string().max(1000, "Description is too long").optional(),
   imageUrl: z.string().url("Invalid URL").optional(),
-  tags: z.nativeEnum(Tag).array().optional(),
+  tags: z.string().array().optional(),
 });
 
 const deleteSchema = z.object({

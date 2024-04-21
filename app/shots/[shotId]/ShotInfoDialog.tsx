@@ -70,7 +70,7 @@ export default function ShotInfoDialog({ shot }: { shot: Shot }) {
         </Flex>
         <Flex direction="column" className="mt-8" gap="2">
           <Text className="text-sm">Tags</Text>
-          <Flex>
+          <Flex gap="2">
             {shot.tags.map((tag) => {
               return <Tag key={tag} tag={tag} />;
             })}
