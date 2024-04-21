@@ -116,16 +116,6 @@ export default function ShotButtons({
           isLoading={isAnyFavouriteLoading}
         />
       </TransparentButton>
-      <DarkButton
-        className="text-xs sm:text-sm px-4 py-2"
-        disabled={isButtonDisabled}
-      >
-        {window.innerWidth > 768 ? (
-          "Get In Touch"
-        ) : (
-          <MdOutlineEmail size="16" />
-        )}
-      </DarkButton>
     </Flex>
   );
 }
