@@ -1,5 +1,4 @@
 import authOptions from "@/app/auth/authOptions";
-import TransparentButton from "@/app/components/Buttons/TransparentButton";
 import log from "@/lib/log";
 import prisma from "@/prisma/client";
 import { Avatar, Flex, Heading, Text } from "@radix-ui/themes";
@@ -9,12 +8,10 @@ import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { FaRegComment } from "react-icons/fa";
 import ButtonsLoading from "./ButtonsLoading";
 import ShotEditing from "./ShotEditing";
-import ShotInfoDialog from "./ShotInfoDialog";
-import "./styles.css";
 import ShotInfoButtons from "./ShotInfoButtons";
+import "./styles.css";
 
 const ShotButtons = dynamic(() => import("@/app/shots/[shotId]/ShotButtons"), {
   ssr: false,
