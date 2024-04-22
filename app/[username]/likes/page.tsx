@@ -1,13 +1,14 @@
+import authOptions from "@/app/auth/authOptions";
 import ShotCard from "@/app/components/ShotCard/ShotCard";
 import prisma from "@/prisma/client";
+import noLikes from "@/public/assets/no-likes.png";
+import { Metadata } from "next";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 import ShotUserInfo from "../../components/ShotCard/UserInfo";
+import NoShots from "../NoShots";
 import ShotsGrid from "../components/ShotsGrid";
 import { UsernameParams } from "../page";
-import NoShots from "../NoShots";
-import noLikes from "@/public/assets/no-likes.png";
-import { getServerSession } from "next-auth";
-import authOptions from "@/app/auth/authOptions";
-import { redirect } from "next/navigation";
 
 export default async function LikesPage({ params }: UsernameParams) {
   const session = await getServerSession(authOptions);
@@ -75,3 +76,8 @@ export default async function LikesPage({ params }: UsernameParams) {
     </ShotsGrid>
   );
 }
+
+export const metadata: Metadata = {
+  title: "Likes | Pixels",
+  description: "Pixels - Likes Page",
+};

@@ -91,7 +91,7 @@ const ComboBox = () => {
         Tags <span className="text-xs font-light">(maximum 5)</span>
       </label>
       <Tags content={tagContent} setContent={setTagContent} />
-      <ComboOptions content={tagContent} />
+      <ComboOptions content={tagContent} setContent={setTagContent} />
     </Flex>
   );
 };

@@ -19,3 +19,10 @@ export default async function Dashboard({ params }: UsernameParams) {
     </div>
   );
 }
+
+export const generateMetadata = ({ params }: UsernameParams) => {
+  return {
+    title: `${params.username} | Pixels`,
+    description: "Pixels - User Page",
+  };
+};

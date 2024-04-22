@@ -115,3 +115,16 @@ export default async function ShotPage({ params: { shotId } }: Params) {
     </Flex>
   );
 }
+
+export async function generateMetadata({ params: { shotId } }: Params) {
+  const shot = await prisma.shot.findUnique({
+    where: {
+      id: shotId,
+    },
+  });
+
+  return {
+    title: `${shot?.title} | Pixels`,
+    description: "Pixels - Shot Page",
+  };
+}

@@ -132,7 +132,9 @@ const SearchInput = () => {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    router.push(`/search/${searchQuery}`);
+
+    const formattedQuery = searchQuery.replace(" ", "-");
+    router.push(`/search/${formattedQuery}`);
 
     setSearchQuery("");
   };

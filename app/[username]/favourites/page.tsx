@@ -1,13 +1,14 @@
+import authOptions from "@/app/auth/authOptions";
 import ShotCard from "@/app/components/ShotCard/ShotCard";
 import prisma from "@/prisma/client";
+import noFavourites from "@/public/assets/no-favourites.jpg";
+import { Metadata } from "next";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 import ShotUserInfo from "../../components/ShotCard/UserInfo";
+import NoShots from "../NoShots";
 import ShotsGrid from "../components/ShotsGrid";
 import { UsernameParams } from "../page";
-import NoShots from "../NoShots";
-import noFavourites from "@/public/assets/no-favourites.jpg";
-import { getServerSession } from "next-auth";
-import authOptions from "@/app/auth/authOptions";
-import { redirect } from "next/navigation";
 
 export default async function FavouritesPage({ params }: UsernameParams) {
   const session = await getServerSession(authOptions);
@@ -75,3 +76,8 @@ export default async function FavouritesPage({ params }: UsernameParams) {
     </ShotsGrid>
   );
 }
+
+export const metadata: Metadata = {
+  title: "Favourites | Pixels",
+  description: "Pixels - Favourite Page",
+};

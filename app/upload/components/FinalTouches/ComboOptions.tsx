@@ -5,6 +5,8 @@ import { handleChangeTags } from "@/lib/redux/utils/textHandlers";
 import { AnimatePresence, motion } from "framer-motion";
 import format from "../../utils/format";
 import ComboOption from "./ComboOption";
+import { setComboboxOpen } from "@/lib/redux/features/disclosure/disclosureSlice";
+import { Dispatch, SetStateAction } from "react";
 
 const suggestedTags: string[] = [
   "Mobile",
@@ -116,7 +118,13 @@ const suggestedTags: string[] = [
   "Service",
 ];
 
-export default function ComboOptions({ content }: { content: string }) {
+export default function ComboOptions({
+  content,
+  setContent,
+}: {
+  content: string;
+  setContent: Dispatch<SetStateAction<string>>;
+}) {
   const { tags: currentTags } = useShotCreationInfo();
   const { isComboboxOpen: isOpen } = useDisclosure();
 
@@ -130,6 +138,8 @@ export default function ComboOptions({ content }: { content: string }) {
     if (currentTags.includes(tag)) return;
 
     handleChangeTags([...currentTags, tag], dispatch);
+
+    setContent("");
   };
 
   return (

@@ -31,7 +31,7 @@ export default function InfiniteFeed({ className }: { className?: string }) {
     0
   );
 
-  const gridStyles = classNames("px-8 pt-4 pb-16 overflow-hidden", className);
+  const gridStyles = classNames("px-8 pb-16 overflow-hidden", className);
 
   return (
     <InfiniteScroll

@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import authOptions from "../auth/authOptions";
 import UploadForm from "../upload/UploadForm";
+import { Metadata } from "next";
 
 interface ParamsProps {
   shotId: string;
@@ -29,3 +30,8 @@ export default async function page({
 
   return <UploadForm shot={shot} />;
 }
+
+export const metadata: Metadata = {
+  title: "Edit | Pixels",
+  description: "Edit shot page",
+};
