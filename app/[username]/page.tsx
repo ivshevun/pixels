@@ -11,7 +11,7 @@ export default async function Dashboard({ params }: UsernameParams) {
     where: { username: params.username },
   });
 
-  if (!user) return redirect("/not-found");
+  if (!user || !params.username) return redirect("/not-found");
 
   return (
     <div className="px-4 md:px-0">

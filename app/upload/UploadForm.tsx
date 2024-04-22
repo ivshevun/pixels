@@ -19,7 +19,7 @@ import axios, { AxiosResponse } from "axios";
 import classNames from "classnames";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { KeyboardEvent, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import useShotImage from "../hooks/useShotImage";
@@ -39,7 +39,7 @@ export default function UploadForm({ shot }: { shot?: Shot }) {
   const [file, setFile] = useState<File | null>(null);
 
   const router = useRouter();
-  const session = useSession();
+  const { data: session } = useSession();
 
   const disclosures = [isEditorOpen, isMediaOpen];
   const areDisclosuresOpen = disclosures.some((disclosure) => disclosure);
@@ -103,7 +103,7 @@ export default function UploadForm({ shot }: { shot?: Shot }) {
       description: shotInfo.shotDescription,
       tags: shotInfo.tags,
       imageUrl: imageUrl!,
-      userId: session.data?.user.id!,
+      userId: session?.user.id!,
       shotId: shot?.id || undefined,
     };
     try {
@@ -134,7 +134,7 @@ export default function UploadForm({ shot }: { shot?: Shot }) {
       dispatch(changeTags([]));
 
       // return to profile page
-      router.push("/" + session.data?.user.username);
+      router.push("/" + session?.user.username);
 
       // show success toast
       toast.success(`Shot ${shot ? "updated" : "created"}`, {
@@ -142,7 +142,7 @@ export default function UploadForm({ shot }: { shot?: Shot }) {
       });
     } catch (error) {
       // show error to user and redirect him to the profile page
-      router.push("/" + session.data?.user.username);
+      router.push("/" + session?.user.username);
       toast.error("Something went wrong", { duration: 3000 });
 
       log(error);
@@ -173,6 +173,8 @@ export default function UploadForm({ shot }: { shot?: Shot }) {
       dispatch(changeTags(shot.tags));
     }
   }, [dispatch, shot]);
+
+  if (!session) return redirect("not-found");
 
   if (isError) toast.error(error.message);
 

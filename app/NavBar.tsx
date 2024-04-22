@@ -8,6 +8,7 @@ import logo from "@/public/logo.jpg";
 import { Flex } from "@radix-ui/themes";
 import { motion } from "framer-motion";
 import Hamburger from "hamburger-react";
+import { useSession } from "next-auth/react";
 import NextImage from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -44,8 +45,9 @@ export default function NavBar() {
 }
 
 const navigation = [
-  { label: "Inspiration", href: "/popular" },
-  { label: "Go Pro", href: "/subscription" },
+  { label: "My profile", href: "/shots" },
+  { label: "Upload", href: "/upload" },
+  { label: "Settings", href: "/account/settings" },
 ];
 
 const linkVariants = {
@@ -96,6 +98,15 @@ const NavMenu = () => {
 };
 
 const NavLinks = () => {
+  const { data: session } = useSession();
+  const username = session?.user.username;
+
+  const navigation = [
+    { label: "My profile", href: `/${username}` },
+    { label: "Upload", href: "/upload" },
+    { label: "Settings", href: `/account/settings` },
+  ];
+
   return (
     <Flex gap="6" className="hidden lg:flex items-center">
       {navigation.map((navLink, index) => (
