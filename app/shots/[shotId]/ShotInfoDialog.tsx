@@ -4,29 +4,7 @@ import { Shot } from "@prisma/client";
 import { Dialog, Flex, Text } from "@radix-ui/themes";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
-
-const formatDate = (date: Date): string => {
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-
-  const day = date.getDate();
-  const month = date.getMonth();
-  const year = date.getFullYear();
-
-  return `${months[month]} ${day}, ${year}`;
-};
+import formatDate from "@/app/utils/formatDate";
 
 export default function ShotInfoDialog({ shot }: { shot: Shot }) {
   const stats = {

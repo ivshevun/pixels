@@ -12,7 +12,7 @@ const queryClient = new QueryClient();
 export default function Providers({ children }: PropsWithChildren) {
   return (
     <SessionProvider>
-      <Theme scaling="100%">
+      <Theme scaling="100%" accentColor="purple">
         <Provider store={store}>
           <QueryClientProvider client={queryClient}>
             {children}

@@ -6,7 +6,13 @@ export default function ButtonsLoading() {
     <Flex align="center" gap="3">
       <Skeleton className="w-8 h-8 sm:w-10 sm:h-10 rounded-full" />
       <Skeleton className="w-8 h-8 sm:w-10 sm:h-10 rounded-full" />
-      <Skeleton className="w-10 h-8 sm:w-28 sm:h-10 rounded-2xl sm:rounded-full" />
+      <DarkButtonLoading />
     </Flex>
   );
 }
+
+export const DarkButtonLoading = () => {
+  return (
+    <Skeleton className="w-10 h-8 sm:w-28 sm:h-10 rounded-2xl sm:rounded-full" />
+  );
+};

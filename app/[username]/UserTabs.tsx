@@ -2,11 +2,13 @@
 import { User } from "@prisma/client";
 import { Flex, Separator } from "@radix-ui/themes";
 import classNames from "classnames";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SortDropdown from "./SortDropdown";
 
 export default function UserTabs({ user }: { user: User }) {
+  const { data: session } = useSession();
   const tabs = [
     {
       label: "shots",
@@ -21,6 +23,18 @@ export default function UserTabs({ user }: { user: User }) {
       href: `/${user.username}/favourites`,
     },
   ];
+
+  const extendedTabs =
+    session?.user.id === user.id
+      ? [
+          ...tabs,
+          {
+            label: "Messages",
+            href: `/${user.username}/messages`,
+          },
+        ]
+      : tabs;
+
   const currentTab = usePathname();
 
   const activeStyles = "bg-yellow-100 rounded-full hover:bg-yellow-200";
@@ -39,7 +53,7 @@ export default function UserTabs({ user }: { user: User }) {
         justify={{ initial: "center", md: "start" }}
         className="w-full"
       >
-        {tabs.map((tab) => (
+        {extendedTabs.map((tab) => (
           <Link
             key={tab.href}
             className={classNames(
@@ -56,7 +70,9 @@ export default function UserTabs({ user }: { user: User }) {
         )}
       </Flex>
       <Separator className="w-full" />
-      <SortDropdown className="flex md:hidden" />
+      {currentTab === `/${user.username}` && (
+        <SortDropdown className="flex md:hidden" />
+      )}
     </Flex>
   );
 }

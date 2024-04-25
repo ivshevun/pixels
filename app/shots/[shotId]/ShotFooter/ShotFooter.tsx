@@ -6,13 +6,18 @@ import { Shot, User } from "@prisma/client";
 import { Avatar, Flex, Separator, Text } from "@radix-ui/themes";
 import Link from "next/link";
 import { IoMailOutline } from "react-icons/io5";
+import SendMessage from "./SendMessage";
+import { getServerSession } from "next-auth";
+import authOptions from "@/app/auth/authOptions";
 
 export default async function ShotFooter({
   userId,
   currentShot,
+  isAuthor,
 }: {
   userId: string;
   currentShot: Shot;
+  isAuthor: boolean;
 }) {
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -22,13 +27,21 @@ export default async function ShotFooter({
 
   return (
     <Flex className="w-full" direction="column" gap="6">
-      <UserInfo user={user} />
+      <UserInfo isAuthor={isAuthor} user={user} />
       <UserShots user={user} currentShot={currentShot} />
     </Flex>
   );
 }
 
-const UserInfo = async ({ user }: { user: User }) => {
+const UserInfo = async ({
+  user,
+  isAuthor,
+}: {
+  user: User;
+  isAuthor: boolean;
+}) => {
+  const session = await getServerSession(authOptions);
+
   return (
     <Flex direction="column" align="center" gap="2">
       <Flex className="w-full" align="center" gap="4">
@@ -46,10 +59,15 @@ const UserInfo = async ({ user }: { user: User }) => {
       <Text className="font-medium text-xl">
         {user?.name || user?.username || "Anonymous"}
       </Text>
-      <DarkButton className="flex items-center gap-2 px-6 py-2 text-sm">
-        <IoMailOutline size="20" />
-        Get in touch
-      </DarkButton>
+      <SendMessage user={user}>
+        <DarkButton
+          disabled={isAuthor || !session}
+          className="flex items-center gap-2 px-6 py-2 text-sm"
+        >
+          <IoMailOutline size="20" />
+          Get in touch
+        </DarkButton>
+      </SendMessage>
     </Flex>
   );
 };

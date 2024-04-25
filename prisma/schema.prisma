@@ -116,4 +116,16 @@ model Comment {
   createdAt DateTime @default(now())
 }
 
+model Message {
+  id        String @id @default(cuid())
+
+  senderId  String
+  recipientId String
+
+  title     String
+  message      String
+
+  createdAt DateTime @default(now())
+}
+
 

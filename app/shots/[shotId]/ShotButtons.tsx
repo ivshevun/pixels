@@ -8,12 +8,15 @@ import useLiked from "@/app/hooks/useLiked";
 import { setFavourited } from "@/lib/redux/features/favourites/favouritesSlice";
 import { changeShotsLikes } from "@/lib/redux/features/shotsLikes/shotsLikesSlice";
 import { useAppDispatch } from "@/lib/redux/hooks";
-import { Shot } from "@prisma/client";
+import { Shot, User } from "@prisma/client";
 import { Flex } from "@radix-ui/themes";
 import axios, { AxiosResponse } from "axios";
 import { useSession } from "next-auth/react";
 import { Suspense, useEffect, useState } from "react";
 import { MdOutlineEmail } from "react-icons/md";
+import SendMessage from "./ShotFooter/SendMessage";
+import useUser from "@/app/hooks/useUser";
+import { DarkButtonLoading } from "./ButtonsLoading";
 
 export default function ShotButtons({
   shot,
@@ -36,6 +39,8 @@ export default function ShotButtons({
 
   const { data: favourited, isLoading: initialFavouriteLoading } =
     useFavourited(shot.id, session?.user.id || "");
+
+  const { data: user } = useUser(authorId);
 
   useEffect(() => {
     if (liked) {
@@ -116,6 +121,21 @@ export default function ShotButtons({
           isLoading={isAnyFavouriteLoading}
         />
       </TransparentButton>
+      {!user && <DarkButtonLoading />}
+      {user && (
+        <SendMessage user={user.data}>
+          <DarkButton
+            className="text-xs sm:text-sm px-4 py-2"
+            disabled={isButtonDisabled}
+          >
+            {window.innerWidth > 768 ? (
+              "Get In Touch"
+            ) : (
+              <MdOutlineEmail size="16" />
+            )}
+          </DarkButton>
+        </SendMessage>
+      )}
     </Flex>
   );
 }

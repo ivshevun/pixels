@@ -12,7 +12,7 @@ import ButtonsLoading from "./ButtonsLoading";
 import ShotEditing from "./ShotEditing";
 import ShotInfoButtons from "./ShotInfoButtons";
 import "./styles.css";
-import ShotFooter from "./ShotFooter";
+import ShotFooter from "./ShotFooter/ShotFooter";
 
 const ShotButtons = dynamic(() => import("@/app/shots/[shotId]/ShotButtons"), {
   ssr: false,
@@ -104,7 +104,7 @@ export default async function ShotPage({ params: { shotId } }: Params) {
         alt="Shot image"
         width="3200"
         height="2400"
-        priority
+        priority={true}
       />
       <div
         id="description"
@@ -113,7 +113,7 @@ export default async function ShotPage({ params: { shotId } }: Params) {
       <ShotInfoButtons shot={shot} />
       <ShotCommentsDrawer shotId={shot.id} />
       {session?.user.id === shot.userId && <ShotEditing shotId={shot.id} />}
-      <ShotFooter currentShot={shot} userId={shot.userId} />
+      <ShotFooter isAuthor={isAuthor} currentShot={shot} userId={shot.userId} />
     </Flex>
   );
 }
