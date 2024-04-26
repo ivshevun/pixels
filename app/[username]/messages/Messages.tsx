@@ -1,17 +1,20 @@
 "use client";
+import { EndMessage, Loader } from "@/app/InfiniteFeed";
 import useMyMessages from "@/app/hooks/useMyMessages";
 import useUser from "@/app/hooks/useUser";
 import formatDate from "@/app/utils/formatDate";
 import { Message } from "@prisma/client";
-import { Card, Flex, Skeleton, Text } from "@radix-ui/themes";
+import { Card, Flex, Heading, Skeleton, Text } from "@radix-ui/themes";
 import { useSession } from "next-auth/react";
+import InfiniteScroll from "react-infinite-scroll-component";
 import DeleteButton, { RefetchType } from "./DeleteButton";
-import MessageSkeleton from "./MessageSkeleton";
 import MessageDetail from "./MessageDetail";
+import MessageSkeleton from "./MessageSkeleton";
 
 export default function Messages() {
   const { data: session } = useSession();
-  const { data, isLoading, refetch } = useMyMessages(session?.user?.id || "");
+  const { data, isLoading, refetch, fetchNextPage, hasNextPage } =
+    useMyMessages(session?.user?.id || "");
 
   if (isLoading)
     return (
@@ -22,14 +25,40 @@ export default function Messages() {
       </Flex>
     );
 
+  const fetchedMessagesCount = data?.pages.reduce(
+    (total, page) => total + page.messages.length,
+    0
+  );
+
+  if (fetchedMessagesCount === 0)
+    return (
+      <Flex direction="column" justify="center" align="center" className="px-2">
+        <iframe src="https://lottie.host/embed/bbefdd99-048c-4108-a591-31c71d561de0/njUqpPgHTp.lottie" />
+        <Heading className="text-3xl sm:text-5xl md:text-7xl text-center">
+          No messages :(
+        </Heading>
+        <Text className="text-xl text-center">
+          It looks like no one texted you... yet
+        </Text>
+      </Flex>
+    );
+
   return (
-    <Flex direction="column" gap="4" className="px-2">
-      {data?.pages.map((page) =>
-        page.messages.map((message) => (
-          <MessageCard key={message.id} message={message} refetch={refetch} />
-        ))
-      )}
-    </Flex>
+    <InfiniteScroll
+      dataLength={fetchedMessagesCount || 0}
+      next={fetchNextPage}
+      hasMore={hasNextPage}
+      loader={<Loader />}
+      endMessage={<EndMessage />}
+    >
+      <Flex direction="column" gap="4" className="px-2 ">
+        {data?.pages.map((page) =>
+          page.messages.map((message) => (
+            <MessageCard key={message.id} message={message} refetch={refetch} />
+          ))
+        )}
+      </Flex>
+    </InfiniteScroll>
   );
 }
 

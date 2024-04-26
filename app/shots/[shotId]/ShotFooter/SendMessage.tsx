@@ -1,8 +1,6 @@
 "use client";
-import DarkButton from "@/app/components/Buttons/DarkButton";
 import { User } from "@prisma/client";
 import { Avatar, Dialog, Text } from "@radix-ui/themes";
-import { IoMailOutline } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
 import { z } from "zod";
 import MessageForm from "./MessageForm";

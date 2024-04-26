@@ -26,7 +26,7 @@ export default async function UserLayout({ params, children }: UsernameParams) {
       direction="column"
       width="100%"
       py="7"
-      className="h-100% py-16 md:px-8 xl:px-20"
+      className="h-100% py-16 md:px-8 xl:px-20 overflow-x-hidden"
       gap="7"
     >
       <UserInfo user={user} />

@@ -24,7 +24,10 @@ export default function DeleteButton({
 }) {
   return (
     <IoTrashOutline
-      onClick={() => handleDelete(messageId, refetch)}
+      onClick={(event) => {
+        event.stopPropagation();
+        handleDelete(messageId, refetch);
+      }}
       size="24"
       color="red"
     />

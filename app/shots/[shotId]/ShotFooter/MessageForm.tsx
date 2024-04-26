@@ -17,6 +17,7 @@ export default function MessageForm({ recipientId }: { recipientId: string }) {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm<MessageFormData>({
     resolver: zodResolver(messageSchema),
     mode: "onSubmit",
@@ -30,6 +31,7 @@ export default function MessageForm({ recipientId }: { recipientId: string }) {
       });
 
       toast.success("Message sent");
+      reset();
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setError(error.response?.data.error);
