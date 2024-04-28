@@ -19,7 +19,7 @@ import axios, { AxiosResponse } from "axios";
 import classNames from "classnames";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSession } from "next-auth/react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { KeyboardEvent, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import useShotImage from "../hooks/useShotImage";
@@ -134,7 +134,7 @@ export default function UploadForm({ shot }: { shot?: Shot }) {
       dispatch(changeTags([]));
 
       // return to profile page
-      router.push("/" + session?.user.username);
+      router.replace("/" + session?.user.username);
 
       // show success toast
       toast.success(`Shot ${shot ? "updated" : "created"}`, {
@@ -174,7 +174,7 @@ export default function UploadForm({ shot }: { shot?: Shot }) {
     }
   }, [dispatch, shot]);
 
-  if (!session) return redirect("not-found");
+  if (!session) router.replace("/auth/sign-in");
 
   if (isError) toast.error(error.message);
 

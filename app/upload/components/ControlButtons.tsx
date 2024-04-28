@@ -1,15 +1,14 @@
 import TransparentButton from "@/app/components/Buttons/TransparentButton";
-import { Flex, Text } from "@radix-ui/themes";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import BeigeButton from "./BeigeButton";
-import FinalTouches from "./FinalTouches/FinalTouches";
 import {
-  changeTitle,
   changeDescription,
   changeTags,
+  changeTitle,
 } from "@/lib/redux/features/shotCreation/shotCreationSlice";
 import { useAppDispatch } from "@/lib/redux/hooks";
+import { Flex } from "@radix-ui/themes";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import FinalTouches from "./FinalTouches/FinalTouches";
 
 export interface SubmitterProps {
   onSubmit: () => void;
@@ -53,16 +52,6 @@ export default function ControlButtons({
         className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/5 2xl:w-1/6"
       >
         {/* Make it disabled if no image is provided */}
-        <BeigeButton
-          className="w-full text-sm px-4 py-2 font-semibold "
-          disabled={!file}
-        >
-          {/* Mobile text */}
-          <Text className="sm:hidden">Save</Text>
-
-          {/* Desktop text */}
-          <Text className="hidden sm:block">Save as draft</Text>
-        </BeigeButton>
         <FinalTouches disabled={disabled} onSubmit={onSubmit} />
       </Flex>
     </Flex>

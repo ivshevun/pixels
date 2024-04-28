@@ -55,12 +55,12 @@ export default function SettingsForm() {
 
         if (updatedUser && status !== 400) {
           const { image, name, username } = updatedUser;
-          update({
+          await update({
             image,
             name,
             username,
           });
-          update();
+          await update();
         }
       }
 
@@ -79,7 +79,7 @@ export default function SettingsForm() {
         await axios.patch("/api/user", patchData);
       }
 
-      router.push("/auth/sign-in");
+      router.replace("/auth/sign-in");
       toast.success("User information changed!");
     } catch (error) {
       if (error instanceof AxiosError) {

@@ -1,7 +1,13 @@
 import { Box, Flex, Heading, Theme } from "@radix-ui/themes";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 import { PropsWithChildren } from "react";
 
-export default function layout({ children }: PropsWithChildren) {
+export default async function layout({ children }: PropsWithChildren) {
+  const session = await getServerSession();
+
+  if (session) return redirect("/");
+
   return (
     <Theme scaling="110%">
       <Flex justify="between" gap="9" className="h-screen">
