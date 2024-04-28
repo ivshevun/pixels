@@ -44,12 +44,6 @@ export default function NavBar() {
   );
 }
 
-const navigation = [
-  { label: "My profile", href: "/shots" },
-  { label: "Upload", href: "/upload" },
-  { label: "Settings", href: "/account/settings" },
-];
-
 const linkVariants = {
   visible: { opacity: 1 },
   hidden: { opacity: 0 },
@@ -58,10 +52,20 @@ const linkVariants = {
 const NavMenu = () => {
   const { isNavMenuOpen: isOpen } = useDisclosure();
   const dispatch = useAppDispatch();
+  const { data: session } = useSession();
 
   const handleMenuToggle = () => {
     dispatch(toggleNavMenu());
   };
+
+  const navigation = [
+    {
+      label: "My profile",
+      href: `/${session?.user.username || "/auth/sign-in"}`,
+    },
+    { label: "Upload", href: "/upload" },
+    { label: "Settings", href: "/account/settings" },
+  ];
 
   return (
     <Flex direction="column" className="lg:hidden">
