@@ -111,9 +111,11 @@ const NavLinks = () => {
     { label: "Settings", href: `/account/settings` },
   ];
 
+  const filteredNavigation = username ? navigation : navigation.slice(1);
+
   return (
     <Flex gap="6" className="hidden lg:flex items-center">
-      {navigation.map((navLink, index) => (
+      {filteredNavigation.map((navLink, index) => (
         <Link key={index} href={navLink.href} className="hover:text-gray-400 ">
           {navLink.label}
         </Link>

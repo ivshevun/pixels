@@ -4,7 +4,7 @@ import handleFileChange from "@/app/upload/utils/handleFileChange";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -40,7 +40,7 @@ export default function SettingsForm() {
     resolver: zodResolver(settingsSchema),
   });
 
-  if (status === "unauthenticated") return redirect("/auth/sign-in");
+  if (status === "unauthenticated") redirect("/auth/sign-in");
 
   const onSubmit = async (data: SettingsData) => {
     let patchData = {};
@@ -77,8 +77,12 @@ export default function SettingsForm() {
         patchData = { userId: session?.user.id, avatarUrl };
 
         await axios.patch("/api/user", patchData);
+
+        await update({ image: avatarUrl });
+        await update();
       }
 
+      await signOut();
       router.replace("/auth/sign-in");
       toast.success("User information changed!");
     } catch (error) {
