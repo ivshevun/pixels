@@ -4,15 +4,14 @@ import prisma from "@/prisma/client";
 import { Avatar, Flex, Heading, Text } from "@radix-ui/themes";
 import { getServerSession } from "next-auth";
 import dynamic from "next/dynamic";
-import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import ButtonsLoading from "./ButtonsLoading";
 import ShotEditing from "./ShotEditing";
+import ShotFooter from "./ShotFooter/ShotFooter";
 import ShotInfoButtons from "./ShotInfoButtons";
 import "./styles.css";
-import ShotFooter from "./ShotFooter/ShotFooter";
 
 const ShotButtons = dynamic(() => import("@/app/shots/[shotId]/ShotButtons"), {
   ssr: false,
@@ -50,16 +49,34 @@ export default async function ShotPage({ params: { shotId } }: Params) {
   const isAuthor = session?.user.id === user?.id;
 
   if (!isAuthor) {
-    // make an api request to shot.patch() and patch views
+    // update views count if not author and user is logged in
     try {
-      await fetch(`${process.env.NEXTAUTH_URL}/api/shot/`, {
-        method: "PATCH",
-        body: JSON.stringify({
+      const existingView = await prisma.view.findFirst({
+        where: {
           shotId,
-          option: "views",
-        }),
-        headers: headers(),
-      }).then((res) => res.json());
+          userId: session?.user.id || "",
+        },
+      });
+      if (!existingView && session?.user.id) {
+        await prisma.$transaction([
+          prisma.view.create({
+            data: {
+              shotId: shotId,
+              userId: session?.user.id,
+            },
+          }),
+          prisma.shot.update({
+            where: {
+              id: shotId,
+            },
+            data: {
+              views: {
+                increment: 1,
+              },
+            },
+          }),
+        ]);
+      }
     } catch (error) {
       // TODO: handle error
       log(error);
