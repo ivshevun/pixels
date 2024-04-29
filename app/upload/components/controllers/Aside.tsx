@@ -31,6 +31,7 @@ export function Aside({ isOpen, setOpen, children, title }: DisclosureProps) {
           exit="hidden"
           transition={{ duration: 0.3 }}
           className="hidden lg:flex flex-col gap-4 w-1/5 bg-white shadow-xl p-8 fixed right-0 top-0 h-full overflow-y-auto z-10 "
+          onMouseDown={(event) => event.stopPropagation()}
         >
           <Text
             onClick={() => setOpen(false)}

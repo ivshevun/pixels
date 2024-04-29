@@ -8,11 +8,12 @@ import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import DarkButton from "../../components/Buttons/DarkButton";
 import AnimatedForm from "../../components/Animated/AnimatedForm";
+import DarkButton from "../../components/Buttons/DarkButton";
 import Input from "../../components/Input";
 import ErrorHandling from "../components/ErrorHandling";
 import SmallText from "../components/SmallText";
+import transliterate from "@/app/utils/transliterate";
 
 type RegisterFormData = z.infer<typeof userSchema>;
 
@@ -30,15 +31,22 @@ export default function RegisterForm() {
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      await axios.post("/api/register", data);
-      await signIn("credentials", {
-        login: data.email || data.username,
+      const username = transliterate(data.username);
+      const changedData = {
+        username,
+        email: data.email,
         password: data.password,
+      };
+
+      await axios.post("/api/register", changedData);
+      await signIn("credentials", {
+        login: changedData.email || username,
+        password: changedData.password,
         callbackUrl: "/",
       });
       await axios.post("/api/emails/welcome", {
-        username: data.username,
-        email: data.email,
+        username,
+        email: changedData.email,
       });
     } catch (error: any) {
       if (axios.isAxiosError(error)) setError(error.response?.data.error);

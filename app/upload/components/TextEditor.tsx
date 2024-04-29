@@ -3,6 +3,7 @@ import { useShotCreationInfo } from "@/lib/redux/features/shotCreation/hooks";
 import { changeDescription } from "@/lib/redux/features/shotCreation/shotCreationSlice";
 import { changeFont } from "@/lib/redux/features/shotText/shotTextInfo";
 import { useAppDispatch } from "@/lib/redux/hooks";
+import CharacterCount from "@tiptap/extension-character-count";
 import Placeholder from "@tiptap/extension-placeholder";
 import TextAlign from "@tiptap/extension-text-align";
 import Underline from "@tiptap/extension-underline";
@@ -11,7 +12,6 @@ import StarterKit from "@tiptap/starter-kit";
 import { Fragment } from "react";
 import Editable from "./Editable/Editable";
 import EditorController from "./controllers/Editor/EditorController";
-import CharacterCount from "@tiptap/extension-character-count";
 
 export default function TextEditor() {
   const dispatch = useAppDispatch();
@@ -34,7 +34,7 @@ export default function TextEditor() {
     content,
     editorProps: {
       attributes: {
-        class: `w-3/4 mt-8 h-auto py-16 min-h-28 flex flex-col mx-auto whitespace-pre-wrap w-3/4 min-h-28 text-xl px-2 py-4 border-2 border-transparent rounded-lg placeholder:text-lg leading-7 hover:border-gray-200 transition-colors outline-purple-950 text-left`,
+        class: `w-3/4 mt-8 h-auto py-16 min-h-28 flex flex-col mx-auto whitespace-pre-wrap w-3/4 min-h-28 text-xl px-2 py-4 border-2 border-transparent rounded-lg placeholder:text-lg leading-7 hover:border-gray-200 transition-colors outline-purple-950 text-left `,
       },
     },
     onUpdate: ({ editor }) => {
@@ -53,11 +53,7 @@ export default function TextEditor() {
 
   return (
     <Fragment>
-      <Editable
-        onFocus={() => dispatch(setEditorOpen(true))}
-        // onBlur={() => dispatch(setEditorOpen(false))}
-        editor={editor}
-      />
+      <Editable onFocus={() => dispatch(setEditorOpen(true))} editor={editor} />
       <EditorController editor={editor} />
     </Fragment>
   );

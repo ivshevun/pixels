@@ -18,6 +18,7 @@ import { FaMagnifyingGlass } from "react-icons/fa6";
 import Login, { Auth } from "./Login";
 import AnimatedMenu from "./components/Animated/AnimatedMenu";
 import Overlay from "./components/Overlay";
+import transliterate from "./utils/transliterate";
 
 export default function NavBar() {
   const pathname = usePathname();
@@ -150,7 +151,7 @@ const SearchInput = () => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const formattedQuery = searchQuery.replace(" ", "-");
+    const formattedQuery = transliterate(searchQuery);
     router.push(`/search/${formattedQuery}`);
 
     setSearchQuery("");

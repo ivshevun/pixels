@@ -8,6 +8,7 @@ import { IoIosSearch } from "react-icons/io";
 import { changeSearchQuery } from "@/lib/redux/features/search/searchSlice";
 import useSearchQuery from "@/lib/redux/features/search/hooks";
 import { useAppDispatch } from "@/lib/redux/hooks";
+import transliterate from "../utils/transliterate";
 
 const suggestedLinks: { label: string; link: string }[] = [
   {
@@ -80,7 +81,7 @@ const SearchInput = () => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const formattedQuery = searchQuery.replace(" ", "-");
+    const formattedQuery = transliterate(searchQuery);
     router.push(`/search/${formattedQuery}`);
   };
 

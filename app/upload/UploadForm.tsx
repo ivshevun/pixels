@@ -189,7 +189,10 @@ export default function UploadForm({ shot }: { shot?: Shot }) {
         !file && "overflow-y-hidden"
       )}
     >
-      <Flex className="relative w-full">
+      <Flex
+        className="relative w-full"
+        onMouseDown={() => dispatch(setMediaOpen(false))}
+      >
         <motion.div
           className="flex flex-col justify-center items-center text-center px-4"
           onClick={handleClick}

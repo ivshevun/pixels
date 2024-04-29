@@ -1,6 +1,7 @@
 "use client";
 import AnimatedForm from "@/app/components/Animated/AnimatedForm";
 import handleFileChange from "@/app/upload/utils/handleFileChange";
+import transliterate from "@/app/utils/transliterate";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
 import axios, { AxiosError, AxiosResponse } from "axios";
@@ -9,11 +10,10 @@ import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { z } from "zod";
 import AvatarUploader from "./AvatarUploader";
 import Inputs from "./Inputs";
 import Submitting from "./Submitting";
-
-import { z } from "zod";
 
 export interface SettingsData {
   username?: string | null;
@@ -48,7 +48,12 @@ export default function SettingsForm() {
     // create new formData to upload an avatar to /avatars folder in s3
     try {
       if (data.name || data.username) {
-        patchData = { userId: session?.user.id, ...patchData, ...data };
+        const name = data.name ? transliterate(data.name || "") : undefined;
+        const username = data.username
+          ? transliterate(data.username || "")
+          : undefined;
+
+        patchData = { userId: session?.user.id, ...patchData, name, username };
 
         const { data: updatedUser, status }: AxiosResponse<User> =
           await axios.patch("/api/user", patchData);
