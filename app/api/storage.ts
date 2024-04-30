@@ -4,8 +4,8 @@ import { randomUUID } from "crypto";
 export const storageClient = new S3Client({
   region: process.env.AWS_REGION_NAME!,
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY!,
-    secretAccessKey: process.env.AWS_SECRET_KEY!,
+    accessKeyId: process.env.AWS_MY_ACCESS_KEY!,
+    secretAccessKey: process.env.AWS_MY_SECRET_KEY!,
   },
 });
 
