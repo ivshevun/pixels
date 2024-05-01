@@ -14,7 +14,7 @@ const variants = {
     height: 0,
     padding: "16px",
     gap: "14px",
-    top: "84px",
+    top: "75px",
     left: 0,
   },
 };

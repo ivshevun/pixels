@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Pixels - a Dribbble clone
 
-## Getting Started
+Pixels - is a platform for designers from all over the world that helps them share their works.
 
-First, run the development server:
+## Key features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Stunning design and animations.
+- Authentication and Authorization using Next Auth
+- All the CRUD opeations with a shot
+- Advanced upload post from with an advanced text editor
+- Forgot password functionality
+- Emails
+- Views
+- Likes
+- Favourites
+- Comments
+- Messages
+- Ability to update your user profile
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. NextJS
+2. TalwindCSS for styling.
+3. Git as a version control.
+4. Next Auth V4
+5. Next API routes
+6. PostgreSQL
+7. Prisma as a Type ORM
+8. React hook for handling forms
+9. Redux as a store
+10. React Query to optimize my website and make user experience better using some techniques like: Infinite Scroll, caching, loading states
+11. Resend + React Emails for beatiful emails
+12. AWS S3 for storing images on the server.
+13. Framer motion for animations.
+14. And some third-party libraries like Zod, Tip Tap, axios, etc.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+# How to run?
 
-## Learn More
+1. Copy repository using `git clone`.
+2. Create `.env` file and fill all the .env variables. (To fill them in, you will have to register to AWS, Resend and create a db locally on your computer or use a hosted one.)
+3. Run `npm run dev` to start a dev server or `npm run build && npm start` if you would like to start it as a bundled application.
+4. Done. And, of course you can use other package managers like `yarn` or `pnpm`
 
-To learn more about Next.js, take a look at the following resources:
+Also, it worth mentioning that I regret not writing tests and not setting up CI/CD. I'll keep my mistakes in mind for the next project.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+![Pixels image](https://i.imgur.com/zsZGmqe.jpeg)

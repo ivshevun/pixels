@@ -32,7 +32,7 @@ export default function FinalTouches({
         </DarkButton>
       </Dialog.Trigger>
       {fileUrl && (
-        <Dialog.Content className="max-w-4xl px-0 md:px-12 flex flex-col items-center md:items-start overflow-visible">
+        <Dialog.Content className="max-w-4xl px-0 md:px-12 flex flex-col items-center md:items-start overflow-scroll">
           <Dialog.Title className="text-center md:text-left ">
             Final Touches
           </Dialog.Title>
@@ -104,7 +104,7 @@ const Buttons = ({ onSubmit }: { onSubmit: () => void }) => {
   const { tags } = useShotCreationInfo();
 
   return (
-    <Flex className="mt-36 gap-4 md:gap-0 justify-center md:justify-between">
+    <Flex className="mt-[10%] gap-4 md:gap-0 justify-center md:justify-between">
       <Dialog.Close>
         <TransparentButton className="py-2 px-4">Cancel</TransparentButton>
       </Dialog.Close>
