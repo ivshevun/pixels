@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
   });
 
   const { data, error } = await resend.emails.send({
-    from: "Acme <onboarding@resend.dev>",
+    from: "ivshevun@pixelsforcreators.xyz",
     to: user.email!,
     subject: "Forgot password | Pixels",
     react: emailTemplate,

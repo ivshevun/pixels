@@ -37,7 +37,7 @@ const ForgotPasswordTemplate = ({
               this request, please reset your password:
             </Text>
             <Button
-              href={`http://localhost:3000/auth/forgot-password/${token}`}
+              href={`https://pixels-designed.netlify.app/auth/forgot-password/${token}`}
               className="bg-gray-900 text-center text-white w-full my-5 py-4 text-xl rounded-full"
             >
               Reset password

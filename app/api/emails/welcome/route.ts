@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
   try {
     // Send the email using the Resend API
     const { data, error } = await resend.emails.send({
-      from: "Acme <onboarding@resend.dev>",
+      from: "ivshevun@pixelsforcreators.xyz",
       to: body.email as string,
       subject: "Welcome to Pixels!",
       react: emailTemplate,

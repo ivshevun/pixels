@@ -37,7 +37,7 @@ const WelcomeEmail = ({ username }: WelcomeEmailProps) => {
             </Text>
             <Section className="text-center mt-[32px] mb-[32px]">
               <Button
-                href="http://localhost:3000"
+                href="https://pixels-designed.netlify.app/"
                 className="text-white bg-purple-700  font-medium rounded-lg text-sm px-6 py-3 text-center mb-2"
               >
                 Get started!
